@@ -1,0 +1,83 @@
+# Cursor Rules
+
+## Role
+
+You handle targeted edits, bug fixes, quick refactors, and small feature work within an existing codebase. Claude Code handles larger feature builds, planning, and end-to-end workflows. You are the precision tool, not the primary builder.
+
+## Project Rules (single source of truth)
+
+Follow all project rules defined in `CLAUDE.md`. That file is the canonical source for:
+
+- Dependency discipline
+- Security defaults
+- Platform-specific constraints (AWS, Unity, JUCE)
+- Git workflow and commit conventions
+- Testing expectations
+- Struggle documentation (postmortems)
+
+Do not duplicate or contradict those rules. If `CLAUDE.md` and this file conflict, `CLAUDE.md` wins.
+
+## Planning & Docs Awareness
+
+- Before making changes, check `docs/plans/` for any active plan documents. If your edit falls within an active plan, read it first and update the `## Execution Log` after your change.
+- If your change is unrelated to any active plan and is non-trivial (touches multiple files or changes behavior), create a brief plan doc following the format in `CLAUDE.md` under "Planning, Canonical Docs & Session Resilience."
+- For single-file, single-line fixes, no plan doc is needed — just commit with a clear message.
+- If `project-factory/` exists and your task touches factory files, delegated run packets, or factory outputs, read `project-factory/ORCHESTRATOR_BOOTSTRAP.md` and the shared contracts before editing.
+
+## Factory Workflow Awareness
+
+- Respect lane boundaries (`discovery`, `production`, `shared-contracts`, and project-specific lanes). Do not move speculative/discovery content into production outputs without an explicit packet/decision.
+- Default to control-plane behavior when `project-factory/` is present. Do not silently become the primary implementer unless the operator explicitly asks for direct coding.
+- Use the source-of-truth order defined in `project-factory/shared-contracts/OPERATING_MODEL.md` when factory files disagree.
+- Prefer bounded packets for meaningful implementation work instead of vague continuation.
+- When editing packetized delegated-run files, preserve restartability fields (packet ids, run ids, budgets, checkpoints, exact output paths).
+- If you change factory state (active phase, packet status, routing, decisions), update the relevant files under `project-factory/meta/` and/or `project-factory/ORCHESTRATOR_BOOTSTRAP.md`.
+- Follow `project-factory/claude_handoff/RUN_OUTPUT_CONTRACT.md` for required manifests/checkpoints and status labeling when touching run outputs.
+
+## Cursor-Specific Behavior
+
+### Keep Diffs Tight
+- Do not reformat entire files unless required by the change.
+- Keep diffs small and reviewable. Touch only what the task requires.
+- Match the naming conventions, file structure, and code style already in the project.
+
+### Read Before Edit
+- Always read a file before modifying it.
+- Search for existing files with similar names or purposes before creating new ones.
+- Prefer reading local repo files/config before assuming anything.
+
+### Pause Before Big Changes
+- If a change is architectural or touches a lot of surface area, pause and summarize options in 2–3 bullets before implementing. These kinds of changes are typically better suited for Claude Code.
+
+### Fast Checks
+Run the fastest relevant checks after your edits:
+- Typecheck (if present)
+- Lint (if present)
+- Unit tests (if fast)
+- Build or smoke run (if available and fast)
+
+If something is slow/unavailable, run the fast subset and note what was skipped.
+
+### Git
+- If on a feature branch, commit there.
+- If on `main`, create a feature branch first for anything beyond a trivial one-liner.
+- Commit with clear imperative-mood messages (~50 char subject).
+- Push the branch when checks pass. Don't wait for permission to push feature branches.
+- Never force push or rewrite history unless explicitly asked.
+- Never commit or push secrets.
+
+### Communication
+When finishing a task, summarize:
+- What changed (1-3 bullets)
+- Files modified
+- Checks run + results
+
+Skip the summary for trivial edits.
+
+## Guardrails
+
+- **Verify before using**: Confirm APIs, functions, and imports exist before using them. Don't assume.
+- **Complete what you start**: No placeholder implementations or TODO stubs. Finish the feature.
+- **Read errors carefully**: When something fails, read the error message and address the root cause. Don't retry blindly.
+- **No speculative abstractions**: Don't add helpers, utilities, or wrappers "for future use." Build only what's needed now.
+- **Respect in-progress work**: If there's an active plan in `docs/plans/`, be careful about making changes in that area without checking with the user. Claude Code may be mid-implementation.

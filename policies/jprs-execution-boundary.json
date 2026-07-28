@@ -1,0 +1,136 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowProjectBucketMetadata",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetBucketLocation",
+        "s3:ListBucket"
+      ],
+      "Resource": "arn:aws:s3:::jprs-*"
+    },
+    {
+      "Sid": "AllowProjectObjectAccess",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": "arn:aws:s3:::jprs-*/*"
+    },
+    {
+      "Sid": "AllowProjectQueues",
+      "Effect": "Allow",
+      "Action": [
+        "sqs:ChangeMessageVisibility",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes",
+        "sqs:GetQueueUrl",
+        "sqs:ReceiveMessage",
+        "sqs:SendMessage"
+      ],
+      "Resource": "arn:aws:sqs:us-east-1:*:jprs-*"
+    },
+    {
+      "Sid": "AllowProjectFunctionInvocation",
+      "Effect": "Allow",
+      "Action": "lambda:InvokeFunction",
+      "Resource": "arn:aws:lambda:us-east-1:*:function:jprs-*"
+    },
+    {
+      "Sid": "AllowProjectStateMachines",
+      "Effect": "Allow",
+      "Action": [
+        "states:DescribeExecution",
+        "states:StartExecution",
+        "states:StopExecution"
+      ],
+      "Resource": [
+        "arn:aws:states:us-east-1:*:stateMachine:jprs-*",
+        "arn:aws:states:us-east-1:*:execution:jprs-*:*"
+      ]
+    },
+    {
+      "Sid": "AllowProjectParameters",
+      "Effect": "Allow",
+      "Action": [
+        "ssm:GetParameter",
+        "ssm:GetParameters"
+      ],
+      "Resource": "arn:aws:ssm:us-east-1:*:parameter/jprs/*"
+    },
+    {
+      "Sid": "AllowWritingToPrecreatedProjectLogs",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:us-east-1:*:log-group:/aws/lambda/jprs-*:*"
+    },
+    {
+      "Sid": "AllowProjectMetricsOnly",
+      "Effect": "Allow",
+      "Action": "cloudwatch:PutMetricData",
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "cloudwatch:namespace": "JPRS"
+        }
+      }
+    },
+    {
+      "Sid": "DenyPrivilegeEscalationAndExcludedServices",
+      "Effect": "Deny",
+      "Action": [
+        "account:*",
+        "aoss:*",
+        "batch:*",
+        "ec2:*",
+        "ecs:*",
+        "eks:*",
+        "es:*",
+        "glue:Create*",
+        "glue:Start*",
+        "iam:*",
+        "kinesis:*",
+        "organizations:*",
+        "rds:*",
+        "redshift:*",
+        "sts:AssumeRole"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "DenyAccountPublicAccessChanges",
+      "Effect": "Deny",
+      "Action": "s3:PutAccountPublicAccessBlock",
+      "Resource": "*"
+    },
+    {
+      "Sid": "DenyUnsafeProjectBucketChanges",
+      "Effect": "Deny",
+      "Action": [
+        "s3:DeleteBucketPolicy",
+        "s3:PutBucketAcl",
+        "s3:PutBucketPolicy",
+        "s3:PutBucketPublicAccessBlock",
+        "s3:PutBucketVersioning"
+      ],
+      "Resource": "arn:aws:s3:::jprs-*"
+    },
+    {
+      "Sid": "DenyUnsafeProjectObjectAclChanges",
+      "Effect": "Deny",
+      "Action": "s3:PutObjectAcl",
+      "Resource": "arn:aws:s3:::jprs-*/*"
+    },
+    {
+      "Sid": "DenyRawSnapshotDeletion",
+      "Effect": "Deny",
+      "Action": "s3:DeleteObject",
+      "Resource": "arn:aws:s3:::jprs-*/raw/*"
+    }
+  ]
+}

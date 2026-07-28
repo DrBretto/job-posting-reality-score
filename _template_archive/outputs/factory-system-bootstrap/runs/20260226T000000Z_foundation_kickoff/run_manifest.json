@@ -1,0 +1,42 @@
+{
+  "packet_id": "foundation_kickoff_template_factory_bootstrap_v1",
+  "execution_profile": "FOUNDATION",
+  "project_slug": "solo-template",
+  "phase_key": "phase_foundation_baseline",
+  "run_id": "20260226T000000Z",
+  "stage": "foundation_baseline_inventory_and_plan",
+  "handoff_target": "delegated executor (Claude)",
+  "status": "not_started",
+  "active_roles": [
+    "Research Analyst",
+    "Planner / Architect",
+    "Evaluator / QA / Red Team",
+    "Operator / Packager"
+  ],
+  "inputs_used": [
+    "repo root files",
+    "project-factory/shared-contracts/*",
+    "project-factory/claude_handoff/*"
+  ],
+  "outputs_emitted": [],
+  "budget_caps": {
+    "time_minutes": 45,
+    "retries": 2,
+    "source_cap": 30
+  },
+  "acceptance_condition": [
+    "All expected outputs are written to the exact mapped paths",
+    "The gate decision is evidence-backed and usable by the Orchestrator",
+    "The run can be resumed cleanly from the emitted checkpoint if needed"
+  ],
+  "stop_condition": [
+    "Stop after the baseline inventory, plan, gate decision, manifest, and checkpoint are emitted",
+    "Stop early with a checkpoint if blocked or budget-limited"
+  ],
+  "checkpoint_path": "project-factory/outputs/factory-system-bootstrap/runs/20260226T000000Z_foundation_kickoff/checkpoint.md",
+  "next_stage": "foundation_baseline_inventory_and_plan",
+  "top_risks": [
+    "First run has not been executed",
+    "Lane inference may need adjustment after inventory"
+  ]
+}

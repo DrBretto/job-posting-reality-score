@@ -1,0 +1,90 @@
+# Run Packet: foundation_kickoff_template_factory_bootstrap_v1
+
+## Header
+- packet_id: `foundation_kickoff_template_factory_bootstrap_v1`
+- execution_profile: `FOUNDATION`
+- project_slug: `solo-template`
+- phase_key: `phase_foundation_baseline`
+- run_id: `20260226T000000Z`
+- run_root: `project-factory/outputs/factory-system-bootstrap/runs/20260226T000000Z_foundation_kickoff`
+- handoff_target: `delegated executor (Claude)`
+- stage: `foundation_baseline_inventory_and_plan`
+- resume_from: `none`
+- skip_completed: `true`
+- budget_caps:
+  - time_minutes: `45`
+  - retries: `2`
+  - source_cap: `30`
+- checkpoint_policy:
+  - on_stage_complete: `true`
+  - on_budget_exhausted: `true`
+  - near_context_limit: `true`
+  - interval_hint_minutes: `20`
+- output_mapping:
+  - `inventory_report` -> `project-factory/outputs/factory-system-bootstrap/runs/20260226T000000Z_foundation_kickoff/inventory_report.md`
+  - `lane_artifact_map` -> `project-factory/outputs/factory-system-bootstrap/runs/20260226T000000Z_foundation_kickoff/lane_artifact_map.md`
+  - `foundation_plan` -> `project-factory/outputs/factory-system-bootstrap/runs/20260226T000000Z_foundation_kickoff/foundation_plan.md`
+  - `gate_decision` -> `project-factory/outputs/factory-system-bootstrap/runs/20260226T000000Z_foundation_kickoff/gate_decision.md`
+  - `run_manifest` -> `project-factory/outputs/factory-system-bootstrap/runs/20260226T000000Z_foundation_kickoff/run_manifest.json`
+  - `checkpoint` -> `project-factory/outputs/factory-system-bootstrap/runs/20260226T000000Z_foundation_kickoff/checkpoint.md`
+
+## Body
+- objective:
+  - Produce a baseline inventory of this template repo, validate inferred lanes/artifact types, and generate a short staged plan for using the factory on future template enhancements.
+- scope:
+  - inventory the current template/factory surfaces
+  - produce the first bounded baseline plan and gate decision
+  - do not expand into unrelated template improvements
+- active_roles:
+  - `Research Analyst`
+  - `Planner / Architect`
+  - `Evaluator / QA / Red Team`
+  - `Operator / Packager`
+- inputs:
+  - repo root files and directories
+  - `CLAUDE.md`, `.cursorrules`, `AGENTS.md`
+  - `docs/PLAN.md`, `docs/plans/`, `docs/POSTMORTEMS.md`
+  - `project-factory/` shared contracts and metadata logs
+- constraints:
+  - Stay generic; do not import domain-specific content from other projects.
+  - Separate evidence/inference/speculation in outputs.
+  - Use exact output paths from `output_mapping`.
+  - Keep artifacts complete and resumable.
+  - Respect source cap/time cap; checkpoint if exhausted.
+- expected_outputs:
+  - `inventory_report`: complete repo inventory focused on artifact families, process docs, and automation surface
+  - `lane_artifact_map`: recommended lane-to-artifact mapping with promotion notes
+  - `foundation_plan`: staged next-step packet plan (2-4 packets max)
+  - `gate_decision`: `unlock`, `revise_foundation`, or `stop` with evidence
+  - `run_manifest`: manifest containing statuses, inputs, outputs, budgets, risks
+  - `checkpoint`: stage checkpoint and resume notes
+- acceptance_condition:
+  - all expected outputs are written to the exact mapped paths
+  - the gate decision is evidence-backed and usable by the Orchestrator
+  - the run can be resumed cleanly from the emitted checkpoint if needed
+- stop_condition:
+  - stop after the baseline inventory, plan, gate decision, manifest, and checkpoint are emitted
+  - stop early with a checkpoint if blocked or budget-limited
+- success_criteria:
+  - Inventory is complete enough to guide future packet design.
+  - Lane mapping is explicit and aligned with shared contracts.
+  - Plan is bounded and restartable.
+  - Gate decision is evidence-backed and usable by the Orchestrator.
+- failure_routing_if_blocked:
+  - Emit partial completed outputs with status labels.
+  - Write `checkpoint` with blockers and exact next actions.
+  - Set manifest status to `blocked` or `budget_exhausted`.
+
+## Footer (to complete during/after run)
+- completion_status: `not_started`
+- outputs_emitted:
+  - none yet
+- next_stage:
+  - `foundation_baseline_inventory_and_plan` (same stage, first execution pending)
+- checkpoint_path:
+  - `project-factory/outputs/factory-system-bootstrap/runs/20260226T000000Z_foundation_kickoff/checkpoint.md`
+- gate_recommendations:
+  - pending
+- top_risks:
+  - packet not executed yet
+  - lane inference may need adjustment after first FOUNDATION run

@@ -1,0 +1,19 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyNewJprsScheduledWork",
+      "Effect": "Deny",
+      "Action": [
+        "lambda:InvokeFunction",
+        "sqs:SendMessage",
+        "states:StartExecution"
+      ],
+      "Resource": [
+        "arn:aws:lambda:us-east-1:*:function:jprs-*",
+        "arn:aws:sqs:us-east-1:*:jprs-*",
+        "arn:aws:states:us-east-1:*:stateMachine:jprs-*"
+      ]
+    }
+  ]
+}

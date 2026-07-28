@@ -1,0 +1,59 @@
+phase	task	owner	aws_surface_or_artifact	why_this_owner	acceptance_evidence
+P0-Guardrails	Choose and lock the region	BRETT_MANUAL_AWS	Console region picker	Region discipline is muscle memory; must be Brett's deliberate choice	Region recorded in workbook header; all resources land there
+P0-Guardrails	Recommend budget/alarm thresholds + explainer	AI_IMPLEMENTATION	Threshold memo	AI drafts numbers/rationale; Brett owns the risk decision	Memo delivered; Brett confirms numbers match his tolerance
+P0-Guardrails	Create Cost budget in console	BRETT_MANUAL_AWS	AWS Budgets	Hands-on rebuild of billing muscle memory	Budget visible; test notification email received
+P0-Guardrails	Create billing alarm in us-east-1	BRETT_MANUAL_AWS	CloudWatch EstimatedCharges alarm	Manual create; also induces the wrong-region failure lesson	Alarm exists in us-east-1, valid state
+P0-Guardrails	Confirm guardrails active before any spend	SHARED_VERIFY	Budgets + CloudWatch	Both must agree the fence is up before Phase 1	Screenshots of active budget + alarm
+P1-S3	Draft lifecycle JSON + key-naming scheme + bucket policy	AI_IMPLEMENTATION	Lifecycle rule JSON, bucket policy	AI prepares config; Brett must read it back	Artifacts delivered with inline comments
+P1-S3	Create private bucket, Block Public Access ON	BRETT_MANUAL_AWS	S3 console	Manual create is the recall act	Bucket exists, private, correct region
+P1-S3	Apply lifecycle rule; confirm versioning OFF	BRETT_MANUAL_AWS	S3 Management/Lifecycle	Enforces operator rule (no versioning) by hand	Lifecycle active; versioning disabled; Brett states why
+P1-S3	Induce same-key overwrite failure	BRETT_MANUAL_AWS	S3 objects	Proves why immutability needs unique keys	Second put replaces first; observation logged
+P1-S3	Confirm immutability-by-convention design	SHARED_VERIFY	S3 bucket + key scheme	Both confirm no versioning yet immutable-by-key	Test object at expected key; design explained
+P2-Collector	Write thin collector handler + ATS fixture	AI_IMPLEMENTATION	Lambda code, mock ATS response	AI writes code (no pandas/numpy per rule); Brett inspects	Handler + fixture delivered
+P2-Collector	Draft least-privilege S3 PutObject policy	AI_IMPLEMENTATION	IAM policy JSON	AI drafts minimal policy; Brett verifies scope	Policy grants only PutObject on one prefix
+P2-Collector	Inspect: name ATS endpoint, read IAM aloud, find S3-key line	SHARED_VERIFY	Code + policy review	INSPECT-FIRST gate before anything goes in	Brett names endpoint, confirms sanctioned API, points at key write
+P2-Collector	Create Lambda + execution role in console	BRETT_MANUAL_AWS	Lambda console	Manual create/wire is the recall act	Function + role exist; test event runs
+P2-Collector	Induce AccessDenied (missing PutObject) then fix	BRETT_MANUAL_AWS	Lambda + IAM + CloudWatch Logs	Rebuilds the function-role permission reflex	AccessDenied observed in logs; fixed; success
+P2-Collector	Confirm snapshot landed with correct schema	SHARED_VERIFY	S3 + CloudWatch Logs	Both confirm end-to-end data landing	Snapshot object present; clean log
+P3-SQS-DLQ	Write worker Lambda + SQS access policy; recommend timeout/maxReceive	AI_IMPLEMENTATION	Worker code, SQS policy JSON	AI prepares; numbers reconciled with reliability seat	Worker + policy delivered
+P3-SQS-DLQ	Inspect: narrate message lifecycle in own words	SHARED_VERIFY	SQS concept review	INSPECT-FIRST: the exact path Brett blanked on	Brett states enqueue->receive->fail->DLQ->redrive
+P3-SQS-DLQ	Create DLQ then main queue; wire redrive policy	BRETT_MANUAL_AWS	SQS console	THE core recall lab; must be by hand	Both queues exist; redrive wired; maxReceive set
+P3-SQS-DLQ	Induce poison message -> land in DLQ -> redrive back	BRETT_MANUAL_AWS	SQS console + DLQ	Rebuilds the DLQ path directly	Retry count observed; DLQ arrival; successful redrive
+P3-SQS-DLQ	Induce low-visibility-timeout duplicate processing	BRETT_MANUAL_AWS	SQS console	Teaches visibility-timeout by breaking it	Duplicate processing observed and logged
+P3-SQS-DLQ	Confirm poison quarantined then recovered	SHARED_VERIFY	SQS queue depths	Both confirm DLQ mechanics work	Before/after depth screenshots
+P4-Scheduler	Draft cron/rate + timezone rationale + invoke-role policy	AI_IMPLEMENTATION	Schedule expression, role JSON	AI drafts; Brett confirms exact fire time	Expression + role policy delivered
+P4-Scheduler	Create schedule + invoke role; point at target	BRETT_MANUAL_AWS	EventBridge Scheduler	Manual create is the recall act	Schedule exists; target wired
+P4-Scheduler	Induce wrong-timezone or missing-invoke-permission failure	BRETT_MANUAL_AWS	Scheduler metrics + target logs	Teaches caller-permission + timezone traps	Misfire/no-fire observed; cause found
+P4-Scheduler	Confirm one real scheduled fire	SHARED_VERIFY	Target execution history	Both confirm autonomous daily run	Scheduled (not manual) invocation at expected time
+P5-StepFunctions	Write ASL (Map+Retry+Catch) + execution-role policy	AI_IMPLEMENTATION	ASL JSON, role JSON	AI prepares definition; Brett traces it	ASL + role delivered
+P5-StepFunctions	Inspect: trace ASL by eye (entry->Map->Catch)	SHARED_VERIFY	State machine review	INSPECT-FIRST before deploy	Brett narrates Retry/Catch without running it
+P5-StepFunctions	Create state machine; assign role; run one execution	BRETT_MANUAL_AWS	Step Functions console	Manual create + read execution history	Execution runs; graph view read
+P5-StepFunctions	Induce one-company failure; confirm isolation via Catch	BRETT_MANUAL_AWS	Execution history	Teaches per-item isolation + error routing	Failed state named; other companies succeed
+P5-StepFunctions	Confirm fan-out isolates failure	SHARED_VERIFY	Execution graph	Both confirm reliability property	Green run with caught-failure branch
+P6-ChangeDetection	Write diff logic + report schema + known-case fixtures	AI_IMPLEMENTATION	Diff Lambda, report schema	AI implements per data seat's identity model	Diff + fixtures delivered
+P6-ChangeDetection	Inspect: evidence-citation + didnt-run path + no fake/real language	SHARED_VERIFY	Code review	INSPECT-FIRST honesty gate	Brett confirms each change cites snapshots; no accusations
+P6-ChangeDetection	Deploy diff worker; run over two real days	BRETT_MANUAL_AWS	Lambda + S3	Manual deploy; first real product use	Report distinguishes new/disappeared/changed
+P6-ChangeDetection	Induce zero-snapshot day -> report says COLLECTORS-DID-NOT-RUN	BRETT_MANUAL_AWS	Lambda + S3	The single most important honesty test	Report says didn't-run, NOT all-jobs-disappeared
+P6-ChangeDetection	Confirm report traceability + run-health header	SHARED_VERIFY	Report object	Both confirm V1 honesty guarantees	Multi-day report, all items traceable, correct header
+P7-Observability	Recommend alarm thresholds + didnt-run metric-math	AI_IMPLEMENTATION	Alarm spec, metric math	AI drafts; Brett states operational meaning	Spec delivered
+P7-Observability	Create SNS topic + confirm email subscription	BRETT_MANUAL_AWS	SNS console	Manual wiring of the alert path	Topic + confirmed subscription
+P7-Observability	Create DLQ-not-empty and collector-didnt-run alarms	BRETT_MANUAL_AWS	CloudWatch Alarms	Manual create is the recall act	Both alarms exist, valid thresholds
+P7-Observability	Induce suppressed run -> alarm fires -> email arrives	BRETT_MANUAL_AWS	Scheduler + CloudWatch + SNS	Proves alerting actually works end-to-end	ALARM state + email receipt captured
+P7-Observability	Confirm alarms distinguish blind-radar vs one-company-fail	SHARED_VERIFY	CloudWatch	Both confirm the two failure signals differ	Both alarms toggle correctly on induced failures
+P8-Bedrock	Write grounded-summary prompt + reuse CFR client + token guard	AI_IMPLEMENTATION	Prompt, Bedrock client config	AI prepares; consumes diff output only	Prompt + config delivered
+P8-Bedrock	Inspect: summary fed ONLY diff; template forbids fake/real	SHARED_VERIFY	Prompt review	INSPECT-FIRST authority guardrail	Brett confirms grounding + no fake/real language
+P8-Bedrock	Enable model access; deploy summary step; set cost ceiling	BRETT_MANUAL_AWS	Bedrock console + Billing	Manual model-access + cost control	Access enabled; ceiling set; cost observed
+P8-Bedrock	Induce ambiguous case; confirm behavior-not-accusation wording	BRETT_MANUAL_AWS	Summary output	Tests the no-overclaim guardrail live	Output describes behavior, no fake-job claim
+P8-Bedrock	Confirm every summary sentence maps to a diff item	SHARED_VERIFY	Summary + diff	Both confirm LLM is narrator not authority	Grounded summary, cost within ceiling
+P9-IaC	Draft SAM/CDK template mirroring the hand-built stack	AI_IMPLEMENTATION	SAM/CDK template	AI drafts; reconstruction test is Brett reading it	Template delivered
+P9-IaC	Inspect: map EACH template block to the console screen he built	SHARED_VERIFY	Template + memory review	Highest INSPECT bar; IaC must not paper over gaps	Brett names console origin for every block
+P9-IaC	Deploy stack to fresh names; diff behavior vs manual	BRETT_MANUAL_AWS	CloudFormation	Round-trip proof of mastery	Stack reproduces V1 end-to-end
+P9-IaC	Induce omitted-permission failure in template	BRETT_MANUAL_AWS	CloudFormation + logs	Proves dependency understanding not syntax copying	Same failure reproduced then fixed
+P9-IaC	Tear down manual stack; keep IaC as source of truth	BRETT_MANUAL_AWS	Console + CFN	Completes manual->code reconstruction	Manual resources gone; IaC stack running
+P9-IaC	Confirm Brett can narrate every block from manual experience	SHARED_VERIFY	Stack narration	The reconstruction acceptance test	Narration notes complete
+P10-Athena	Write Parquet step + table DDL + analytical SQL	AI_IMPLEMENTATION	Parquet writer, DDL, SQL	AI prepares; framed as evidence not truth-claims	Artifacts delivered
+P10-Athena	Inspect: what each query measures and does NOT prove	SHARED_VERIFY	SQL review	INSPECT-FIRST anti-overclaim gate	Brett states momentum != will-hire-me, repost != fake
+P10-Athena	Add partitioned Parquet; define external table by hand	BRETT_MANUAL_AWS	Athena console	Manual DDL (no paid Glue crawler per rule)	Table defined; partitioned Parquet present
+P10-Athena	Induce unpartitioned scan -> watch cost jump -> add partition	BRETT_MANUAL_AWS	Athena Query editor	Teaches scan-cost lever by breaking it	Before/after Data-scanned recorded
+P10-Athena	Confirm real queries return honest behavior signals	SHARED_VERIFY	Athena results	Both confirm mature value + honest framing	Queries return momentum/first-seen/repost, cost negligible
+ALL-PHASES	Teardown ledger kept current; nothing always-on left running	BRETT_MANUAL_AWS	Cross-phase ledger	Standing cost/no-always-on rule	Ledger complete; no RDS/NAT/EC2; monthly cost < $5

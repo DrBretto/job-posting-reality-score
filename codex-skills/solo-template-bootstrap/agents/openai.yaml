@@ -1,0 +1,4 @@
+interface:
+  display_name: "Solo Template Bootstrap"
+  short_description: "Bootstrap projects from your local solo template"
+  default_prompt: "Create this workspace from my solo template."
