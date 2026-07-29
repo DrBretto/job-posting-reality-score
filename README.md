@@ -22,12 +22,11 @@ It reports observed behavior and evidence; it does not label jobs or companies "
 - Region: `us-east-1`.
 - V1: P0 through P7.
 
-Start here:
+**Operator entrypoint:** [START_HERE.md](START_HERE.md)
 
-1. Read the [P0 account preflight](docs/operator/phase-0/P0_ACCOUNT_PREFLIGHT.md).
-2. Follow the [P0 console worksheet](docs/operator/phase-0/P0_CONSOLE_WORKSHEET.md).
-3. Answer the recall prompt in your own words.
-4. Run the shared verification before beginning P1.
+That single guide contains the current status, manual/AI division of work, complete P0 console
+instructions, values to enter, progress-report template, done gate, future phase map, and restart
+instructions. The other documents are supporting references rather than required navigation.
 
 ## Architecture
 

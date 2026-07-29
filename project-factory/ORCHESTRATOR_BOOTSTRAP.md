@@ -26,7 +26,7 @@ complete from document existence alone.
 
 | Phase | Status | Next gate |
 |---|---|---|
-| P0 account guardrails | READY FOR BRETT | Complete `docs/operator/phase-0/P0_CONSOLE_WORKSHEET.md` |
+| P0 account guardrails | READY FOR BRETT | Follow the P0 section in `START_HERE.md` |
 | P1 S3 substrate | LOCKED | P0 done-gate and no-notes answer |
 | P2-P8 manual V1/V1.5 | LOCKED | Preceding phase complete |
 | P9 IaC reconstruction | LOCKED | Working V1 |
@@ -34,10 +34,11 @@ complete from document existence alone.
 
 ## Next Unlocked Action
 
-`docs/operator/phase-0/P0_CONSOLE_WORKSHEET.md`
+`START_HERE.md`
 
-Brett performs the console steps. The AI may answer questions and run read-only verification, but it
-does not click through or create the resources for him.
+Brett follows the current phase instructions in that single operator guide. The AI may answer
+questions and run read-only verification, but it does not click through or create the resources for
+him.
 
 ## State Resolution Order
 
@@ -55,7 +56,7 @@ without changing its objective.
 
 ## Resume Instructions
 
-1. Read `README.md`, `docs/PLAN.md`, and the current phase plan.
+1. Read `START_HERE.md`, `docs/PLAN.md`, and the current phase plan.
 2. Read `git status` and the latest commit before editing.
 3. Confirm the current phase from the table above and from observable AWS evidence.
 4. Keep manual and AI-owned work separate.

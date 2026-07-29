@@ -22,6 +22,7 @@ This phase deliberately separates preparation from proof:
 - [x] Draft the shared execution-role permissions boundary.
 - [x] Correct the committee's unsupported direct scheduler-disable mechanism.
 - [x] Draft the P4 budget-lockdown policy.
+- [x] Consolidate operator instructions, progress reporting, and restart guidance into `START_HERE.md`.
 - [ ] Brett completes root-key review, human MFA, and access-key inventory.
 - [ ] Brett enables billing alerts and observes the intentional wrong-region failure.
 - [ ] Brett creates the `$5` warning budget, `$10` ceiling budget, and billing alarm.
@@ -43,6 +44,8 @@ This phase deliberately separates preparation from proof:
 - 2026-07-28: Both IAM policy files returned zero findings from AWS Access Analyzer policy validation.
 - 2026-07-28: Repository fast checks passed; code-specific checks remain unavailable until application
   code and tests are added.
+- 2026-07-29: Replaced the generic template entrypoint with a complete operator guide and synchronized
+  the README, orchestrator bootstrap, and session status around it.
 
 ## Follow-ups
 
