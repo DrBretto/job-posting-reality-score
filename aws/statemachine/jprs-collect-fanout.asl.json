@@ -1,0 +1,48 @@
+{
+  "Comment": "JPRS collect fan-out: one company per Map branch. Retry handles transient failures; Catch isolates a permanently-bad company so the whole run still succeeds.",
+  "StartAt": "CollectAllCompanies",
+  "States": {
+    "CollectAllCompanies": {
+      "Type": "Map",
+      "ItemsPath": "$.companies",
+      "MaxConcurrency": 3,
+      "ItemProcessor": {
+        "ProcessorConfig": { "Mode": "INLINE" },
+        "StartAt": "CollectOne",
+        "States": {
+          "CollectOne": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Parameters": {
+              "FunctionName": "jprs-collect-one",
+              "Payload.$": "$"
+            },
+            "Retry": [
+              {
+                "ErrorEquals": ["States.ALL"],
+                "IntervalSeconds": 2,
+                "MaxAttempts": 2,
+                "BackoffRate": 2.0
+              }
+            ],
+            "Catch": [
+              {
+                "ErrorEquals": ["States.ALL"],
+                "ResultPath": "$.error",
+                "Next": "MarkCompanyFailed"
+              }
+            ],
+            "End": true
+          },
+          "MarkCompanyFailed": {
+            "Type": "Pass",
+            "Result": { "status": "FAILED_ISOLATED" },
+            "ResultPath": "$.outcome",
+            "End": true
+          }
+        }
+      },
+      "End": true
+    }
+  }
+}

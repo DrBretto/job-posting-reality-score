@@ -1,0 +1,73 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowProjectScopedDataPlane",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket",
+        "s3:GetBucketLocation",
+        "sqs:SendMessage",
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes",
+        "sqs:GetQueueUrl",
+        "sqs:StartMessageMoveTask",
+        "states:StartExecution",
+        "states:DescribeExecution",
+        "lambda:InvokeFunction",
+        "ssm:GetParameter",
+        "ssm:GetParameters",
+        "ssm:GetParametersByPath"
+      ],
+      "Resource": [
+        "arn:aws:s3:::jprs-*",
+        "arn:aws:s3:::jprs-*/*",
+        "arn:aws:sqs:us-east-1:*:jprs-*",
+        "arn:aws:states:us-east-1:*:stateMachine:jprs-*",
+        "arn:aws:states:us-east-1:*:execution:jprs-*:*",
+        "arn:aws:lambda:us-east-1:*:function:jprs-*",
+        "arn:aws:ssm:us-east-1:*:parameter/jprs/*"
+      ]
+    },
+    {
+      "Sid": "AllowProjectObservabilityAndDelivery",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "cloudwatch:PutMetricData",
+        "sns:Publish",
+        "ses:SendEmail",
+        "bedrock:InvokeModel"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "DenyPrivilegeEscalationAndOutOfScopeInfra",
+      "Effect": "Deny",
+      "Action": [
+        "iam:*",
+        "ec2:*",
+        "rds:*",
+        "elasticache:*",
+        "es:*",
+        "eks:*",
+        "organizations:*",
+        "account:*",
+        "s3:PutBucketPublicAccessBlock",
+        "s3:PutAccountPublicAccessBlock",
+        "s3:PutBucketPolicy",
+        "s3:PutBucketAcl",
+        "s3:DeleteBucketPolicy",
+        "kms:ScheduleKeyDeletion",
+        "kms:DisableKey"
+      ],
+      "Resource": "*"
+    }
+  ],
+  "_notes": "SHARED permissions boundary for every JPRS execution role. A boundary is a CEILING: each role also gets its own tighter policy (collector, processor, reporter, llm, sfn, scheduler). Applied when roles are created at P2 — not at P0. Account id is intentionally wildcarded ('*') so no account number is baked in; region pinned to us-east-1. Deny block prevents any JPRS role from touching IAM/EC2/RDS/making a bucket public, even if a role policy is mis-written. Review this file together at P2 before attaching."
+}

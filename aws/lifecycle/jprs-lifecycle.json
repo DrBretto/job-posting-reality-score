@@ -1,0 +1,32 @@
+{
+  "Rules": [
+    {
+      "ID": "raw-court-of-record-IA-then-expire",
+      "Filter": { "Prefix": "raw/" },
+      "Status": "Enabled",
+      "Transitions": [
+        { "Days": 90, "StorageClass": "STANDARD_IA" }
+      ],
+      "Expiration": { "Days": 400 }
+    },
+    {
+      "ID": "normalized-replayable-expire-90",
+      "Filter": { "Prefix": "normalized/" },
+      "Status": "Enabled",
+      "Expiration": { "Days": 90 }
+    },
+    {
+      "ID": "reports-expire-180",
+      "Filter": { "Prefix": "reports/" },
+      "Status": "Enabled",
+      "Expiration": { "Days": 180 }
+    },
+    {
+      "ID": "abort-incomplete-multipart-7d",
+      "Filter": { "Prefix": "" },
+      "Status": "Enabled",
+      "AbortIncompleteMultipartUpload": { "DaysAfterInitiation": 7 }
+    }
+  ],
+  "_notes": "events/ and current/ intentionally have NO expiration: events/ is the product's permanent change-memory; current/ is the small always-overwritten latest-state + source-status. raw/ is the court-of-record: cools to Standard-IA at 90d, expires at 400d (V1 learning scale keeps ~13 months of raw). normalized/ is replayable from raw so it expires at 90d. reports/ kept 180d (tiny). NO versioning anywhere (operator hard rule) — immutability comes from unique write-once keys, not versions. Adjust the day counts together before applying if you want a longer raw window."
+}

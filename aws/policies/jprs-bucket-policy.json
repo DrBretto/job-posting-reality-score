@@ -1,0 +1,27 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyNonTLS",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:*",
+      "Resource": [
+        "arn:aws:s3:::REPLACE_WITH_YOUR_BUCKET_NAME",
+        "arn:aws:s3:::REPLACE_WITH_YOUR_BUCKET_NAME/*"
+      ],
+      "Condition": { "Bool": { "aws:SecureTransport": "false" } }
+    },
+    {
+      "Sid": "DenyUnEncryptedPutObject",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::REPLACE_WITH_YOUR_BUCKET_NAME/*",
+      "Condition": {
+        "StringNotEquals": { "s3:x-amz-server-side-encryption": "AES256" }
+      }
+    }
+  ],
+  "_notes": "Two belt-and-suspenders denies on top of Block-Public-Access + default SSE-S3. DenyNonTLS rejects any plaintext-HTTP request. DenyUnEncryptedPutObject rejects a PutObject that isn't SSE-S3 (AES256). Replace REPLACE_WITH_YOUR_BUCKET_NAME with your actual bucket name (3 spots) before pasting into Permissions -> Bucket policy. No account ID needed (S3 ARNs don't carry one). If you enable default SSE-S3 at the bucket level (you will), the second deny is redundant-but-harmless insurance."
+}

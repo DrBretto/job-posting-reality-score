@@ -1,0 +1,12 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "WriteRawSnapshotsOnly",
+      "Effect": "Allow",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::jprs-prod-bw-20260731/raw/*"
+    }
+  ],
+  "_notes": "Least-privilege for the collector Lambda: it can PutObject ONLY under raw/ in the one bucket. No GetObject, no ListBucket, no other prefix, no other bucket, no s3:* wildcard. This is the interview answer to 'how do you scope a Lambda's S3 access' — action + resource pinned to exactly what it needs. You'll ADD this inline policy only AFTER you watch the AccessDenied happen without it. Logging perms come from the AWSLambdaBasicExecutionRole managed policy, attached separately."
+}
