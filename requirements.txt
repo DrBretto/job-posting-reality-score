@@ -1,0 +1,4 @@
+# Lambda runtime dependencies (installed into each function package by `sam build`).
+# boto3 is provided by the AWS Lambda Python runtime, so it is intentionally omitted here.
+pydantic>=2.6
+pyyaml>=6.0

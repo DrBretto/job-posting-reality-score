@@ -17,7 +17,8 @@ Region: **us-east-1** · Cost target: **< $5/mo** · S3 versioning: **OFF** · N
 | P2 | First collector Lambda + exec role | not started |
 | P3 | SQS + DLQ (the recall lab) | not started |
 | P4 | EventBridge Scheduler | **DONE** — jprs-daily-collect (rate 5min, SQS SendMessage target, scheduler assumes a role) fired -> snapshot with no manual action; then disabled |
-| P5 | Step Functions orchestration | **IN PROGRESS** |
+| P5 | Step Functions orchestration | **DONE** — jprs-collect-fanout (Map + Retry + Catch); 2 companies collected, bad one caught -> FAILED_ISOLATED, run green. End of hands-on interview-refresher set. |
+| P6-P10 | Change-detection + scoring + report + observability + IaC | **DONE (all-AI, deploy-ready)** — full V1 app (3 connectors, M1 enumerate, differ w/ disappearance invariant + M3 guards, 6-dim scoring, honest report, narrator-OFF); **40 pytest passing**; SAM template deploys whole stack (M4 prefix-split IAM, M5 budget-lockdown + 30d log retention), **sam validate + cfn-lint clean**. Reconciled handler paths (src.*) + CodeUri + requirements.txt + .samignore. Bedrock off; Ashby gated; Athena (P10) deferred until history exists. Ready for `sam build && sam deploy`. |
 | P6 | Change detection & daily report (V1 deliverable) | not started |
 | P7 | CloudWatch alarms & observability | not started |
 | P8 | Bedrock digest (optional) | not started |

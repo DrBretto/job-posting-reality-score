@@ -1,0 +1,860 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Job Posting Reality Score (JPRS) V1 stack. Folds phases P2-P7 into one deploy:
+  S3 (single bucket, prefix-partitioned, no versioning), SQS collect-queue + DLQ,
+  EventBridge Scheduler (collect + assemble), four Lambdas (enumerate/collector/differ/report)
+  each with its own least-privilege role + shared permissions boundary, an optional
+  feature-flagged narrator Lambda, a Standard Step Functions assembler (Map + Retry + Catch),
+  CloudWatch alarms A1-A7 -> SNS, and the M5 enforcing cost fence (AWS Budgets + Budget Action
+  that attaches an IAM lockdown deny policy to the scheduler roles per ADR-0001).
+
+# ---------------------------------------------------------------------------
+# Parameters
+# ---------------------------------------------------------------------------
+Parameters:
+  BucketName:
+    Type: String
+    Default: jprs-prod-bw-20260731
+    Description: Name of the single JPRS data bucket (prefix-partitioned, no versioning).
+    AllowedPattern: '^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$'
+  AlertEmail:
+    Type: String
+    Default: drbretto82@gmail.com
+    Description: Email that receives ops alarms (A1-A7) and AWS Budgets alerts.
+    AllowedPattern: '^[^@\s]+@[^@\s]+\.[^@\s]+$'
+  DigestRecipient:
+    Type: String
+    Default: drbretto82@gmail.com
+    Description: Email that receives the daily digest report (SES). Must be a verified SES identity while SES is in sandbox.
+    AllowedPattern: '^[^@\s]+@[^@\s]+\.[^@\s]+$'
+  SesSender:
+    Type: String
+    Default: drbretto82@gmail.com
+    Description: Verified SES sender identity used as the digest From address.
+    AllowedPattern: '^[^@\s]+@[^@\s]+\.[^@\s]+$'
+  CollectCron:
+    Type: String
+    Default: cron(0 7 * * ? *)
+    Description: EventBridge Scheduler expression for the daily collect run (in TimeZone).
+  AssembleCron:
+    Type: String
+    Default: cron(0 9 * * ? *)
+    Description: EventBridge Scheduler expression for the daily assemble run (collect + offset, in TimeZone).
+  TimeZone:
+    Type: String
+    Default: America/New_York
+    Description: IANA timezone applied to both schedules.
+  EnableNarrator:
+    Type: String
+    Default: 'false'
+    AllowedValues: ['true', 'false']
+    Description: Feature flag for the optional Bedrock narrator Lambda. OFF by default and never on the daily path.
+
+Conditions:
+  NarratorEnabled: !Equals [!Ref EnableNarrator, 'true']
+
+# ---------------------------------------------------------------------------
+# Globals (shared Lambda config)
+# ---------------------------------------------------------------------------
+Globals:
+  Function:
+    Runtime: python3.13
+    Architectures: [arm64]
+    Timeout: 30
+    MemorySize: 256
+    CodeUri: ../
+    PermissionsBoundary: !Ref PermissionsBoundaryPolicy
+    Tags:
+      Project: job-posting-reality-score
+      Env: v1
+      ManagedBy: brett
+    Environment:
+      Variables:
+        BUCKET_NAME: !Ref BucketName
+        METRIC_NAMESPACE: JPRS
+        COMPANIES_PARAM: /jprs/companies
+
+Resources:
+
+  # =========================================================================
+  # Shared IAM: permissions boundary (ceiling on every JPRS execution role)
+  # and the budget-lockdown deny policy (M5 cost fence).
+  # =========================================================================
+  PermissionsBoundaryPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: jprs-permissions-boundary
+      Description: Shared ceiling for every JPRS execution role. Scopes to project resources; denies IAM/EC2/RDS and any make-public action.
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowProjectScopedDataPlane
+            Effect: Allow
+            Action:
+              - s3:GetObject
+              - s3:PutObject
+              - s3:ListBucket
+              - s3:GetBucketLocation
+              - sqs:SendMessage
+              - sqs:ReceiveMessage
+              - sqs:DeleteMessage
+              - sqs:GetQueueAttributes
+              - sqs:GetQueueUrl
+              - states:StartExecution
+              - states:DescribeExecution
+              - lambda:InvokeFunction
+              - ssm:GetParameter
+              - ssm:GetParameters
+              - ssm:GetParametersByPath
+            Resource:
+              - !Sub arn:aws:s3:::${BucketName}
+              - !Sub arn:aws:s3:::${BucketName}/*
+              - !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:jprs-*
+              - !Sub arn:aws:states:${AWS::Region}:${AWS::AccountId}:stateMachine:jprs-*
+              - !Sub arn:aws:states:${AWS::Region}:${AWS::AccountId}:execution:jprs-*:*
+              - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:jprs-*
+              - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/jprs/*
+          - Sid: AllowProjectObservabilityAndDelivery
+            Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+              - cloudwatch:PutMetricData
+              - sns:Publish
+              - ses:SendEmail
+              - ses:SendRawEmail
+              - bedrock:InvokeModel
+            Resource: '*'
+          - Sid: DenyPrivilegeEscalationAndOutOfScopeInfra
+            Effect: Deny
+            Action:
+              - iam:*
+              - ec2:*
+              - rds:*
+              - elasticache:*
+              - es:*
+              - eks:*
+              - organizations:*
+              - account:*
+              - s3:PutBucketPublicAccessBlock
+              - s3:PutAccountPublicAccessBlock
+              - s3:PutBucketPolicy
+              - s3:PutBucketAcl
+              - s3:DeleteBucketPolicy
+              - kms:ScheduleKeyDeletion
+              - kms:DisableKey
+            Resource: '*'
+
+  BudgetLockdownPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: jprs-budget-lockdown-deny
+      Description: Attached by the $10 Budget Action to the scheduler roles to halt new scheduled JPRS work (ADR-0001).
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyNewJprsScheduledWork
+            Effect: Deny
+            Action:
+              - lambda:InvokeFunction
+              - sqs:SendMessage
+              - states:StartExecution
+            Resource:
+              - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:jprs-*
+              - !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:jprs-*
+              - !Sub arn:aws:states:${AWS::Region}:${AWS::AccountId}:stateMachine:jprs-*
+
+  # =========================================================================
+  # S3 data bucket (single bucket, prefix-partitioned, NO versioning)
+  # =========================================================================
+  DataBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName: !Ref BucketName
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+            BucketKeyEnabled: true
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      # Versioning intentionally omitted => OFF (operator hard rule).
+      # Minimal lifecycle: only abort incomplete multipart uploads (no retention ceremony).
+      LifecycleConfiguration:
+        Rules:
+          - Id: abort-incomplete-multipart-7d
+            Status: Enabled
+            AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 7
+      Tags:
+        - { Key: Project, Value: job-posting-reality-score }
+        - { Key: Env, Value: v1 }
+        - { Key: ManagedBy, Value: brett }
+
+  DataBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref DataBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyNonTLS
+            Effect: Deny
+            Principal: '*'
+            Action: s3:*
+            Resource:
+              - !Sub arn:aws:s3:::${BucketName}
+              - !Sub arn:aws:s3:::${BucketName}/*
+            Condition:
+              Bool:
+                aws:SecureTransport: 'false'
+          - Sid: DenyUnEncryptedPutObject
+            Effect: Deny
+            Principal: '*'
+            Action: s3:PutObject
+            Resource: !Sub arn:aws:s3:::${BucketName}/*
+            Condition:
+              StringNotEquals:
+                s3:x-amz-server-side-encryption: AES256
+
+  # =========================================================================
+  # SQS: collect-queue + collect-dlq (redrive maxReceiveCount 3, VT 180s = 6x fn)
+  # =========================================================================
+  CollectDlq:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: jprs-collect-dlq
+      MessageRetentionPeriod: 1209600  # 14 days (> source)
+      SqsManagedSseEnabled: true
+      Tags:
+        - { Key: Project, Value: job-posting-reality-score }
+        - { Key: Env, Value: v1 }
+        - { Key: ManagedBy, Value: brett }
+
+  CollectQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: jprs-collect-queue
+      VisibilityTimeout: 180          # 6x the 30s collector timeout
+      MessageRetentionPeriod: 345600  # 4 days
+      SqsManagedSseEnabled: true
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt CollectDlq.Arn
+        maxReceiveCount: 3
+      Tags:
+        - { Key: Project, Value: job-posting-reality-score }
+        - { Key: Env, Value: v1 }
+        - { Key: ManagedBy, Value: brett }
+
+  # =========================================================================
+  # CloudWatch log groups (M5: explicit 30-day retention on every function group)
+  # =========================================================================
+  EnumerateLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /aws/lambda/jprs-enumerate
+      RetentionInDays: 30
+  CollectorLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /aws/lambda/jprs-collector
+      RetentionInDays: 30
+  DifferLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /aws/lambda/jprs-differ
+      RetentionInDays: 30
+  ReportLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /aws/lambda/jprs-report
+      RetentionInDays: 30
+  NarratorLogGroup:
+    Type: AWS::Logs::LogGroup
+    Condition: NarratorEnabled
+    Properties:
+      LogGroupName: /aws/lambda/jprs-narrator
+      RetentionInDays: 30
+
+  # =========================================================================
+  # Lambdas (each: own least-priv Policies + shared boundary from Globals)
+  # M4 prefix split enforced here:
+  #   collector -> PutObject raw/*, normalized/*, status/*  (NOT current/*)
+  #   differ    -> owns current/*, events/*
+  #   report    -> writes reports/*, reads processed
+  # =========================================================================
+
+  EnumerateFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: EnumerateLogGroup
+    Properties:
+      FunctionName: jprs-enumerate
+      Handler: src.enumerate.handler.handler
+      Description: M1 backbone. Reads SSM /jprs/companies, writes RUN_OPEN manifest, fans out one SQS message per company.
+      Environment:
+        Variables:
+          QUEUE_URL: !Ref CollectQueue
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Sid: EnumerateReadConfig
+              Effect: Allow
+              Action: [ssm:GetParameter, ssm:GetParameters, ssm:GetParametersByPath]
+              Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/jprs/*
+            - Sid: EnumerateWriteManifest
+              Effect: Allow
+              Action: s3:PutObject
+              Resource: !Sub arn:aws:s3:::${BucketName}/manifest/*
+            - Sid: EnumerateFanout
+              Effect: Allow
+              Action: sqs:SendMessage
+              Resource: !GetAtt CollectQueue.Arn
+            - Sid: EnumerateMetrics
+              Effect: Allow
+              Action: cloudwatch:PutMetricData
+              Resource: '*'
+              Condition:
+                StringEquals:
+                  cloudwatch:namespace: JPRS
+
+  CollectorFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: CollectorLogGroup
+    Properties:
+      FunctionName: jprs-collector
+      Handler: src.collector.handler.handler
+      Description: SQS-triggered. Fetches one company board, writes raw/, normalized/, status/ (SUCCESS sentinel). Never writes current/.
+      Events:
+        CollectQueueEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt CollectQueue.Arn
+            BatchSize: 5
+            FunctionResponseTypes:
+              - ReportBatchItemFailures
+            ScalingConfig:
+              MaximumConcurrency: 5
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Sid: CollectorWriteForwardTiersOnly
+              Effect: Allow
+              Action: s3:PutObject
+              Resource:
+                - !Sub arn:aws:s3:::${BucketName}/raw/*
+                - !Sub arn:aws:s3:::${BucketName}/normalized/*
+                - !Sub arn:aws:s3:::${BucketName}/status/*
+            - Sid: CollectorReadStatusForDedupe
+              Effect: Allow
+              Action: s3:GetObject
+              Resource: !Sub arn:aws:s3:::${BucketName}/status/*
+            - Sid: CollectorMetrics
+              Effect: Allow
+              Action: cloudwatch:PutMetricData
+              Resource: '*'
+              Condition:
+                StringEquals:
+                  cloudwatch:namespace: JPRS
+
+  DifferFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: DifferLogGroup
+    Properties:
+      FunctionName: jprs-differ
+      Handler: src.differ.handler.handler
+      Description: Step Functions task. Diffs one company (only if a fresh SUCCESS sentinel exists). Owns current/ + events/.
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Sid: DifferReadInputs
+              Effect: Allow
+              Action: s3:GetObject
+              Resource:
+                - !Sub arn:aws:s3:::${BucketName}/raw/*
+                - !Sub arn:aws:s3:::${BucketName}/normalized/*
+                - !Sub arn:aws:s3:::${BucketName}/status/*
+                - !Sub arn:aws:s3:::${BucketName}/manifest/*
+                - !Sub arn:aws:s3:::${BucketName}/current/*
+            - Sid: DifferOwnsCurrentAndEvents
+              Effect: Allow
+              Action: s3:PutObject
+              Resource:
+                - !Sub arn:aws:s3:::${BucketName}/current/*
+                - !Sub arn:aws:s3:::${BucketName}/events/*
+            - Sid: DifferMetrics
+              Effect: Allow
+              Action: cloudwatch:PutMetricData
+              Resource: '*'
+              Condition:
+                StringEquals:
+                  cloudwatch:namespace: JPRS
+
+  ReportFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: ReportLogGroup
+    Properties:
+      FunctionName: jprs-report
+      Handler: src.report.handler.handler
+      Description: Step Functions task. Reads manifest + sentinels (completeness judge) + events, writes reports/, sends the SES digest.
+      Environment:
+        Variables:
+          SES_SENDER: !Ref SesSender
+          DIGEST_RECIPIENT: !Ref DigestRecipient
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Sid: ReportReadProcessed
+              Effect: Allow
+              Action: s3:GetObject
+              Resource:
+                - !Sub arn:aws:s3:::${BucketName}/events/*
+                - !Sub arn:aws:s3:::${BucketName}/status/*
+                - !Sub arn:aws:s3:::${BucketName}/manifest/*
+                - !Sub arn:aws:s3:::${BucketName}/reports/*
+            - Sid: ReportWriteReportsOnly
+              Effect: Allow
+              Action: s3:PutObject
+              Resource: !Sub arn:aws:s3:::${BucketName}/reports/*
+            - Sid: ReportSendDigest
+              Effect: Allow
+              Action: [ses:SendEmail, ses:SendRawEmail]
+              Resource: !Sub arn:aws:ses:${AWS::Region}:${AWS::AccountId}:identity/*
+            - Sid: ReportMetrics
+              Effect: Allow
+              Action: cloudwatch:PutMetricData
+              Resource: '*'
+              Condition:
+                StringEquals:
+                  cloudwatch:namespace: JPRS
+
+  NarratorFunction:
+    Type: AWS::Serverless::Function
+    Condition: NarratorEnabled
+    DependsOn: NarratorLogGroup
+    Properties:
+      FunctionName: jprs-narrator
+      Handler: src.llm.narrator.narrate
+      Description: OPTIONAL, feature-flagged. Bedrock narration of stored evidence only. Non-authoritative; not on the daily path.
+      Environment:
+        Variables:
+          HAIKU_MODEL_ID: anthropic.claude-3-haiku-20240307-v1:0
+          SONNET_MODEL_ID: anthropic.claude-3-5-sonnet-20240620-v1:0
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Sid: NarratorInvokeNamedModelsOnly
+              Effect: Allow
+              Action: bedrock:InvokeModel
+              Resource:
+                - !Sub arn:aws:bedrock:${AWS::Region}::foundation-model/anthropic.claude-3-haiku-20240307-v1:0
+                - !Sub arn:aws:bedrock:${AWS::Region}::foundation-model/anthropic.claude-3-5-sonnet-20240620-v1:0
+            - Sid: NarratorReadEvidence
+              Effect: Allow
+              Action: s3:GetObject
+              Resource:
+                - !Sub arn:aws:s3:::${BucketName}/normalized/*
+                - !Sub arn:aws:s3:::${BucketName}/events/*
+            - Sid: NarratorMetrics
+              Effect: Allow
+              Action: cloudwatch:PutMetricData
+              Resource: '*'
+              Condition:
+                StringEquals:
+                  cloudwatch:namespace: JPRS
+
+  # =========================================================================
+  # Step Functions Standard assembler (Map + Retry + Catch -> report_incomplete)
+  # =========================================================================
+  SfnRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: jprs-sfn-assemble-role
+      PermissionsBoundary: !Ref PermissionsBoundaryPolicy
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: states.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: jprs-sfn-assemble-inline
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: InvokeAssemblyFunctions
+                Effect: Allow
+                Action: lambda:InvokeFunction
+                Resource:
+                  - !GetAtt DifferFunction.Arn
+                  - !GetAtt ReportFunction.Arn
+              - Sid: ReadCompanyRegistry
+                Effect: Allow
+                Action: ssm:GetParameter
+                Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/jprs/companies
+
+  DailyAssembleStateMachine:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Name: jprs-daily-assemble
+      Type: STANDARD
+      DefinitionUri: statemachine/jprs-daily-assemble.asl.json
+      DefinitionSubstitutions:
+        DifferFunctionArn: !GetAtt DifferFunction.Arn
+        ReportFunctionArn: !GetAtt ReportFunction.Arn
+      Role: !GetAtt SfnRole.Arn
+      Tags:
+        Project: job-posting-reality-score
+        Env: v1
+        ManagedBy: brett
+
+  # =========================================================================
+  # EventBridge Scheduler: two schedules, each with its own least-priv role
+  # =========================================================================
+  CollectSchedulerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: jprs-scheduler-collect-role
+      PermissionsBoundary: !Ref PermissionsBoundaryPolicy
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: scheduler.amazonaws.com
+            Action: sts:AssumeRole
+            Condition:
+              StringEquals:
+                aws:SourceAccount: !Ref AWS::AccountId
+      Policies:
+        - PolicyName: invoke-enumerate
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: lambda:InvokeFunction
+                Resource: !GetAtt EnumerateFunction.Arn
+
+  AssembleSchedulerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: jprs-scheduler-assemble-role
+      PermissionsBoundary: !Ref PermissionsBoundaryPolicy
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: scheduler.amazonaws.com
+            Action: sts:AssumeRole
+            Condition:
+              StringEquals:
+                aws:SourceAccount: !Ref AWS::AccountId
+      Policies:
+        - PolicyName: start-assemble
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: states:StartExecution
+                Resource: !Ref DailyAssembleStateMachine
+
+  CollectSchedule:
+    Type: AWS::Scheduler::Schedule
+    Properties:
+      Name: jprs-collect-daily
+      Description: Fires the daily collect run (enumerate -> RUN_OPEN manifest -> SQS fan-out).
+      State: ENABLED
+      FlexibleTimeWindow:
+        Mode: 'OFF'
+      ScheduleExpression: !Ref CollectCron
+      ScheduleExpressionTimezone: !Ref TimeZone
+      Target:
+        Arn: !GetAtt EnumerateFunction.Arn
+        RoleArn: !GetAtt CollectSchedulerRole.Arn
+        Input: '{"trigger":"collect"}'
+
+  AssembleSchedule:
+    Type: AWS::Scheduler::Schedule
+    Properties:
+      Name: jprs-assemble-daily
+      Description: Fires the daily assemble run (collect + offset) -> Step Functions StartExecution.
+      State: ENABLED
+      FlexibleTimeWindow:
+        Mode: 'OFF'
+      ScheduleExpression: !Ref AssembleCron
+      ScheduleExpressionTimezone: !Ref TimeZone
+      Target:
+        Arn: !Ref DailyAssembleStateMachine
+        RoleArn: !GetAtt AssembleSchedulerRole.Arn
+        Input: '{"trigger":"assemble"}'
+
+  # =========================================================================
+  # SNS ops-alerts topic + email subscription
+  # =========================================================================
+  OpsAlertTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: jprs-ops-alerts
+      DisplayName: JPRS Ops Alerts
+      Tags:
+        - { Key: Project, Value: job-posting-reality-score }
+        - { Key: Env, Value: v1 }
+        - { Key: ManagedBy, Value: brett }
+
+  OpsAlertSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref OpsAlertTopic
+      Protocol: email
+      Endpoint: !Ref AlertEmail
+
+  # =========================================================================
+  # CloudWatch alarms A1-A7 -> SNS
+  # =========================================================================
+  A1DlqNotEmpty:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: jprs-A1-dlq-not-empty
+      AlarmDescription: A1 - a message is poison; inspect + redrive the collect DLQ.
+      Namespace: AWS/SQS
+      MetricName: ApproximateNumberOfMessagesVisible
+      Dimensions:
+        - Name: QueueName
+          Value: !GetAtt CollectDlq.QueueName
+      Statistic: Maximum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref OpsAlertTopic]
+      OKActions: [!Ref OpsAlertTopic]
+
+  A2MissedRun:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: jprs-A2-missed-run
+      AlarmDescription: A2 - collectors did not run today (NO-RUN heartbeat). Custom metric CollectRunSuccess missing/0.
+      Namespace: JPRS
+      MetricName: CollectRunSuccess
+      Statistic: Sum
+      Period: 86400
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: LessThanThreshold
+      TreatMissingData: breaching
+      AlarmActions: [!Ref OpsAlertTopic]
+
+  A3ReportNotAssembled:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: jprs-A3-report-not-assembled
+      AlarmDescription: A3 - no report today. Custom metric ReportComplete missing/0. Distinguishes assembly failure from a quiet day.
+      Namespace: JPRS
+      MetricName: ReportComplete
+      Statistic: Sum
+      Period: 86400
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: LessThanThreshold
+      TreatMissingData: breaching
+      AlarmActions: [!Ref OpsAlertTopic]
+
+  A4QueueBackingUp:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: jprs-A4-queue-backing-up
+      AlarmDescription: A4 - collectors stuck/throttled. Oldest message age > 3x visibility timeout (540s).
+      Namespace: AWS/SQS
+      MetricName: ApproximateAgeOfOldestMessage
+      Dimensions:
+        - Name: QueueName
+          Value: !GetAtt CollectQueue.QueueName
+      Statistic: Maximum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 540
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref OpsAlertTopic]
+
+  A5CollectorErrors:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: jprs-A5-collector-errors
+      AlarmDescription: A5 - collector code/permission/ATS problem before it reaches the DLQ.
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref CollectorFunction
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref OpsAlertTopic]
+
+  A6SourceSuspect:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: jprs-A6-source-suspect
+      AlarmDescription: A6 - a source returned suspiciously few postings; removal events suppressed. Custom metric SourceSuspect.
+      Namespace: JPRS
+      MetricName: SourceSuspect
+      Statistic: Sum
+      Period: 86400
+      EvaluationPeriods: 1
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref OpsAlertTopic]
+
+  A7AssemblyExecutionsFailed:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: jprs-A7-assembly-executions-failed
+      AlarmDescription: A7 - the assembler hit Catch/unhandled error. Step Functions ExecutionsFailed.
+      Namespace: AWS/States
+      MetricName: ExecutionsFailed
+      Dimensions:
+        - Name: StateMachineArn
+          Value: !Ref DailyAssembleStateMachine
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref OpsAlertTopic]
+
+  # =========================================================================
+  # M5 enforcing cost fence: Budgets + Budget Action (ADR-0001)
+  #   $5  monthly budget  -> email alerts (80% / 100% actual, 80% forecast)
+  #   $10 ceiling budget  -> Budget Action attaches the lockdown deny policy
+  #                          to both scheduler roles (halts new scheduled work)
+  # =========================================================================
+  MonthlyBudget5:
+    Type: AWS::Budgets::Budget
+    Properties:
+      Budget:
+        BudgetName: jprs-monthly-5
+        BudgetType: COST
+        TimeUnit: MONTHLY
+        BudgetLimit:
+          Amount: 5
+          Unit: USD
+      NotificationsWithSubscribers:
+        - Notification:
+            NotificationType: ACTUAL
+            ComparisonOperator: GREATER_THAN
+            Threshold: 80
+            ThresholdType: PERCENTAGE
+          Subscribers:
+            - SubscriptionType: EMAIL
+              Address: !Ref AlertEmail
+        - Notification:
+            NotificationType: ACTUAL
+            ComparisonOperator: GREATER_THAN
+            Threshold: 100
+            ThresholdType: PERCENTAGE
+          Subscribers:
+            - SubscriptionType: EMAIL
+              Address: !Ref AlertEmail
+        - Notification:
+            NotificationType: FORECASTED
+            ComparisonOperator: GREATER_THAN
+            Threshold: 80
+            ThresholdType: PERCENTAGE
+          Subscribers:
+            - SubscriptionType: EMAIL
+              Address: !Ref AlertEmail
+
+  CeilingBudget10:
+    Type: AWS::Budgets::Budget
+    Properties:
+      Budget:
+        BudgetName: jprs-ceiling-10
+        BudgetType: COST
+        TimeUnit: MONTHLY
+        BudgetLimit:
+          Amount: 10
+          Unit: USD
+      NotificationsWithSubscribers:
+        - Notification:
+            NotificationType: ACTUAL
+            ComparisonOperator: GREATER_THAN
+            Threshold: 100
+            ThresholdType: PERCENTAGE
+          Subscribers:
+            - SubscriptionType: EMAIL
+              Address: !Ref AlertEmail
+
+  BudgetsActionExecRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: jprs-budgets-action-exec-role
+      Description: Assumed by AWS Budgets to attach the lockdown policy to the scheduler roles. NOT a JPRS data-plane role (no project boundary - it must retain iam:Attach/DetachRolePolicy).
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: budgets.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSBudgetsActionsWithAWSResourceControlAccess
+
+  BudgetLockdownAction:
+    Type: AWS::Budgets::BudgetsAction
+    DependsOn: CeilingBudget10
+    Properties:
+      BudgetName: jprs-ceiling-10
+      NotificationType: ACTUAL
+      ActionType: APPLY_IAM_POLICY
+      ActionThreshold:
+        Value: 100
+        Type: PERCENTAGE
+      ApprovalModel: AUTOMATIC
+      ExecutionRoleArn: !GetAtt BudgetsActionExecRole.Arn
+      Definition:
+        IamActionDefinition:
+          PolicyArn: !Ref BudgetLockdownPolicy
+          Roles:
+            - !Ref CollectSchedulerRole
+            - !Ref AssembleSchedulerRole
+      Subscribers:
+        - Type: EMAIL
+          Address: !Ref AlertEmail
+
+# ---------------------------------------------------------------------------
+# Outputs
+# ---------------------------------------------------------------------------
+Outputs:
+  DataBucketName:
+    Description: JPRS data bucket.
+    Value: !Ref DataBucket
+  CollectQueueUrl:
+    Description: Collect queue URL.
+    Value: !Ref CollectQueue
+  CollectDlqUrl:
+    Description: Collect DLQ URL.
+    Value: !Ref CollectDlq
+  DailyAssembleStateMachineArn:
+    Description: Standard assembler state machine ARN.
+    Value: !Ref DailyAssembleStateMachine
+  OpsAlertTopicArn:
+    Description: SNS topic that fans out alarms A1-A7.
+    Value: !Ref OpsAlertTopic

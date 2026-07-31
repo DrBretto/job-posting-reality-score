@@ -64,3 +64,52 @@ concurrency, and other always-on services.
 
 `READY` means the local instructions and artifacts exist. `COMPLETE` means the AWS result was
 manually built and verified. A document being present never proves that its AWS phase is complete.
+
+## V1 Application Code (`src/`)
+
+The real V1 application (change-detection + scoring + report) lives under `src/`. Lambdas are thin
+(stdlib + `pydantic`/`boto3`/`pyyaml` only — no pandas/numpy) so each deploys as a plain zip.
+
+```
+src/
+  common/models.py      Pydantic models + enums (SourceSnapshot, CanonicalJob, ChangeEvent,
+                        DimensionScorecard, EvidenceRef ...), versioned schema_v
+  common/s3layout.py    5-tier key builders. M4 prefix split: collector owns status/+raw/+
+                        normalized/; differ owns current/+events/. No S3 versioning.
+  common/normalize.py   deterministic normalizer + canonical/field hashing (no LLM)
+  common/connectors.py  Greenhouse / Lever / Ashby; fetch -> raw+receipt BEFORE parse -> status
+                        label -> CanonicalJob. Host-allowlist, identifying UA. Ashby flag OFF.
+  enumerate/handler.py  M1 completeness backbone: registry -> RUN_OPEN manifest -> SQS fan-out
+  collector/handler.py  SQS-triggered; raw+receipt+normalized+status+SUCCESS sentinel per message
+  differ/handler.py     change-detection brain: disappearance invariant, grace, mass-drop guard,
+                        M3 cumulative-bleed + silent-subset guards. Writes events/+current/
+  scoring/scoring.py    6 deterministic dimensions, UNKNOWN first-class, weakest-link confidence
+  report/handler.py     deterministic md+json renderer; run-health header; never-fake vocab guard
+  llm/narrator.py       optional Bedrock narrator, FEATURE-FLAGGED OFF, slot-fill + post-check (M2)
+  llm/bedrock_client.py self-contained Bedrock wrapper (dry-run default)
+  cli.py                offline dev CLI (connect / diff / report)
+config/companies.yaml   operator-curated registry (3 Greenhouse companies for V1)
+```
+
+### Lambda handler entry points (module.function — for the IaC track)
+
+| Lambda | Entry point |
+|---|---|
+| enumerate (dispatcher) | `src.enumerate.handler.handler` |
+| collector (SQS)        | `src.collector.handler.handler` |
+| differ                 | `src.differ.handler.handler` |
+| report assembler       | `src.report.handler.handler` |
+| narrator (gated OFF)   | `src.llm.narrator.narrate` |
+
+### Develop / test
+
+```bash
+python3.13 -m venv .venv && . .venv/bin/activate
+pip install -e ".[dev]"
+pytest                     # golden-fixture suite (offline; never hits a live ATS)
+python -m src.cli connect --provider greenhouse --board-token acme \
+    --fixture tests/fixtures/greenhouse_acme.json
+```
+
+The honesty invariant, the M1/M2/M3 conditions, and connector status-labeling are all covered by the
+`tests/` golden fixtures. Tests use synthetic/captured fixtures only — no live network.

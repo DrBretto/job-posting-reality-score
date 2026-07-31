@@ -1,0 +1,144 @@
+{
+  "Comment": "JPRS daily assemble (Standard). Runs on the assemble schedule AFTER the collect schedule + offset. Reads the configured company set, diffs each company in an isolated Map branch (differ skips any company lacking a fresh SUCCESS sentinel -> never diffs an uncollected source to 'all removed'), then invokes report. Report is the completeness judge: it compares the RUN_OPEN manifest's expected sources against SUCCESS sentinels (manifest-vs-sentinel, never wall-clock). Any hard failure Catches to ReportIncomplete so a degraded report is always produced.",
+  "StartAt": "LoadCompanies",
+  "States": {
+    "LoadCompanies": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:ssm:getParameter",
+      "Parameters": {
+        "Name": "/jprs/companies"
+      },
+      "ResultSelector": {
+        "companies.$": "States.StringToJson($.Parameter.Value)"
+      },
+      "ResultPath": "$.config",
+      "Retry": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "ReportIncomplete"
+        }
+      ],
+      "Next": "DiffAllCompanies"
+    },
+    "DiffAllCompanies": {
+      "Type": "Map",
+      "ItemsPath": "$.config.companies",
+      "MaxConcurrency": 5,
+      "ItemProcessor": {
+        "ProcessorConfig": { "Mode": "INLINE" },
+        "StartAt": "DiffOne",
+        "States": {
+          "DiffOne": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Parameters": {
+              "FunctionName": "${DifferFunctionArn}",
+              "Payload.$": "$"
+            },
+            "Retry": [
+              {
+                "ErrorEquals": [
+                  "Lambda.ServiceException",
+                  "Lambda.SdkClientException",
+                  "Lambda.TooManyRequestsException",
+                  "States.TaskFailed"
+                ],
+                "IntervalSeconds": 2,
+                "MaxAttempts": 3,
+                "BackoffRate": 2.0
+              }
+            ],
+            "Catch": [
+              {
+                "ErrorEquals": ["States.ALL"],
+                "ResultPath": "$.error",
+                "Next": "DiffDegraded"
+              }
+            ],
+            "End": true
+          },
+          "DiffDegraded": {
+            "Type": "Pass",
+            "Result": { "status": "DEGRADED" },
+            "ResultPath": "$.outcome",
+            "End": true
+          }
+        }
+      },
+      "ResultPath": "$.diffResults",
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "ReportIncomplete"
+        }
+      ],
+      "Next": "BuildReport"
+    },
+    "BuildReport": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${ReportFunctionArn}",
+        "Payload": {
+          "mode": "assemble",
+          "runContext.$": "$"
+        }
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException",
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "ReportIncomplete"
+        }
+      ],
+      "End": true
+    },
+    "ReportIncomplete": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${ReportFunctionArn}",
+        "Payload": {
+          "mode": "incomplete",
+          "runContext.$": "$"
+        }
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2,
+          "BackoffRate": 2.0
+        }
+      ],
+      "End": true
+    }
+  }
+}

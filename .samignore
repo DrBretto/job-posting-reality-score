@@ -1,0 +1,30 @@
+# Keep Lambda deployment packages to just src/ + requirements deps.
+# CodeUri is the repo root (so `src` is an importable package matching `from src.common ...`
+# and handlers like `src.collector.handler.handler`); everything below is pruned from the zip.
+.venv/
+.git/
+.github/
+tests/
+infra/
+docs/
+aws/
+policies/
+scripts/
+config/
+project-factory/
+codex-skills/
+_template_archive/
+jprs.egg-info/
+__pycache__/
+*.pyc
+*.md
+.gitignore
+.samignore
+Makefile
+LICENSE
+CODEOWNERS
+CONTRIBUTING.md
+AGENTS.md
+CLAUDE.md
+BUILD_LOG.md
+START_HERE.md

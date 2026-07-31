@@ -1,0 +1,16 @@
+# JPRS company/board registry (operator-curated).
+# V1 = Greenhouse only (strongest identity + updated_at; D1). Ashby entries stay disabled until
+# URL-slug UUID permanence is verified (D2/U4). board_token = the provider's own board slug.
+companies:
+  - provider: greenhouse
+    board_token: stripe
+    company_slug: stripe
+    enabled: true
+  - provider: greenhouse
+    board_token: figma
+    company_slug: figma
+    enabled: true
+  - provider: greenhouse
+    board_token: gitlab
+    company_slug: gitlab
+    enabled: true
