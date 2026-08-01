@@ -392,21 +392,43 @@ def _refresh_repost_fields(rec: JobStateRecord, job: CanonicalJob) -> None:
 # --------------------------------------------------------------------------------------------------
 # Lambda handler (thin S3 wrapper). Reads persisted state + latest snapshot, writes events/+current/.
 # --------------------------------------------------------------------------------------------------
-def handler(event, context):  # pragma: no cover - AWS glue, exercised via CLI/integration
-    import boto3
+def build_snapshot_from_status(status_doc: dict) -> SourceSnapshot:
+    """Reconstruct the SourceSnapshot the differ needs from the collector's status/ doc.
 
+    The collector persists status/_source_status.json (source_id/status/snapshot_id/fetched_at/...)
+    rather than a full SourceSnapshot JSON, so the differ rebuilds the fields diff_source uses.
+    """
+    fetched = status_doc["fetched_at"]
+    return SourceSnapshot(
+        snapshot_id=status_doc["snapshot_id"],
+        source_id=status_doc["source_id"],
+        fetched_at=datetime.fromisoformat(fetched) if isinstance(fetched, str) else fetched,
+        status=SnapshotStatus(status_doc["status"]),
+        http_status=status_doc.get("http_status"),
+        job_count_observed=status_doc.get("job_count_observed"),
+        error_class=status_doc.get("error_class"),
+    )
+
+
+def run_diff(s3, bucket: str, provider: str, board: str, *, run_id: str, dt: str, today: datetime) -> dict:
+    """Load this source's status + normalized jobs + prior state from S3, diff, and persist.
+
+    Testable with a mocked S3 (moto) — this is the glue the pure `diff_source` needs. It DERIVES the
+    keys it reads (status/ + normalized/ are deterministic) instead of being handed them, which is
+    exactly the contract gap that used to make the Map branch fail silently to DEGRADED.
+    """
     from src.common import s3layout
 
-    bucket = os.environ["JPRS_BUCKET"]
-    s3 = boto3.client("s3")
-    run_id = event["run_id"]
-    provider = event["provider"]
-    board = event["board_token"]
-    today = datetime.now(timezone.utc)
+    status_doc = _load_json(s3, bucket, s3layout.source_status_key(provider, board), default=None)
+    if status_doc is None:
+        # collector produced no status for this source this run -> nothing to diff; skip safely
+        return {"skipped": "no_source_status", "provider": provider, "board": board}
 
-    # load snapshot + jobs the collector produced, and prior diff state
-    snapshot = SourceSnapshot.model_validate(_load_json(s3, bucket, event["snapshot_key"]))
-    jobs = [CanonicalJob.model_validate(j) for j in _load_json(s3, bucket, event["normalized_key"])]
+    snapshot = build_snapshot_from_status(status_doc)
+    jobs = [
+        CanonicalJob.model_validate(j)
+        for j in _load_json(s3, bucket, s3layout.normalized_key(provider, board, dt), default=[])
+    ]
 
     state = None
     state_key = s3layout.current_state_key(provider, board)
@@ -416,7 +438,6 @@ def handler(event, context):  # pragma: no cover - AWS glue, exercised via CLI/i
 
     result = diff_source(state, snapshot, jobs, run_id=run_id, today=today)
 
-    dt = today.strftime("%Y-%m-%d")
     _put_json(s3, bucket, s3layout.events_key(provider, board, dt),
               [e.model_dump(mode="json") for e in result.events])
     _put_json(s3, bucket, state_key, result.state.model_dump(mode="json"))
@@ -429,10 +450,25 @@ def handler(event, context):  # pragma: no cover - AWS glue, exercised via CLI/i
         "frozen": result.frozen,
         "suspect": result.suspect,
         "suspect_reason": result.suspect_reason,
+        "provider": provider,
+        "board": board,
     }
 
 
-def _load_json(s3, bucket, key, default="__raise__"):  # pragma: no cover
+def handler(event, context):
+    import boto3
+
+    bucket = os.environ["JPRS_BUCKET"]
+    s3 = boto3.client("s3")
+    provider = event["provider"]
+    board = event["board_token"]
+    today = datetime.now(timezone.utc)
+    run_id = event.get("run_id") or today.strftime("%Y-%m-%d")
+    dt = event.get("dt") or run_id  # run_id is a YYYY-MM-DD date; snapshots/events partition by it
+    return run_diff(s3, bucket, provider, board, run_id=run_id, dt=dt, today=today)
+
+
+def _load_json(s3, bucket, key, default="__raise__"):
     import botocore.exceptions
 
     try:
@@ -444,7 +480,7 @@ def _load_json(s3, bucket, key, default="__raise__"):  # pragma: no cover
         return default
 
 
-def _put_json(s3, bucket, key, body):  # pragma: no cover
+def _put_json(s3, bucket, key, body):
     s3.put_object(
         Bucket=bucket, Key=key,
         Body=json.dumps(body, separators=(",", ":"), default=str).encode(),

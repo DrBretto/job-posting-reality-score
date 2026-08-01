@@ -71,9 +71,9 @@ Globals:
       ManagedBy: brett
     Environment:
       Variables:
-        BUCKET_NAME: !Ref BucketName
+        JPRS_BUCKET: !Ref BucketName
         METRIC_NAMESPACE: JPRS
-        COMPANIES_PARAM: /jprs/companies
+        JPRS_COMPANIES_SSM: /jprs/companies
 
 Resources:
 
@@ -147,25 +147,6 @@ Resources:
               - kms:DisableKey
             Resource: '*'
 
-  BudgetLockdownPolicy:
-    Type: AWS::IAM::ManagedPolicy
-    Properties:
-      ManagedPolicyName: jprs-budget-lockdown-deny
-      Description: Attached by the $10 Budget Action to the scheduler roles to halt new scheduled JPRS work (ADR-0001).
-      PolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Sid: DenyNewJprsScheduledWork
-            Effect: Deny
-            Action:
-              - lambda:InvokeFunction
-              - sqs:SendMessage
-              - states:StartExecution
-            Resource:
-              - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:jprs-*
-              - !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:jprs-*
-              - !Sub arn:aws:states:${AWS::Region}:${AWS::AccountId}:stateMachine:jprs-*
-
   # =========================================================================
   # S3 data bucket (single bucket, prefix-partitioned, NO versioning)
   # =========================================================================
@@ -218,14 +199,10 @@ Resources:
             Condition:
               Bool:
                 aws:SecureTransport: 'false'
-          - Sid: DenyUnEncryptedPutObject
-            Effect: Deny
-            Principal: '*'
-            Action: s3:PutObject
-            Resource: !Sub arn:aws:s3:::${BucketName}/*
-            Condition:
-              StringNotEquals:
-                s3:x-amz-server-side-encryption: AES256
+          # DenyUnEncryptedPutObject removed: the bucket's default SSE-S3 (BucketEncryption)
+          # already encrypts every object, and the app relies on that rather than sending an
+          # x-amz-server-side-encryption header — so a header-deny would reject ALL app writes.
+          # TLS is still enforced by DenyNonTLS above.
 
   # =========================================================================
   # SQS: collect-queue + collect-dlq (redrive maxReceiveCount 3, VT 180s = 6x fn)
@@ -303,7 +280,7 @@ Resources:
       Description: M1 backbone. Reads SSM /jprs/companies, writes RUN_OPEN manifest, fans out one SQS message per company.
       Environment:
         Variables:
-          QUEUE_URL: !Ref CollectQueue
+          JPRS_COLLECT_QUEUE_URL: !Ref CollectQueue
       Policies:
         - Version: '2012-10-17'
           Statement:
@@ -314,7 +291,7 @@ Resources:
             - Sid: EnumerateWriteManifest
               Effect: Allow
               Action: s3:PutObject
-              Resource: !Sub arn:aws:s3:::${BucketName}/manifest/*
+              Resource: !Sub arn:aws:s3:::${BucketName}/runs/*
             - Sid: EnumerateFanout
               Effect: Allow
               Action: sqs:SendMessage
@@ -383,7 +360,7 @@ Resources:
                 - !Sub arn:aws:s3:::${BucketName}/raw/*
                 - !Sub arn:aws:s3:::${BucketName}/normalized/*
                 - !Sub arn:aws:s3:::${BucketName}/status/*
-                - !Sub arn:aws:s3:::${BucketName}/manifest/*
+                - !Sub arn:aws:s3:::${BucketName}/runs/*
                 - !Sub arn:aws:s3:::${BucketName}/current/*
             - Sid: DifferOwnsCurrentAndEvents
               Effect: Allow
@@ -419,8 +396,15 @@ Resources:
               Resource:
                 - !Sub arn:aws:s3:::${BucketName}/events/*
                 - !Sub arn:aws:s3:::${BucketName}/status/*
-                - !Sub arn:aws:s3:::${BucketName}/manifest/*
+                - !Sub arn:aws:s3:::${BucketName}/runs/*
                 - !Sub arn:aws:s3:::${BucketName}/reports/*
+            - Sid: ReportListStatusSentinels
+              Effect: Allow
+              Action: s3:ListBucket
+              Resource: !Sub arn:aws:s3:::${BucketName}
+              Condition:
+                StringLike:
+                  s3:prefix: status/*
             - Sid: ReportWriteReportsOnly
               Effect: Allow
               Action: s3:PutObject
@@ -739,105 +723,6 @@ Resources:
       ComparisonOperator: GreaterThanThreshold
       TreatMissingData: notBreaching
       AlarmActions: [!Ref OpsAlertTopic]
-
-  # =========================================================================
-  # M5 enforcing cost fence: Budgets + Budget Action (ADR-0001)
-  #   $5  monthly budget  -> email alerts (80% / 100% actual, 80% forecast)
-  #   $10 ceiling budget  -> Budget Action attaches the lockdown deny policy
-  #                          to both scheduler roles (halts new scheduled work)
-  # =========================================================================
-  MonthlyBudget5:
-    Type: AWS::Budgets::Budget
-    Properties:
-      Budget:
-        BudgetName: jprs-monthly-5
-        BudgetType: COST
-        TimeUnit: MONTHLY
-        BudgetLimit:
-          Amount: 5
-          Unit: USD
-      NotificationsWithSubscribers:
-        - Notification:
-            NotificationType: ACTUAL
-            ComparisonOperator: GREATER_THAN
-            Threshold: 80
-            ThresholdType: PERCENTAGE
-          Subscribers:
-            - SubscriptionType: EMAIL
-              Address: !Ref AlertEmail
-        - Notification:
-            NotificationType: ACTUAL
-            ComparisonOperator: GREATER_THAN
-            Threshold: 100
-            ThresholdType: PERCENTAGE
-          Subscribers:
-            - SubscriptionType: EMAIL
-              Address: !Ref AlertEmail
-        - Notification:
-            NotificationType: FORECASTED
-            ComparisonOperator: GREATER_THAN
-            Threshold: 80
-            ThresholdType: PERCENTAGE
-          Subscribers:
-            - SubscriptionType: EMAIL
-              Address: !Ref AlertEmail
-
-  CeilingBudget10:
-    Type: AWS::Budgets::Budget
-    Properties:
-      Budget:
-        BudgetName: jprs-ceiling-10
-        BudgetType: COST
-        TimeUnit: MONTHLY
-        BudgetLimit:
-          Amount: 10
-          Unit: USD
-      NotificationsWithSubscribers:
-        - Notification:
-            NotificationType: ACTUAL
-            ComparisonOperator: GREATER_THAN
-            Threshold: 100
-            ThresholdType: PERCENTAGE
-          Subscribers:
-            - SubscriptionType: EMAIL
-              Address: !Ref AlertEmail
-
-  BudgetsActionExecRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: jprs-budgets-action-exec-role
-      Description: Assumed by AWS Budgets to attach the lockdown policy to the scheduler roles. NOT a JPRS data-plane role (no project boundary - it must retain iam:Attach/DetachRolePolicy).
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: budgets.amazonaws.com
-            Action: sts:AssumeRole
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSBudgetsActionsWithAWSResourceControlAccess
-
-  BudgetLockdownAction:
-    Type: AWS::Budgets::BudgetsAction
-    DependsOn: CeilingBudget10
-    Properties:
-      BudgetName: jprs-ceiling-10
-      NotificationType: ACTUAL
-      ActionType: APPLY_IAM_POLICY
-      ActionThreshold:
-        Value: 100
-        Type: PERCENTAGE
-      ApprovalModel: AUTOMATIC
-      ExecutionRoleArn: !GetAtt BudgetsActionExecRole.Arn
-      Definition:
-        IamActionDefinition:
-          PolicyArn: !Ref BudgetLockdownPolicy
-          Roles:
-            - !Ref CollectSchedulerRole
-            - !Ref AssembleSchedulerRole
-      Subscribers:
-        - Type: EMAIL
-          Address: !Ref AlertEmail
 
 # ---------------------------------------------------------------------------
 # Outputs

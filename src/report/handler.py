@@ -207,8 +207,45 @@ def _ratio(inp: ReportInput) -> float:
     return round(len(set(inp.succeeded_sources) & set(inp.expected_sources)) / len(set(inp.expected_sources)), 4)
 
 
-def handler(event, context):  # pragma: no cover - AWS glue
+def assemble_report_input(s3, bucket: str, run_id: str, dt: str) -> ReportInput:
+    """Build ReportInput from S3: RUN_OPEN manifest (expected), SUCCESS sentinels (succeeded),
+    and the differ's change events. This is the assembler the render step always needed; without it
+    the report rendered an empty 0/0 input. Completeness = manifest-expected vs sentinel-succeeded
+    (never wall-clock), per RELIABILITY §5.1."""
+    from src.common import s3layout
+
+    manifest = _load_json(s3, bucket, s3layout.run_manifest_key(run_id), default=None)
+    manifest_present = manifest is not None
+    expected_sources = list(manifest.get("expected_sources", [])) if manifest_present else []
+
+    succeeded: list[str] = []
+    for key in _list_keys(s3, bucket, f"status/run={run_id}/"):
+        if key.endswith("/SUCCESS.json"):
+            segs = dict(s.split("=", 1) for s in key.split("/") if "=" in s)
+            p, b = segs.get("provider"), segs.get("board")
+            if p and b:
+                succeeded.append(f"{p}:{b}")
+
+    events: list[ChangeEvent] = []
+    for sid in expected_sources:
+        provider, _, board = sid.partition(":")
+        for e in _load_json(s3, bucket, s3layout.events_key(provider, board, dt), default=[]):
+            events.append(ChangeEvent.model_validate(e))
+
+    return ReportInput(
+        run_id=run_id,
+        dt=dt,
+        expected_sources=expected_sources,
+        succeeded_sources=sorted(set(succeeded)),
+        manifest_present=manifest_present,
+        events=events,
+        scorecards=[],  # scoring is a later dimension; the renderer handles an empty list
+    )
+
+
+def handler(event, context):
     import os
+    from datetime import timezone
 
     import boto3
 
@@ -216,16 +253,46 @@ def handler(event, context):  # pragma: no cover - AWS glue
 
     bucket = os.environ["JPRS_BUCKET"]
     s3 = boto3.client("s3")
-    dt = event.get("dt") or datetime.utcnow().strftime("%Y-%m-%d")
-    run_id = event.get("run_id", dt)
+    ctx = event.get("runContext") or {}
+    run_id = event.get("run_id") or ctx.get("run_id") or datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    dt = event.get("dt") or ctx.get("dt") or run_id
 
-    # NOTE: assembly of ReportInput (loading manifest, sentinels, events, scorecards from S3)
-    # is the ReportAssembler Step Functions responsibility; this handler renders a pre-assembled input.
-    inp = ReportInput(**event["report_input"]) if "report_input" in event else ReportInput(run_id=run_id, dt=dt)
+    inp = assemble_report_input(s3, bucket, run_id, dt)
     markdown, report_json = render_report(inp)
 
     s3.put_object(Bucket=bucket, Key=s3layout.report_md_key(dt), Body=markdown.encode(),
                   ContentType="text/markdown")
     s3.put_object(Bucket=bucket, Key=s3layout.report_json_key(dt),
                   Body=json.dumps(report_json, default=str).encode(), ContentType="application/json")
-    return {"run_health": report_json["run_health"], "dt": dt}
+    return {
+        "run_health": report_json["run_health"], "dt": dt,
+        "expected": len(inp.expected_sources), "succeeded": len(inp.succeeded_sources),
+        "events": len(inp.events),
+    }
+
+
+def _load_json(s3, bucket, key, default="__raise__"):
+    import botocore.exceptions
+
+    try:
+        obj = s3.get_object(Bucket=bucket, Key=key)
+        return json.loads(obj["Body"].read())
+    except botocore.exceptions.ClientError:
+        if default == "__raise__":
+            raise
+        return default
+
+
+def _list_keys(s3, bucket, prefix):
+    keys, token = [], None
+    while True:
+        kw = {"Bucket": bucket, "Prefix": prefix}
+        if token:
+            kw["ContinuationToken"] = token
+        resp = s3.list_objects_v2(**kw)
+        keys.extend(o["Key"] for o in resp.get("Contents", []))
+        if resp.get("IsTruncated"):
+            token = resp.get("NextContinuationToken")
+        else:
+            break
+    return keys

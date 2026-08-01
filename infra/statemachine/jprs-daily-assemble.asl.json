@@ -9,7 +9,7 @@
         "Name": "/jprs/companies"
       },
       "ResultSelector": {
-        "companies.$": "States.StringToJson($.Parameter.Value)"
+        "raw.$": "States.StringToJson($.Parameter.Value)"
       },
       "ResultPath": "$.config",
       "Retry": [
@@ -31,7 +31,7 @@
     },
     "DiffAllCompanies": {
       "Type": "Map",
-      "ItemsPath": "$.config.companies",
+      "ItemsPath": "$.config.raw.companies",
       "MaxConcurrency": 5,
       "ItemProcessor": {
         "ProcessorConfig": { "Mode": "INLINE" },

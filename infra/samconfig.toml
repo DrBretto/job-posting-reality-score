@@ -17,15 +17,13 @@ stack_name = "jprs-v1"
 region = "us-east-1"
 capabilities = "CAPABILITY_NAMED_IAM"
 confirm_changeset = true
-resolve_s3 = true
+s3_bucket = "jprs-sam-artifacts-bw-20260731"
+s3_prefix = "jprs-v1"
 disable_rollback = false
 # Override defaults at deploy time with --parameter-overrides, e.g.:
 #   sam deploy --parameter-overrides AlertEmail=you@example.com EnableNarrator=false
 parameter_overrides = [
   "BucketName=jprs-prod-bw-20260731",
-  "TimeZone=America/New_York",
-  "CollectCron=cron(0 7 * * ? *)",
-  "AssembleCron=cron(0 9 * * ? *)",
   "EnableNarrator=false",
 ]
 
