@@ -111,3 +111,146 @@ def test_weakest_link_composite_confidence():
                card.hiring_activity_evidence.confidence, card.repost_churn_pattern.confidence,
                card.source_data_confidence.confidence]
     assert card.application_priority.confidence == min(feeders)
+
+
+def test_agentic_applied_ai_role_scores_high():
+    job = make_job(
+        "agentic",
+        title="Senior Agentic AI Engineer",
+        description=(
+            "Build multi-agent LLM systems with MCP, evaluation harnesses, Python, AWS Bedrock, "
+            "tool use, orchestration, and backend APIs."
+        ),
+        location="Remote - United States",
+        remote="remote",
+    )
+    card = score_job(ScoreContext(job=job), today=TODAY)
+    assert card.brett_fit.band == Band.HIGH
+    assert card.brett_fit.score >= 0.85
+    assert card.excluded is False
+    assert "agentic-ai" in card.brett_fit.detail["title_signals"]
+    assert "mcp" in card.brett_fit.detail["skill_signals"]
+
+
+def test_staff_title_remains_visible_but_ranks_below_equivalent_senior_role():
+    description = "Build agentic LLM systems with MCP, Python, AWS, orchestration, and evals."
+    senior = make_job(
+        "senior", title="Senior AI Engineer", description=description,
+        location="Remote - United States", remote="remote",
+    )
+    staff = make_job(
+        "staff", title="Staff AI Engineer", description=description,
+        location="Remote - United States", remote="remote",
+    )
+    senior_card = score_job(ScoreContext(job=senior), today=TODAY)
+    staff_card = score_job(ScoreContext(job=staff), today=TODAY)
+    assert staff_card.brett_fit.band == Band.HIGH
+    assert staff_card.brett_fit.score < senior_card.brett_fit.score
+
+
+def test_fit_terms_use_word_boundaries():
+    """The strings retail/email/html must not accidentally count as AI or ML evidence."""
+    job = make_job(
+        "boundaries",
+        title="Retail Platform Analyst",
+        description="Maintain retail email templates written in HTML.",
+        location="Remote",
+        remote="remote",
+    )
+    card = score_job(ScoreContext(job=job), today=TODAY)
+    assert card.brett_fit.score < ScoringProfile().brett_fit_floor
+    assert "llms" not in card.brett_fit.detail["skill_signals"]
+    assert card.excluded is True
+
+
+def test_non_engineering_ai_role_is_excluded():
+    job = make_job(
+        "pm",
+        title="Product Manager, AI Platform",
+        description="Own an agentic LLM platform using MCP, Python, AWS, and evaluation tooling.",
+        location="Remote - United States",
+        remote="remote",
+    )
+    card = score_job(ScoreContext(job=job), today=TODAY)
+    assert card.brett_fit.score == 0.0
+    assert card.brett_fit.detail["blocked_role"] == 1
+    assert card.excluded is True
+
+
+def test_company_boilerplate_cannot_rescue_unrelated_engineering_title():
+    job = make_job(
+        "field-app",
+        title="Field Application Engineer (Integrated Photonics)",
+        description=(
+            "Our AI company uses LLM agents, Python, AWS, MCP, orchestration, evals, and data pipelines."
+        ),
+        location="Remote - United States",
+        remote="remote",
+    )
+    card = score_job(ScoreContext(job=job), today=TODAY)
+    assert card.brett_fit.detail["blocked_title_lane"] == 1
+    assert card.excluded is True
+
+
+def test_presales_and_clearance_specific_roles_are_excluded():
+    for key, title in (
+        ("presales", "Staff Applied AI Engineer - Pre-Sales"),
+        ("clearance", "Applied AI Engineer, Federal - Top Secret Clearance"),
+    ):
+        job = make_job(
+            key,
+            title=title,
+            description="Build LLM agents with Python, MCP, AWS, and evaluation tooling.",
+            location="Remote - United States",
+            remote="remote",
+        )
+        card = score_job(ScoreContext(job=job), today=TODAY)
+        assert card.brett_fit.detail["blocked_role"] == 1
+        assert card.excluded is True
+
+
+def test_specific_nonlocal_office_requires_remote_evidence():
+    onsite = make_job(
+        "palo-alto",
+        title="Forward Deployed Engineer",
+        description="Work with customers and build Python AI systems.",
+        location="Palo Alto, California, United States",
+    )
+    remote = make_job(
+        "austin-remote",
+        title="AI Software Engineer",
+        description="This role is available for remote work with occasional travel to Austin.",
+        location="Austin, Texas, United States",
+    )
+    onsite_card = score_job(ScoreContext(job=onsite), today=TODAY)
+    remote_card = score_job(ScoreContext(job=remote), today=TODAY)
+    assert onsite_card.brett_fit.detail["blocked_geography"] == 1
+    assert onsite_card.excluded is True
+    assert remote_card.brett_fit.detail["blocked_geography"] == 0
+    assert remote_card.excluded is False
+
+
+def test_remote_role_restricted_to_canada_is_excluded():
+    job = make_job(
+        "canada",
+        title="Agentic AI Engineer",
+        description="Build LLM agents in Python on AWS.",
+        location="Remote - Canada",
+        remote="remote",
+    )
+    card = score_job(ScoreContext(job=job), today=TODAY)
+    assert card.brett_fit.detail["blocked_geography"] == 1
+    assert card.excluded is True
+
+
+def test_remote_role_restricted_to_europe_is_excluded():
+    job = make_job(
+        "sweden",
+        title="Backend Engineer - Platform | Sweden | Remote",
+        description="Build a Python platform for LLM services and data pipelines.",
+        location="Sweden (Remote)",
+        remote="remote",
+    )
+    card = score_job(ScoreContext(job=job), today=TODAY)
+    assert card.brett_fit.detail["blocked_geography"] == 1
+    assert card.excluded is True

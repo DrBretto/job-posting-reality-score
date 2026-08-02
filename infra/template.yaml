@@ -6,8 +6,7 @@ Description: >
   EventBridge Scheduler (collect + assemble), four Lambdas (enumerate/collector/differ/report)
   each with its own least-privilege role + shared permissions boundary, an optional
   feature-flagged narrator Lambda, a Standard Step Functions assembler (Map + Retry + Catch),
-  CloudWatch alarms A1-A7 -> SNS, and the M5 enforcing cost fence (AWS Budgets + Budget Action
-  that attaches an IAM lockdown deny policy to the scheduler roles per ADR-0001).
+  CloudWatch alarms A1-A7 -> SNS, finite log retention, and no always-on compute.
 
 # ---------------------------------------------------------------------------
 # Parameters
@@ -20,17 +19,14 @@ Parameters:
     AllowedPattern: '^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$'
   AlertEmail:
     Type: String
-    Default: drbretto82@gmail.com
-    Description: Email that receives ops alarms (A1-A7) and AWS Budgets alerts.
+    Description: Email that receives ops alarms A1-A7.
     AllowedPattern: '^[^@\s]+@[^@\s]+\.[^@\s]+$'
   DigestRecipient:
     Type: String
-    Default: drbretto82@gmail.com
     Description: Email that receives the daily digest report (SES). Must be a verified SES identity while SES is in sandbox.
     AllowedPattern: '^[^@\s]+@[^@\s]+\.[^@\s]+$'
   SesSender:
     Type: String
-    Default: drbretto82@gmail.com
     Description: Verified SES sender identity used as the digest From address.
     AllowedPattern: '^[^@\s]+@[^@\s]+\.[^@\s]+$'
   CollectCron:
@@ -78,8 +74,7 @@ Globals:
 Resources:
 
   # =========================================================================
-  # Shared IAM: permissions boundary (ceiling on every JPRS execution role)
-  # and the budget-lockdown deny policy (M5 cost fence).
+  # Shared IAM permissions boundary (ceiling on every JPRS execution role).
   # =========================================================================
   PermissionsBoundaryPolicy:
     Type: AWS::IAM::ManagedPolicy
@@ -394,6 +389,7 @@ Resources:
               Effect: Allow
               Action: s3:GetObject
               Resource:
+                - !Sub arn:aws:s3:::${BucketName}/current/*
                 - !Sub arn:aws:s3:::${BucketName}/events/*
                 - !Sub arn:aws:s3:::${BucketName}/status/*
                 - !Sub arn:aws:s3:::${BucketName}/runs/*

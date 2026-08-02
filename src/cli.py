@@ -4,6 +4,7 @@ Subcommands:
   connect   — run a connector against a local fixture file (no network), print the snapshot + jobs
   diff      — run the differ over two local snapshot-day fixtures (replay-from-raw semantics)
   report    — render a report locally from an events+scorecards fixture
+  registry  — render config/companies.yaml as the JSON payload stored in SSM
 
 Every path is offline: fixtures are JSON files, never a live ATS call.
 """
@@ -19,6 +20,7 @@ from pathlib import Path
 from src.common.connectors import FetchResult, get_connector
 from src.common.models import CanonicalJob, SourceSnapshot
 from src.differ.handler import DiffState, diff_source
+from src.enumerate.handler import load_registry_from_yaml
 from src.report.handler import ReportInput, render_report
 
 
@@ -88,9 +90,22 @@ def cmd_report(args) -> int:
         manifest_present=data.get("manifest_present", True),
         events=[ChangeEvent.model_validate(e) for e in data.get("events", [])],
         scorecards=[DimensionScorecard.model_validate(c) for c in data.get("scorecards", [])],
+        jobs=[CanonicalJob.model_validate(job) for job in data.get("jobs", [])],
+        source_labels=data.get("source_labels", {}),
     )
     markdown, _report_json = render_report(inp)
     print(markdown)
+    return 0
+
+
+def cmd_registry(args) -> int:
+    entries = load_registry_from_yaml(args.config)
+    payload = {"companies": [entry.model_dump(mode="json") for entry in entries]}
+    print(json.dumps(
+        payload,
+        indent=None if args.compact else 2,
+        separators=(",", ":") if args.compact else None,
+    ))
     return 0
 
 
@@ -115,6 +130,11 @@ def build_parser() -> argparse.ArgumentParser:
     r = sub.add_parser("report", help="render a report from an events+scorecards fixture")
     r.add_argument("--fixture", required=True)
     r.set_defaults(func=cmd_report)
+
+    registry = sub.add_parser("registry", help="render the operator registry as SSM JSON")
+    registry.add_argument("--config", default="config/companies.yaml")
+    registry.add_argument("--compact", action="store_true")
+    registry.set_defaults(func=cmd_registry)
     return p
 
 

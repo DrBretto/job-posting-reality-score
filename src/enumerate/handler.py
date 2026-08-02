@@ -41,6 +41,7 @@ class RunManifest(BaseModel):
     state: str = "RUN_OPEN"
     expected_tasks: list[str] = Field(default_factory=list)  # task_id = run_id:provider:company_slug
     expected_sources: list[str] = Field(default_factory=list)  # source_id = provider:board_token
+    source_labels: dict[str, str] = Field(default_factory=dict)  # source_id -> operator company slug
 
 
 def _task_id(run_id: str, provider: str, company_slug: str) -> str:
@@ -73,11 +74,13 @@ def build_manifest(run_id: str, entries: list[CompanyEntry], *, now: datetime | 
     active = _active_entries(entries)
     expected_tasks = [_task_id(run_id, e.provider.value, e.company_slug) for e in active]
     expected_sources = [f"{e.provider.value}:{e.board_token}" for e in active]
+    source_labels = {f"{e.provider.value}:{e.board_token}": e.company_slug for e in active}
     return RunManifest(
         run_id=run_id,
         opened_at=now,
         expected_tasks=sorted(expected_tasks),
         expected_sources=sorted(expected_sources),
+        source_labels=dict(sorted(source_labels.items())),
     )
 
 

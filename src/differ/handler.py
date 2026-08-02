@@ -241,6 +241,8 @@ def diff_source(
         existing = prior_jobs.get(job.job_id)
         if existing is None:
             # brand-new id -> first-seen (first_seen_at is OUR earliest SUCCESS observation)
+            job.first_seen_at = as_of
+            job.last_seen_at = as_of
             events.append(_event(
                 ChangeEventType.FIRST_SEEN,
                 source_id=source_id, run_id=run_id, as_of=as_of,
@@ -266,6 +268,10 @@ def diff_source(
             continue
 
         # existing job present again
+        # Carry our authoritative observation window into current_jobs.json. Connector timestamps
+        # are per-fetch placeholders and must not make an old posting appear newly seen every day.
+        job.first_seen_at = existing.first_seen_at
+        job.last_seen_at = as_of
         prev_state = existing.state
         if prev_state == JobLifecycleState.DISAPPEARED:
             events.append(_event(

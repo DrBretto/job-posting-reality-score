@@ -2,84 +2,77 @@
 
 ## Goals
 
-1. Build a useful daily radar for selected public job boards.
-2. Preserve immutable posting history so changes and reposts can be proven from evidence.
-3. Rank attention using transparent fit and activity signals, without pretending to know whether a
-   listing is genuine.
-4. Rebuild Brett's working recall of AWS by constructing P0-P8 manually in the console.
-5. Keep the starter system below `$5/month` under expected use.
+1. Produce a useful daily shortlist of current roles for Brett.
+2. Preserve public posting history so changes, disappearances, and repost patterns are evidence-backed.
+3. Rank attention transparently around Brett's demonstrated agentic AI, applied AI, backend/platform,
+   AWS, automation, and developer-tooling experience.
+4. Keep AWS architecture skills fresh through inspectable serverless components and explicit manual
+   checkpoints.
+5. Keep expected operating cost below `$5/month` without always-on infrastructure.
 
 ## Constraints
 
 - One AWS account and one region: `us-east-1`.
-- Public ATS/company-career sources only; respect source terms and rate limits.
-- No automated application submission or personal-contact harvesting.
-- No NAT Gateway, EC2, RDS, OpenSearch, EKS, paid Glue, Kinesis, provisioned Lambda concurrency, or
-  always-on compute in starter scope.
-- S3 is the source of truth; versioning remains off.
-- Bedrock is off until P8 and may be omitted entirely.
-- AWS resources are created manually by Brett through P8. AI may create local code, policies, tests,
-  fixtures, and exact console worksheets.
-- Never put account IDs, ARNs tied to the private account, access keys, emails, or secrets in Git.
+- Public ATS/company-career sources only; no authenticated scraping.
+- No automated applications or personal-contact harvesting.
+- No NAT Gateway, EC2, RDS, OpenSearch, EKS, Kinesis, paid Glue, or provisioned concurrency.
+- S3 is the evidence store and versioning remains off.
+- Bedrock is optional and remains disabled; no LLM sets scores or authoritative facts.
+- AWS deployment, SSM changes, destructive actions, and merges to `main` require operator approval.
+- Private account identifiers, ARNs, access keys, emails, and secrets never enter Git.
 
 ## Architecture
 
 Daily collection:
 
-`EventBridge Scheduler -> enumerate Lambda -> RUN_OPEN manifest -> SQS + DLQ -> collector Lambda -> S3`
+`EventBridge Scheduler -> enumerate Lambda -> RUN_OPEN manifest -> SQS/DLQ -> collector -> S3`
 
 Daily interpretation:
 
-`EventBridge Scheduler -> Step Functions Standard -> differ/report Lambdas -> S3 -> SES`
+`EventBridge Scheduler -> Step Functions -> differ -> current/events -> report -> S3 + SES`
 
-Storage prefixes are separated by ownership. In particular, the collector writes status records but
-the differ owns published current state. Raw snapshots use unique write-once keys and cannot be
-deleted by execution roles.
+The collector owns `raw/`, `normalized/`, and `status/`. The differ alone owns `current/` and
+`events/`. Failed or partial fetches freeze source state and cannot emit disappearance events.
 
 ## Milestones
 
 | Phase | Outcome | Status |
 |---|---|---|
-| P0 | Region, identity, cost, and access guardrails | AI KIT READY / MANUAL WORK NOT STARTED |
-| P1 | Private S3 record substrate | NOT STARTED |
-| P2 | One connector and collector Lambda | NOT STARTED |
-| P3 | SQS, DLQ, retries, and redrive recall lab | NOT STARTED |
-| P4 | EventBridge Scheduler and explicit enumerate step | NOT STARTED |
-| P5 | Multi-source fan-out and complete-run manifests | NOT STARTED |
-| P6 | Evidence-backed diff engine and mass-drop protection | NOT STARTED |
-| P7 | Daily report, SES delivery, monitoring, and runbook | NOT STARTED |
-| P8 | Optional template-constrained Bedrock narration | NOT STARTED |
-| P9 | Reconstruct the hand-built stack as IaC | NOT STARTED |
-| P10 | Athena/Parquet historical analysis | NOT STARTED |
-
-V1 is P0-P7. P8 is optional. P9 and P10 begin only after V1 works.
-
-## Required Conditions
-
-The committee's five major conditions are part of the build, not optional follow-up:
-
-1. Add an explicit enumerate Lambda and `RUN_OPEN` manifest backbone before P5.
-2. Permit LLM narration only through a constrained evidence template before P8.
-3. Add cumulative and per-segment mass-drop guards before P6 is complete.
-4. Separate collector `status/` ownership from differ `current/` ownership before P2 IAM is final.
-5. Enforce finite log retention and a supported cost lockdown at every relevant phase.
-
-Condition 5 is refined by
-[ADR 0001](ADR/0001-supported-budget-enforcement.md): AWS Budgets cannot directly disable an
-EventBridge schedule. At P4, the `$10` Budget Action will instead attach a deny policy to the
-scheduler invocation role, preventing new Lambda, Step Functions, and SQS work.
+| P0 | Region, identity, and account guardrails | COMPLETE |
+| P1 | Private S3 evidence substrate | COMPLETE |
+| P2 | Public ATS connector and collector Lambda | COMPLETE |
+| P3 | SQS, DLQ, retries, and redrive lab | COMPLETE |
+| P4 | Scheduled collection and enumerate step | COMPLETE |
+| P5 | Multi-source fan-out and complete-run manifest | COMPLETE |
+| P6 | Evidence-backed differ and mass-drop protection | COMPLETE |
+| P7 | Daily report, SES path, monitoring, and runbook | DEPLOYED; USEFULNESS UPDATE PENDING |
+| P8 | Optional constrained Bedrock narration | DEFERRED / OFF |
+| P9 | SAM infrastructure reconstruction | COMPLETE AND DEPLOYED |
+| P10 | Parquet/Athena historical analysis | DEFERRED UNTIL HISTORY JUSTIFIES IT |
 
 ## Current Work
 
-The active execution plan is
-[P0 account guardrails](plans/2026-07-28-p0-account-guardrails.md).
-Do not begin P1 until every P0 done-gate item is checked and Brett can answer the recall prompt
-without notes.
+The active plan is
+[2026-08-02 real-job radar](plans/2026-08-02-real-job-radar.md).
+
+Local work is complete when the full test suite, SAM validation, SAM build, live registry check, and
+feature-branch push pass. The next gate is explicit approval to deploy the code, update
+`/jprs/companies`, and verify one controlled 15-source run.
+
+## Next Product Steps
+
+1. Deploy and verify the August 2 usefulness pass.
+2. Let history accumulate while using the digest for daily applications.
+3. Record application outcomes in a small explicit schema before changing score weights from
+   outcomes.
+4. Add a target-board health review and prune companies that stop producing relevant roles.
+5. Consider Parquet/Athena only when accumulated history answers a concrete question better than the
+   existing JSON records.
 
 ## Non-Goals
 
-- Calling recycled postings fraudulent or fake.
-- Scraping arbitrary websites behind authentication or anti-bot controls.
-- Building a commercial dashboard before the personal daily radar is useful.
-- Using AI where deterministic collection, normalization, or comparison is sufficient.
-- Automating away the AWS console work that this project exists to refresh.
+- Inferring deceptive intent from posting behavior.
+- Broad prestige-company monitoring without current role relevance.
+- A commercial dashboard before the personal digest proves useful.
+- LLM-based scoring where deterministic evidence is sufficient.
+- Replacing human review of a posting or automating submission.

@@ -29,6 +29,7 @@ Desktop.ini
 dist/
 build/
 out/
+.aws-sam/
 *.o
 *.so
 *.dylib
@@ -58,6 +59,7 @@ lerna-debug.log*
 # Temporary files
 *.tmp
 *.temp
+rep_out.json
 .cache/
 .tmp/
 

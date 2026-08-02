@@ -5,8 +5,10 @@ Guarantees (SCORING §5, RELIABILITY §5.1, PANEL_DISSENT M2):
       VERIFIED-QUIET  — every expected source produced a SUCCESS snapshot AND nothing material changed
       INCOMPLETE      — the run happened but >=1 expected source lacks a SUCCESS snapshot (NAMES them)
       NO-RUN          — no manifest for the expected run_id (the scheduler/dispatcher never opened it)
-  - Never-fake vocabulary guard: the rendered output is scanned for banned tokens
-    (fake/real/ghost/scam/fraud/fraudulent/lying/fabricated) as whole words; any hit raises.
+  - Never-fake vocabulary guard: system-authored report language is scanned for banned tokens
+    (fake/real/ghost/scam/fraud/fraudulent/lying/fabricated) as whole words; sourced titles,
+    locations, URLs, and identifiers are redacted before scanning because they are evidence labels,
+    not system claims.
   - Every reported change cites evidence_refs (snapshot_id / event_id).
   - M2: the report body is 100% deterministic and slot-filled from stored evidence. If an optional
     LLM narration is ever attached it must slot-fill a fixed template of pre-approved sentence frames
@@ -19,14 +21,18 @@ from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 
 from src.common.models import (
+    Band,
+    CanonicalJob,
     ChangeEvent,
     ChangeEventType,
     DimensionScorecard,
     RunHealth,
+    SnapshotStatus,
 )
+from src.scoring.scoring import ScoreContext, ScoringProfile, score_job
 
 # whole-word banned vocabulary (word boundaries so "Reality"/"really"/"already" are safe)
 BANNED_TOKENS = ("fake", "real", "ghost", "scam", "fraud", "fraudulent", "lying", "fabricated")
@@ -68,6 +74,26 @@ _JOB_SCOPED = {
     ChangeEventType.DISAPPEARED, ChangeEventType.RETURNED, ChangeEventType.PROBABLE_REPOST,
 }
 _MATERIAL = _JOB_SCOPED - {ChangeEventType.FIRST_SEEN}  # material for the quiet/changed decision
+_MAX_MATCHES = 20
+_MAX_EVENT_ITEMS = 15
+
+_COMPANY_LABELS = {
+    "axiomatic-ai": "Axiomatic AI",
+    "bolt-new": "Bolt.new",
+    "cadence-solutions": "Cadence Solutions",
+    "cargomatic": "Cargomatic",
+    "future": "Future",
+    "grafana-labs": "Grafana Labs",
+    "icon": "ICON",
+    "implicit": "Implicit",
+    "legion-intelligence": "Legion Intelligence",
+    "machinify": "Machinify",
+    "mozilla": "Mozilla",
+    "nimble-gravity": "Nimble Gravity",
+    "snorkel-ai": "Snorkel AI",
+    "tailscale": "Tailscale",
+    "warp": "Warp",
+}
 
 
 @dataclass
@@ -79,6 +105,8 @@ class ReportInput:
     manifest_present: bool = True
     events: list[ChangeEvent] = field(default_factory=list)
     scorecards: list[DimensionScorecard] = field(default_factory=list)
+    jobs: list[CanonicalJob] = field(default_factory=list)
+    source_labels: dict[str, str] = field(default_factory=dict)
 
 
 def compute_run_health(inp: ReportInput) -> tuple[RunHealth, list[str]]:
@@ -97,6 +125,97 @@ def _evidence_str(e: ChangeEvent) -> str:
     return "[" + ", ".join(parts) + "]"
 
 
+def _company_name(source_id: str, source_labels: dict[str, str]) -> str:
+    slug = source_labels.get(source_id) or source_id.partition(":")[2] or source_id
+    return _COMPANY_LABELS.get(slug, slug.replace("-", " ").title())
+
+
+def _md_text(value: str) -> str:
+    return value.replace("\\", "\\\\").replace("[", "\\[").replace("]", "\\]").replace("|", "\\|")
+
+
+def _job_link(job: CanonicalJob) -> str:
+    title = _md_text(job.title)
+    url = job.posting_url or job.apply_url or ""
+    return f"[{title}]({url})" if url else title
+
+
+def _ranked_matches(inp: ReportInput) -> list[DimensionScorecard]:
+    eligible = [
+        card for card in inp.scorecards
+        if not card.excluded and card.brett_fit.band in (Band.HIGH, Band.MEDIUM)
+    ]
+    return sorted(
+        eligible,
+        key=lambda card: (
+            -(card.application_priority.score if card.application_priority.score is not None else -1.0),
+            -(card.brett_fit.score if card.brett_fit.score is not None else -1.0),
+            card.job_id,
+        ),
+    )
+
+
+def _signal_summary(card: DimensionScorecard) -> str:
+    detail = card.brett_fit.detail
+    signals: list[str] = []
+    for key in ("title_signals", "skill_signals"):
+        signals.extend(s for s in str(detail.get(key, "")).split(",") if s)
+    return ", ".join(signals[:6])
+
+
+def _match_json(card: DimensionScorecard, job: CanonicalJob, inp: ReportInput) -> dict:
+    return {
+        "source_id": card.source_id,
+        "job_id": card.job_id,
+        "company": _company_name(card.source_id, inp.source_labels),
+        "title": job.title,
+        "location": job.raw_location or job.canonical_location or "Location not stated",
+        "remote_mode": job.remote_hybrid_language.value,
+        "posting_url": job.posting_url or job.apply_url or None,
+        "first_seen_at": job.first_seen_at.isoformat() if job.first_seen_at else None,
+        "fit_score": card.brett_fit.score,
+        "fit_band": card.brett_fit.band.value,
+        "priority_score": card.application_priority.score,
+        "priority_band": card.application_priority.band.value,
+        "priority_confidence": card.application_priority.confidence,
+        "signals": _signal_summary(card),
+    }
+
+
+def _event_subject(event: ChangeEvent, jobs_by_id: dict[str, CanonicalJob], inp: ReportInput) -> str:
+    job = jobs_by_id.get(event.job_id or "")
+    if job is None:
+        return str(event.job_id or event.source_id)
+    return f"{_job_link(job)} at {_company_name(event.source_id, inp.source_labels)}"
+
+
+def _source_values(inp: ReportInput) -> list[str]:
+    """Provider-supplied strings that may legitimately contain otherwise guarded vocabulary."""
+    values: set[str] = set(inp.source_labels.values()) | set(inp.expected_sources)
+    for job in inp.jobs:
+        values.update(filter(None, (
+            job.source_id, job.job_id, job.title, job.raw_location, job.canonical_location,
+            job.posting_url, job.apply_url,
+        )))
+    for event in inp.events:
+        values.update(filter(None, (
+            event.source_id, event.job_id, event.event_id, event.snapshot_id,
+            event.prior_snapshot_id, event.linked_job_id, event.content_hash,
+        )))
+    values.update(_company_name(source_id, inp.source_labels) for source_id in inp.expected_sources)
+    return sorted((str(value) for value in values if value), key=len, reverse=True)
+
+
+def _assert_report_language(markdown: str, report_json: dict, inp: ReportInput) -> None:
+    markdown_guard = markdown
+    json_guard = json.dumps(report_json, default=str)
+    for value in _source_values(inp):
+        markdown_guard = markdown_guard.replace(value, "<SOURCE_VALUE>")
+        json_guard = json_guard.replace(value, "<SOURCE_VALUE>")
+    assert_no_banned_vocab(markdown_guard)
+    assert_no_banned_vocab(json_guard)
+
+
 def render_report(inp: ReportInput) -> tuple[str, dict]:
     """Return (markdown, json_dict). Deterministic; narrator NOT invoked (V1 path)."""
     health, missing = compute_run_health(inp)
@@ -105,6 +224,20 @@ def render_report(inp: ReportInput) -> tuple[str, dict]:
     source_events = [e for e in inp.events if e.event_type in (
         ChangeEventType.SOURCE_FETCH_FAILED, ChangeEventType.SOURCE_RESPONSE_PARTIAL,
         ChangeEventType.SOURCE_SUSPECT)]
+    jobs_by_id = {job.job_id: job for job in inp.jobs}
+    ranked = _ranked_matches(inp)
+    ranked_pairs = [(card, jobs_by_id[card.job_id]) for card in ranked if card.job_id in jobs_by_id]
+    top_pairs = ranked_pairs[:_MAX_MATCHES]
+    relevant_ids = {card.job_id for card, _ in ranked_pairs}
+    relevance_order = {card.job_id: index for index, (card, _) in enumerate(ranked_pairs)}
+    visible_material = (
+        [event for event in material_events if event.job_id in relevant_ids]
+        if inp.scorecards else material_events
+    )
+    visible_first_seen = (
+        [event for event in first_seen if event.job_id in relevant_ids]
+        if inp.scorecards else first_seen
+    )
 
     # ---- header ----
     if health == RunHealth.VERIFIED_QUIET and not material_events and not first_seen:
@@ -132,45 +265,61 @@ def render_report(inp: ReportInput) -> tuple[str, dict]:
         lines.append("## Source-level notices")
         lines.append("")
         for e in sorted(source_events, key=lambda x: (x.source_id, x.event_type.value)):
-            lines.append(f"- {e.source_id}: {_CHANGE_PHRASE[e.event_type]} {_evidence_str(e)}")
+            company = _company_name(e.source_id, inp.source_labels)
+            lines.append(f"- {company} ({e.source_id}): {_CHANGE_PHRASE[e.event_type]} {_evidence_str(e)}")
         lines.append("")
 
-    if material_events:
+    if top_pairs:
+        lines.append("## Best current matches")
+        lines.append("")
+        for card, job in top_pairs:
+            fit = card.brett_fit
+            priority = card.application_priority
+            fit_score = f"{fit.score:.2f}" if fit.score is not None else "UNKNOWN"
+            priority_score = f"{priority.score:.2f}" if priority.score is not None else "UNKNOWN"
+            location = _md_text(job.raw_location or job.canonical_location or "Location not stated")
+            company = _company_name(card.source_id, inp.source_labels)
+            signals = _signal_summary(card)
+            signal_text = f" | signals: {signals}" if signals else ""
+            lines.append(
+                f"- {_job_link(job)} - {company} | {location} | fit {fit.band.value} {fit_score} | "
+                f"priority {priority.band.value} {priority_score}{signal_text}"
+            )
+        if len(ranked_pairs) > _MAX_MATCHES:
+            lines.append(f"- {len(ranked_pairs) - _MAX_MATCHES} additional matching roles are retained in JSON.")
+        lines.append("")
+    elif inp.scorecards:
+        lines.extend(["## Best current matches", "", "No current postings cleared the fit threshold today.", ""])
+
+    if visible_material:
         lines.append("## Changes")
         lines.append("")
-        for e in sorted(material_events, key=lambda x: (x.source_id, str(x.job_id), x.event_type.value)):
+        ordered = sorted(
+            visible_material,
+            key=lambda x: (relevance_order.get(x.job_id or "", len(relevance_order)), x.event_type.value),
+        )
+        for e in ordered[:_MAX_EVENT_ITEMS]:
             extra = ""
             if e.event_type == ChangeEventType.PROBABLE_REPOST and e.repost_score is not None:
                 extra = f" (confidence {e.repost_score}; linked {e.linked_job_id})"
-            lines.append(f"- {e.job_id}: {_CHANGE_PHRASE[e.event_type]}{extra} {_evidence_str(e)}")
+            subject = _event_subject(e, jobs_by_id, inp)
+            lines.append(f"- {subject}: {_CHANGE_PHRASE[e.event_type]}{extra} {_evidence_str(e)}")
+        if len(visible_material) > _MAX_EVENT_ITEMS:
+            lines.append(f"- {len(visible_material) - _MAX_EVENT_ITEMS} additional matching-role changes are retained in JSON.")
         lines.append("")
 
-    if first_seen:
+    if visible_first_seen:
         lines.append("## Newly observed postings")
         lines.append("")
-        for e in sorted(first_seen, key=lambda x: str(x.job_id)):
-            lines.append(f"- {e.job_id}: {_CHANGE_PHRASE[e.event_type]} {_evidence_str(e)}")
-        lines.append("")
-
-    surfaced = [c for c in inp.scorecards if not c.excluded]
-    if surfaced:
-        lines.append("## Application priority (behavioral observations, confidence-bounded)")
-        lines.append("")
-        surfaced_sorted = sorted(
-            surfaced,
-            key=lambda c: (-(c.application_priority.score or -1.0), c.job_id),
+        ordered = sorted(
+            visible_first_seen,
+            key=lambda x: relevance_order.get(x.job_id or "", len(relevance_order)),
         )
-        for c in surfaced_sorted:
-            ap = c.application_priority
-            score_txt = f"{ap.score:.3f}" if ap.score is not None else "UNKNOWN"
-            refs = "; ".join(f"{r.kind.value}:{r.ref_id}" for r in ap.evidence_refs[:3])
-            lines.append(
-                f"- {c.job_id} — application_priority {ap.band.value} ({score_txt}, "
-                f"confidence {ap.confidence:.2f}) — fit {c.brett_fit.band.value}, "
-                f"freshness {c.freshness.band.value}, hiring {c.hiring_activity_evidence.band.value}, "
-                f"churn {c.repost_churn_pattern.band.value}, record {c.source_data_confidence.band.value} "
-                f"[{refs}]"
-            )
+        for e in ordered[:_MAX_EVENT_ITEMS]:
+            subject = _event_subject(e, jobs_by_id, inp)
+            lines.append(f"- {subject}: {_CHANGE_PHRASE[e.event_type]} {_evidence_str(e)}")
+        if len(visible_first_seen) > _MAX_EVENT_ITEMS:
+            lines.append(f"- {len(visible_first_seen) - _MAX_EVENT_ITEMS} additional matching new postings are retained in JSON.")
         lines.append("")
 
     markdown = "\n".join(lines)
@@ -184,21 +333,23 @@ def render_report(inp: ReportInput) -> tuple[str, dict]:
         "succeeded_sources": sorted(inp.succeeded_sources),
         "incomplete_sources": missing,
         "completeness_ratio": _ratio(inp),
+        "current_job_count": len(inp.jobs),
+        "matching_job_count": len(ranked_pairs),
+        "top_matches": [_match_json(card, job, inp) for card, job in top_pairs],
         "events": [e.model_dump(mode="json") for e in inp.events],
         "scorecards": [c.model_dump(mode="json") for c in inp.scorecards],
         "narration_enabled": False,  # M2: V1 deterministic-only path
     }
 
-    # never-fake guard — scan BOTH rendered surfaces before returning
-    assert_no_banned_vocab(markdown)
-    assert_no_banned_vocab(json.dumps(report_json, default=str))
+    # Scan both surfaces after redacting provider-supplied labels. Event notes remain unredacted.
+    _assert_report_language(markdown, report_json, inp)
     return markdown, report_json
 
 
 def _profile_version(inp: ReportInput) -> str:
     if inp.scorecards:
         return inp.scorecards[0].scoring_profile_version
-    return "1.0.0"
+    return ScoringProfile().version
 
 
 def _ratio(inp: ReportInput) -> float:
@@ -217,6 +368,7 @@ def assemble_report_input(s3, bucket: str, run_id: str, dt: str) -> ReportInput:
     manifest = _load_json(s3, bucket, s3layout.run_manifest_key(run_id), default=None)
     manifest_present = manifest is not None
     expected_sources = list(manifest.get("expected_sources", [])) if manifest_present else []
+    source_labels = dict(manifest.get("source_labels", {})) if manifest_present else {}
 
     succeeded: list[str] = []
     for key in _list_keys(s3, bucket, f"status/run={run_id}/"):
@@ -232,6 +384,46 @@ def assemble_report_input(s3, bucket: str, run_id: str, dt: str) -> ReportInput:
         for e in _load_json(s3, bucket, s3layout.events_key(provider, board, dt), default=[]):
             events.append(ChangeEvent.model_validate(e))
 
+    jobs: list[CanonicalJob] = []
+    scorecards: list[DimensionScorecard] = []
+    scored_as_of = datetime.fromisoformat(f"{dt}T23:59:59+00:00")
+    for sid in expected_sources:
+        provider, _, board = sid.partition(":")
+        raw_jobs = _load_json(s3, bucket, s3layout.current_jobs_key(provider, board), default=[])
+        state = _load_json(s3, bucket, s3layout.current_state_key(provider, board), default={})
+        state_jobs = state.get("jobs", {})
+        observation_count = max(1, len(state.get("success_count_history", [])))
+        source_events = [event for event in events if event.source_id == sid]
+        statuses = [SnapshotStatus.SUCCESS] * observation_count
+        if any(event.event_type == ChangeEventType.SOURCE_FETCH_FAILED for event in source_events):
+            statuses.append(SnapshotStatus.FETCH_FAILED)
+        elif any(event.event_type in (
+            ChangeEventType.SOURCE_RESPONSE_PARTIAL, ChangeEventType.SOURCE_SUSPECT
+        ) for event in source_events):
+            statuses.append(SnapshotStatus.PARTIAL)
+
+        for raw_job in raw_jobs:
+            job = CanonicalJob.model_validate(raw_job)
+            record = state_jobs.get(job.job_id, {})
+            if record.get("first_seen_at"):
+                job.first_seen_at = _parse_datetime(record["first_seen_at"])
+            if record.get("last_seen_at"):
+                job.last_seen_at = _parse_datetime(record["last_seen_at"])
+            job_events = [
+                event for event in source_events
+                if event.job_id == job.job_id or event.job_id is None
+            ]
+            jobs.append(job)
+            scorecards.append(score_job(
+                ScoreContext(
+                    job=job,
+                    events=job_events,
+                    recent_snapshot_statuses=statuses,
+                    num_successful_observations=observation_count,
+                ),
+                today=scored_as_of,
+            ))
+
     return ReportInput(
         run_id=run_id,
         dt=dt,
@@ -239,13 +431,20 @@ def assemble_report_input(s3, bucket: str, run_id: str, dt: str) -> ReportInput:
         succeeded_sources=sorted(set(succeeded)),
         manifest_present=manifest_present,
         events=events,
-        scorecards=[],  # scoring is a later dimension; the renderer handles an empty list
+        scorecards=scorecards,
+        jobs=jobs,
+        source_labels=source_labels,
     )
+
+
+def _parse_datetime(value: str | datetime) -> datetime:
+    if isinstance(value, datetime):
+        return value
+    return datetime.fromisoformat(value.replace("Z", "+00:00"))
 
 
 def handler(event, context):
     import os
-    from datetime import timezone
 
     import boto3
 
@@ -264,11 +463,57 @@ def handler(event, context):
                   ContentType="text/markdown")
     s3.put_object(Bucket=bucket, Key=s3layout.report_json_key(dt),
                   Body=json.dumps(report_json, default=str).encode(), ContentType="application/json")
+
+    digest_delivery = "disabled"
+    sender = os.environ.get("SES_SENDER", "").strip()
+    recipient = os.environ.get("DIGEST_RECIPIENT", "").strip()
+    if bool(sender) != bool(recipient):
+        raise ValueError("SES_SENDER and DIGEST_RECIPIENT must be configured together")
+    if sender and recipient:
+        marker_key = s3layout.digest_delivery_key(dt)
+        prior_delivery = _load_json(s3, bucket, marker_key, default=None)
+        if prior_delivery is not None:
+            digest_delivery = "already-sent"
+        else:
+            subject = (
+                f"Job radar {dt}: {report_json['matching_job_count']} matching roles "
+                f"({report_json['run_health']})"
+            )
+            message_id = send_digest(
+                boto3.client("ses"), sender=sender, recipient=recipient,
+                subject=subject, body=markdown,
+            )
+            s3.put_object(
+                Bucket=bucket,
+                Key=marker_key,
+                Body=json.dumps({
+                    "dt": dt,
+                    "recipient": recipient,
+                    "message_id": message_id,
+                    "sent_at": datetime.now(timezone.utc).isoformat(),
+                }, separators=(",", ":")).encode(),
+                ContentType="application/json",
+            )
+            digest_delivery = "sent"
     return {
         "run_health": report_json["run_health"], "dt": dt,
         "expected": len(inp.expected_sources), "succeeded": len(inp.succeeded_sources),
-        "events": len(inp.events),
+        "events": len(inp.events), "matches": report_json["matching_job_count"],
+        "digest_delivery": digest_delivery,
     }
+
+
+def send_digest(ses, *, sender: str, recipient: str, subject: str, body: str) -> str:
+    """Send the deterministic Markdown report as a plain-text SES email."""
+    response = ses.send_email(
+        Source=sender,
+        Destination={"ToAddresses": [recipient]},
+        Message={
+            "Subject": {"Data": subject, "Charset": "UTF-8"},
+            "Body": {"Text": {"Data": body, "Charset": "UTF-8"}},
+        },
+    )
+    return response["MessageId"]
 
 
 def _load_json(s3, bucket, key, default="__raise__"):
@@ -277,10 +522,11 @@ def _load_json(s3, bucket, key, default="__raise__"):
     try:
         obj = s3.get_object(Bucket=bucket, Key=key)
         return json.loads(obj["Body"].read())
-    except botocore.exceptions.ClientError:
-        if default == "__raise__":
-            raise
-        return default
+    except botocore.exceptions.ClientError as exc:
+        code = str(exc.response.get("Error", {}).get("Code", ""))
+        if default != "__raise__" and code in ("NoSuchKey", "NoSuchObject", "404", "NotFound"):
+            return default
+        raise
 
 
 def _list_keys(s3, bucket, prefix):

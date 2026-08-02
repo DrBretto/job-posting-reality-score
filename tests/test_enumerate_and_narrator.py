@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import json
 from datetime import datetime, timezone
 
+from src.cli import main as cli_main
 from src.enumerate.handler import (
     CompanyEntry,
     build_manifest,
@@ -33,6 +35,10 @@ def test_manifest_records_expected_task_set():
     assert m.run_id == "2026-07-24"
     # only the two enabled Greenhouse sources (disabled + gated Ashby excluded)
     assert m.expected_sources == ["greenhouse:figma", "greenhouse:stripe"]
+    assert m.source_labels == {
+        "greenhouse:figma": "figma",
+        "greenhouse:stripe": "stripe",
+    }
     assert len(m.expected_tasks) == 2
 
 
@@ -56,7 +62,19 @@ def test_fan_out_one_message_per_active_company():
 def test_registry_loads_from_config_yaml():
     entries = load_registry_from_yaml("config/companies.yaml")
     slugs = {e.company_slug for e in entries if e.enabled}
-    assert {"stripe", "figma", "gitlab"} <= slugs
+    assert len(slugs) == 15
+    assert {
+        "machinify", "icon", "cargomatic", "future", "axiomatic-ai", "nimble-gravity",
+        "legion-intelligence", "warp", "tailscale", "grafana-labs", "mozilla", "snorkel-ai",
+        "bolt-new", "cadence-solutions", "implicit",
+    } == slugs
+
+
+def test_registry_cli_renders_ssm_payload(capsys):
+    assert cli_main(["registry", "--compact"]) == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert len(payload["companies"]) == 15
+    assert payload["companies"][0]["board_token"] == "machinifyinc"
 
 
 def test_narrator_off_by_default_returns_template():

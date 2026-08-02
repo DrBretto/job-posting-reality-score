@@ -5,15 +5,20 @@ from __future__ import annotations
 from datetime import datetime, timezone
 
 import pytest
+from botocore.exceptions import ClientError
 
 from src.common.models import ChangeEvent, ChangeEventType, RunHealth
 from src.report.handler import (
     NeverFakeViolation,
     ReportInput,
+    _load_json,
     assert_no_banned_vocab,
     compute_run_health,
     render_report,
+    send_digest,
 )
+from src.scoring.scoring import ScoreContext, score_job
+from tests.conftest import make_job
 
 DT = "2026-07-24"
 
@@ -96,3 +101,93 @@ def test_render_rejects_banned_token_smuggled_via_event_notes():
     )
     with pytest.raises(NeverFakeViolation):
         render_report(inp)
+
+
+def test_guard_allows_banned_word_inside_sourced_job_title():
+    source_id = "greenhouse:example"
+    job = make_job(
+        "real-time",
+        source_id=source_id,
+        title="Real-Time AI Engineer",
+        description="Build LLM agents in Python on AWS.",
+        location="Remote - United States",
+        remote="remote",
+    )
+    job.posting_url = "https://job-boards.greenhouse.io/example/jobs/real-time"
+    card = score_job(ScoreContext(job=job), today=datetime(2026, 7, 24, tzinfo=timezone.utc))
+    inp = ReportInput(
+        run_id=DT, dt=DT,
+        expected_sources=[source_id], succeeded_sources=[source_id],
+        jobs=[job], scorecards=[card],
+        events=[_event(ChangeEventType.FIRST_SEEN, job_id=job.job_id, source_id=source_id)],
+    )
+
+    md, js = render_report(inp)
+
+    assert "Real-Time AI Engineer" in md
+    assert js["top_matches"][0]["title"] == "Real-Time AI Engineer"
+
+
+def test_report_surfaces_readable_linked_match():
+    source_id = "greenhouse:machinifyinc"
+    job = make_job(
+        "42",
+        source_id=source_id,
+        title="AI Engineer, Agentic Systems",
+        description="Build multi-agent LLM workflows with MCP, Python, AWS, and evaluation tooling.",
+        location="Remote - United States",
+        remote="remote",
+    )
+    job.posting_url = "https://job-boards.greenhouse.io/machinifyinc/jobs/42"
+    card = score_job(ScoreContext(job=job), today=datetime(2026, 7, 24, tzinfo=timezone.utc))
+    inp = ReportInput(
+        run_id=DT,
+        dt=DT,
+        expected_sources=[source_id],
+        succeeded_sources=[source_id],
+        source_labels={source_id: "machinify"},
+        jobs=[job],
+        scorecards=[card],
+        events=[_event(ChangeEventType.FIRST_SEEN, job_id=job.job_id, source_id=source_id)],
+    )
+
+    md, js = render_report(inp)
+
+    assert "[AI Engineer, Agentic Systems](https://job-boards.greenhouse.io/machinifyinc/jobs/42)" in md
+    assert "Machinify" in md and "Remote - United States" in md
+    assert js["matching_job_count"] == 1
+    assert js["top_matches"][0]["title"] == "AI Engineer, Agentic Systems"
+
+
+def test_send_digest_uses_plain_text_email():
+    class FakeSes:
+        request = None
+
+        def send_email(self, **kwargs):
+            self.request = kwargs
+            return {"MessageId": "message-123"}
+
+    ses = FakeSes()
+    message_id = send_digest(
+        ses,
+        sender="sender@example.com",
+        recipient="brett@example.com",
+        subject="Daily job radar",
+        body="# Matches\nOne role",
+    )
+
+    assert message_id == "message-123"
+    assert ses.request["Destination"]["ToAddresses"] == ["brett@example.com"]
+    assert ses.request["Message"]["Body"]["Text"]["Data"] == "# Matches\nOne role"
+
+
+def test_load_json_does_not_hide_access_denied():
+    class DeniedS3:
+        def get_object(self, **kwargs):
+            raise ClientError(
+                {"Error": {"Code": "AccessDenied", "Message": "denied"}},
+                "GetObject",
+            )
+
+    with pytest.raises(ClientError):
+        _load_json(DeniedS3(), "bucket", "current/jobs.json", default=[])

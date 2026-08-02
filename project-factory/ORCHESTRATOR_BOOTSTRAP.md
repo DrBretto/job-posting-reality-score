@@ -2,63 +2,51 @@
 
 ## Current State Summary
 
-Job Posting Reality Score is a manual-first AWS refresher and a practical job-search radar.
-The committee roadmap is complete and preserved under `docs/roadmap/committee-v1/`.
+Job Posting Reality Score is a deployed serverless AWS job-search radar and completed AWS refresher.
+The committee roadmap remains under `docs/roadmap/committee-v1/`, but verified code and AWS state
+supersede its old phase forecasts.
 
-Current truth:
+Current truth as of 2026-08-02:
 
-- P0 local operator kit and IAM policy drafts are ready for inspection.
-- P0 AWS console work is not complete.
-- No project AWS resources have been created by an AI agent.
-- No application code has been implemented.
-- The source repository is new and does not extend the older Company Fit Radar codebase.
+- `jprs-v1` is deployed and scheduled in `us-east-1`.
+- The production registry still contains three original build targets.
+- Branch `codex/real-job-radar` contains the pending usefulness pass: 15 validated targets,
+  Brett-specific deterministic ranking, readable links, SES delivery, timing repair, and tests.
+- AWS deployment and `/jprs/companies` have not been changed for this pass.
+- Bedrock narration and Ashby collection remain disabled.
 
 ## Operating Mode
 
-**Direct implementation with a manual AWS boundary.**
+**Direct implementation with an explicit AWS boundary.**
 
-The orchestrator may inspect local/AWS state read-only, create local source code and documentation,
-write tests and fixtures, and verify artifacts. Brett manually creates and configures AWS resources
-through P8. Never bulk-deploy the architecture, silently create cloud resources, or mark a phase
-complete from document existence alone.
+The orchestrator may inspect local and AWS state read-only, implement code/docs/tests, run local
+verification, and commit/push an owned feature branch. It must obtain Brett's explicit approval
+before deployment, SSM changes, destructive cloud actions, or merging to `main`.
 
-## Active Phases
+This is not a governance-packet task. Do not invoke the Infotropy governance spine for ordinary work
+in this repository.
 
-| Phase | Status | Next gate |
-|---|---|---|
-| P0 account guardrails | READY FOR BRETT | Follow the P0 section in `START_HERE.md` |
-| P1 S3 substrate | LOCKED | P0 done-gate and no-notes answer |
-| P2-P8 manual V1/V1.5 | LOCKED | Preceding phase complete |
-| P9 IaC reconstruction | LOCKED | Working V1 |
-| P10 Athena history | LOCKED | Sufficient accumulated data |
+## Active Checkpoint
 
-## Next Unlocked Action
+Read in this order:
 
-`START_HERE.md`
+1. `START_HERE.md`
+2. `docs/plans/2026-08-02-real-job-radar.md`
+3. `docs/PLAN.md`
+4. `git status` and the latest commit
+5. Live AWS state when a deployment decision depends on it
 
-Brett follows the current phase instructions in that single operator guide. The AI may answer
-questions and run read-only verification, but it does not click through or create the resources for
-him.
+The current sequence is: finish local validation -> commit/push feature branch -> request deployment
+approval -> deploy code -> update SSM between runs -> force and verify one complete run.
 
 ## State Resolution Order
 
-When documents disagree, resolve in this order:
-
 1. Current operator instruction.
-2. `CLAUDE.md` and `AGENTS.md`.
-3. `docs/PLAN.md`.
-4. Accepted ADRs under `docs/ADR/`.
-5. `docs/roadmap/committee-v1/JOB_POSTING_REALITY_SCORE_MASTER_ROADMAP.md`.
-6. Other committee reference artifacts.
+2. `AGENTS.md` and `CLAUDE.md`.
+3. Verified AWS and repository state.
+4. Active implementation plan.
+5. Accepted ADRs.
+6. Historical committee roadmap.
 
-An accepted local ADR may correct an unsupported implementation detail in the committee roadmap
-without changing its objective.
-
-## Resume Instructions
-
-1. Read `START_HERE.md`, `docs/PLAN.md`, and the current phase plan.
-2. Read `git status` and the latest commit before editing.
-3. Confirm the current phase from the table above and from observable AWS evidence.
-4. Keep manual and AI-owned work separate.
-5. Update the execution log as work is completed.
-6. Do not advance phases until the current done-gate and recall prompt both pass.
+Never copy private account identifiers, ARNs, access keys, notification addresses, or secrets into
+repository files or chat.

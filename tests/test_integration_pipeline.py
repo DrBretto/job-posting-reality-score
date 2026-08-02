@@ -6,7 +6,6 @@ bug that shipped: the differ silently writing nothing, and the report rendering 
 """
 
 import json
-import os
 from datetime import datetime, timezone
 
 import boto3
@@ -23,11 +22,13 @@ DT = "2026-08-01"
 
 
 @pytest.fixture
-def s3():
+def s3(monkeypatch):
     with mock_aws():
         client = boto3.client("s3", region_name="us-east-1")
         client.create_bucket(Bucket=BUCKET)
-        os.environ["JPRS_BUCKET"] = BUCKET
+        monkeypatch.setenv("JPRS_BUCKET", BUCKET)
+        monkeypatch.delenv("SES_SENDER", raising=False)
+        monkeypatch.delenv("DIGEST_RECIPIENT", raising=False)
         yield client
 
 
@@ -42,7 +43,10 @@ def _get(client, key):
 def _job(job_id, title="Engineer", dept="Eng", body="b"):
     return {
         "source_id": SID, "job_id": job_id, "id_kind": "NATIVE_ID", "title": title, "department": dept,
-        "canonical_location": "Remote", "content_hash": f"h-{job_id}-{title}-{body}",
+        "canonical_location": "remote", "raw_location": "Remote - United States",
+        "remote_hybrid_language": "REMOTE", "description_text": body,
+        "posting_url": f"https://job-boards.greenhouse.io/acme/jobs/{job_id}",
+        "content_hash": f"h-{job_id}-{title}-{body}",
         "field_hashes": {"title_hash": f"t-{title}", "body_hash": f"b-{body}"},
         "schema_version": SCHEMA_VERSION,
     }
@@ -109,6 +113,71 @@ def test_report_assembles_nonempty_from_s3(s3):
     assert sum(1 for e in rj["events"] if e["event_type"] == "first-seen") == 2
     md = s3.get_object(Bucket=BUCKET, Key=s3layout.report_md_key(DT))["Body"].read().decode()
     assert "1/1 sources succeeded" in md
+
+
+def test_report_scores_and_links_current_jobs(s3):
+    from src.differ import handler as differ
+    from src.report import handler as report
+
+    _seed_manifest(s3, sources=(SID,))
+    _seed_collection(s3, [
+        _job(
+            "agent-1",
+            title="Agentic AI Engineer",
+            body="Build multi-agent LLM workflows with MCP, Python, AWS, orchestration, and evals.",
+        )
+    ])
+    differ.run_diff(s3, BUCKET, PROVIDER, BOARD, run_id=DT, dt=DT, today=datetime.now(timezone.utc))
+
+    out = report.handler({"mode": "assemble", "run_id": DT}, None)
+    rj = _get(s3, s3layout.report_json_key(DT))
+    md = s3.get_object(Bucket=BUCKET, Key=s3layout.report_md_key(DT))["Body"].read().decode()
+
+    assert out["matches"] == 1
+    assert rj["current_job_count"] == 1 and rj["matching_job_count"] == 1
+    assert rj["top_matches"][0]["title"] == "Agentic AI Engineer"
+    assert "https://job-boards.greenhouse.io/acme/jobs/agent-1" in md
+
+
+def test_differ_preserves_authoritative_first_seen_in_current_jobs(s3):
+    from src.differ import handler as differ
+
+    day1 = "2026-08-01"
+    day2 = "2026-08-02"
+    _seed_collection(s3, [_job("j1")], snap="snap-1", run_id=day1, dt=day1)
+    differ.run_diff(s3, BUCKET, PROVIDER, BOARD, run_id=day1, dt=day1,
+                    today=datetime.now(timezone.utc))
+    first_seen = _get(s3, s3layout.current_jobs_key(PROVIDER, BOARD))[0]["first_seen_at"]
+
+    _seed_collection(s3, [_job("j1")], snap="snap-2", run_id=day2, dt=day2)
+    differ.run_diff(s3, BUCKET, PROVIDER, BOARD, run_id=day2, dt=day2,
+                    today=datetime.now(timezone.utc))
+    current = _get(s3, s3layout.current_jobs_key(PROVIDER, BOARD))[0]
+
+    assert current["first_seen_at"] == first_seen
+    assert current["last_seen_at"] >= first_seen
+
+
+def test_report_sends_digest_once(s3, monkeypatch):
+    from src.differ import handler as differ
+    from src.report import handler as report
+
+    address = "brett@example.com"
+    ses = boto3.client("ses", region_name="us-east-1")
+    ses.verify_email_identity(EmailAddress=address)
+    monkeypatch.setenv("SES_SENDER", address)
+    monkeypatch.setenv("DIGEST_RECIPIENT", address)
+    _seed_manifest(s3, sources=(SID,))
+    _seed_collection(s3, [_job("j1")])
+    differ.run_diff(s3, BUCKET, PROVIDER, BOARD, run_id=DT, dt=DT, today=datetime.now(timezone.utc))
+
+    first = report.handler({"mode": "assemble", "run_id": DT}, None)
+    second = report.handler({"mode": "assemble", "run_id": DT}, None)
+
+    assert first["digest_delivery"] == "sent"
+    assert second["digest_delivery"] == "already-sent"
+    marker = _get(s3, s3layout.digest_delivery_key(DT))
+    assert marker["recipient"] == address and marker["message_id"]
 
 
 def test_incomplete_when_a_source_lacks_sentinel(s3):

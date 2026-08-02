@@ -35,9 +35,12 @@ fi
 if [ -f package.json ] && grep -q '"test"' package.json; then
   echo "✓ Running tests..."
   npm test -- --passWithNoTests 2>/dev/null || FAILED+=("tests")
+elif [ -x .venv/bin/pytest ] && { [ -d tests ] || [ -f pytest.ini ] || [ -f pyproject.toml ]; }; then
+  echo "✓ Running Python tests..."
+  .venv/bin/pytest -x --tb=short -p no:cacheprovider || FAILED+=("tests")
 elif command -v pytest &> /dev/null && { [ -d tests ] || [ -f pytest.ini ] || [ -f pyproject.toml ]; }; then
   echo "✓ Running Python tests..."
-  pytest -x --tb=short 2>/dev/null || FAILED+=("tests")
+  pytest -x --tb=short -p no:cacheprovider || FAILED+=("tests")
 else
   SKIPPED+=("tests")
 fi

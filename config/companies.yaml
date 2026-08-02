@@ -1,16 +1,64 @@
-# JPRS company/board registry (operator-curated).
-# V1 = Greenhouse only (strongest identity + updated_at; D1). Ashby entries stay disabled until
-# URL-slug UUID permanence is verified (D2/U4). board_token = the provider's own board slug.
+# JPRS company/board registry (operator-curated; live-validated 2026-08-02).
+# V1 remains Greenhouse-only. These boards emphasize agentic/applied AI, backend/platform work,
+# developer tooling, and remote-US roles. board_token is the provider's public board slug.
 companies:
   - provider: greenhouse
-    board_token: stripe
-    company_slug: stripe
+    board_token: machinifyinc
+    company_slug: machinify
     enabled: true
   - provider: greenhouse
-    board_token: figma
-    company_slug: figma
+    board_token: iconcareers
+    company_slug: icon
     enabled: true
   - provider: greenhouse
-    board_token: gitlab
-    company_slug: gitlab
+    board_token: cargomatic
+    company_slug: cargomatic
+    enabled: true
+  - provider: greenhouse
+    board_token: future
+    company_slug: future
+    enabled: true
+  - provider: greenhouse
+    board_token: axiomaticai
+    company_slug: axiomatic-ai
+    enabled: true
+  - provider: greenhouse
+    board_token: nimblegravity
+    company_slug: nimble-gravity
+    enabled: true
+  - provider: greenhouse
+    board_token: yurtsai
+    company_slug: legion-intelligence
+    enabled: true
+  - provider: greenhouse
+    board_token: warp
+    company_slug: warp
+    enabled: true
+  - provider: greenhouse
+    board_token: tailscale
+    company_slug: tailscale
+    enabled: true
+  - provider: greenhouse
+    board_token: grafanalabs
+    company_slug: grafana-labs
+    enabled: true
+  - provider: greenhouse
+    board_token: mozilla
+    company_slug: mozilla
+    enabled: true
+  - provider: greenhouse
+    board_token: snorkelai
+    company_slug: snorkel-ai
+    enabled: true
+  - provider: greenhouse
+    board_token: stackblitz
+    company_slug: bolt-new
+    enabled: true
+  - provider: greenhouse
+    board_token: solutions
+    company_slug: cadence-solutions
+    enabled: true
+  - provider: greenhouse
+    board_token: implicit
+    company_slug: implicit
     enabled: true

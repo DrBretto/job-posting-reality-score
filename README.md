@@ -1,115 +1,116 @@
 # Job Posting Reality Score
 
-Job Posting Reality Score (JPRS) is a low-cost AWS project that preserves public job-posting history
-and reports what actually changed. Its first purpose is practical: improve Brett's job search while
-rebuilding hands-on fluency with the AWS services that commonly appear in engineering interviews.
+Job Posting Reality Score (JPRS) is Brett's low-cost AWS job-search radar. It collects public job
+boards every day, preserves posting history, reports meaningful changes, and ranks current openings
+against Brett's strongest lane: agentic and applied AI engineering, backend/platform work, AWS,
+automation, and developer tooling.
 
-The first useful product is:
+The product answers two practical questions:
 
-> Save selected public job postings every day and tell me what changed.
+> Which current roles deserve attention today?
 
-The longer-term product uses that history to identify fresh openings, repeated reposts, requirement
-changes, hiring momentum, and the posting characteristics associated with useful application outcomes.
-It reports observed behavior and evidence; it does not label jobs or companies "real" or "fake."
+> What changed on the boards we care about?
+
+It reports observed behavior and confidence-bounded scores. It does not automate applications,
+collect personal contact details, or make claims about a company's intent.
 
 ## Current State
 
-- Committee roadmap: complete and copied into this repository.
-- Current phase: **P0 — account guardrails**.
-- AWS resources created by this repository so far: **none**.
-- Operating mode: Brett builds AWS resources manually in the console; AI prepares code, policies,
-  tests, checklists, and explanations for inspection.
-- Region: `us-east-1`.
-- V1: P0 through P7.
+- The `jprs-v1` stack is deployed and running in `us-east-1`.
+- Daily collection and assembly have been verified end to end.
+- Production still watches the original build targets until the August 2 usefulness pass is deployed.
+- The pending pass replaces them with 15 live-validated Greenhouse boards selected for Brett's lane.
+- It connects deterministic fit scoring to the daily report, adds readable titles/locations/links,
+  sends the report through SES, and preserves authoritative first-seen dates.
+- Bedrock narration remains off. Scoring and reporting are deterministic.
 
-**Operator entrypoint:** [START_HERE.md](START_HERE.md)
+Start with [START_HERE.md](START_HERE.md). The active implementation record is
+[docs/plans/2026-08-02-real-job-radar.md](docs/plans/2026-08-02-real-job-radar.md).
 
-That single guide contains the current status, manual/AI division of work, complete P0 console
-instructions, values to enter, progress-report template, done gate, future phase map, and restart
-instructions. The other documents are supporting references rather than required navigation.
+## Daily Flow
 
-## Architecture
+```text
+EventBridge Scheduler
+  -> enumerate Lambda
+  -> RUN_OPEN manifest
+  -> SQS + DLQ
+  -> collector Lambda
+  -> raw / normalized / status S3 records
 
-The planned V1 flow is:
-
-`EventBridge Scheduler -> enumerate Lambda -> SQS/DLQ -> collector Lambda -> immutable S3`
-
-A second scheduled workflow uses Step Functions to compare snapshots, write evidence-backed change
-events and reports, and send a daily digest. Bedrock is optional and stays off until P8.
-
-The starter architecture is serverless, single-account, and single-region. It intentionally excludes
-NAT Gateway, EC2, RDS, OpenSearch, EKS, Kinesis, paid Glue jobs/crawlers, provisioned Lambda
-concurrency, and other always-on services.
-
-## Project Rules
-
-- Public ATS and company-career sources only.
-- No automated applications, contact harvesting, or authenticated scraping.
-- S3 versioning stays off. Raw history uses unique write-once keys and lifecycle expiration.
-- Every execution role receives the shared permissions boundary plus a narrower role policy.
-- Every Lambda log group gets finite retention.
-- The target operating cost is below `$5/month`; `$10` is the emergency ceiling.
-- Manual console work remains manual through P8. IaC reconstruction begins at P9.
-
-## Roadmap
-
-- [Master roadmap](docs/roadmap/committee-v1/JOB_POSTING_REALITY_SCORE_MASTER_ROADMAP.md)
-- [Manual AWS workbook](docs/roadmap/committee-v1/AWS_MANUAL_BUILD_WORKBOOK.md)
-- [Reference architecture](docs/roadmap/committee-v1/REFERENCE_ARCHITECTURE.md)
-- [Security and threat model](docs/roadmap/committee-v1/SECURITY_AND_THREAT_MODEL.md)
-- [Panel dissent and required conditions](docs/roadmap/committee-v1/PANEL_DISSENT.md)
-- [Local execution plan](docs/PLAN.md)
-
-## Status Language
-
-`READY` means the local instructions and artifacts exist. `COMPLETE` means the AWS result was
-manually built and verified. A document being present never proves that its AWS phase is complete.
-
-## V1 Application Code (`src/`)
-
-The real V1 application (change-detection + scoring + report) lives under `src/`. Lambdas are thin
-(stdlib + `pydantic`/`boto3`/`pyyaml` only — no pandas/numpy) so each deploys as a plain zip.
-
-```
-src/
-  common/models.py      Pydantic models + enums (SourceSnapshot, CanonicalJob, ChangeEvent,
-                        DimensionScorecard, EvidenceRef ...), versioned schema_v
-  common/s3layout.py    5-tier key builders. M4 prefix split: collector owns status/+raw/+
-                        normalized/; differ owns current/+events/. No S3 versioning.
-  common/normalize.py   deterministic normalizer + canonical/field hashing (no LLM)
-  common/connectors.py  Greenhouse / Lever / Ashby; fetch -> raw+receipt BEFORE parse -> status
-                        label -> CanonicalJob. Host-allowlist, identifying UA. Ashby flag OFF.
-  enumerate/handler.py  M1 completeness backbone: registry -> RUN_OPEN manifest -> SQS fan-out
-  collector/handler.py  SQS-triggered; raw+receipt+normalized+status+SUCCESS sentinel per message
-  differ/handler.py     change-detection brain: disappearance invariant, grace, mass-drop guard,
-                        M3 cumulative-bleed + silent-subset guards. Writes events/+current/
-  scoring/scoring.py    6 deterministic dimensions, UNKNOWN first-class, weakest-link confidence
-  report/handler.py     deterministic md+json renderer; run-health header; never-fake vocab guard
-  llm/narrator.py       optional Bedrock narrator, FEATURE-FLAGGED OFF, slot-fill + post-check (M2)
-  llm/bedrock_client.py self-contained Bedrock wrapper (dry-run default)
-  cli.py                offline dev CLI (connect / diff / report)
-config/companies.yaml   operator-curated registry (3 Greenhouse companies for V1)
+EventBridge Scheduler
+  -> Step Functions
+  -> differ Lambda
+  -> current jobs + change events
+  -> report Lambda
+  -> Markdown + JSON in S3
+  -> SES digest
 ```
 
-### Lambda handler entry points (module.function — for the IaC track)
+The collector cannot overwrite `current/`. Failed or partial fetches freeze job state, so a source
+failure cannot turn into a mass disappearance. Raw snapshots use unique keys and S3 versioning stays
+off.
 
-| Lambda | Entry point |
-|---|---|
-| enumerate (dispatcher) | `src.enumerate.handler.handler` |
-| collector (SQS)        | `src.collector.handler.handler` |
-| differ                 | `src.differ.handler.handler` |
-| report assembler       | `src.report.handler.handler` |
-| narrator (gated OFF)   | `src.llm.narrator.narrate` |
+## Target Registry
 
-### Develop / test
+`config/companies.yaml` is the local source of truth. The August 2 registry covers 15 companies with
+current agentic AI, applied AI, platform, backend, or developer-tooling openings. The deployed
+enumerator reads the production copy from SSM parameter `/jprs/companies`.
+
+Render the exact SSM JSON without editing it by hand:
 
 ```bash
-python3.13 -m venv .venv && . .venv/bin/activate
-pip install -e ".[dev]"
-pytest                     # golden-fixture suite (offline; never hits a live ATS)
-python -m src.cli connect --provider greenhouse --board-token acme \
-    --fixture tests/fixtures/greenhouse_acme.json
+.venv/bin/python -m src.cli registry --compact
 ```
 
-The honesty invariant, the M1/M2/M3 conditions, and connector status-labeling are all covered by the
-`tests/` golden fixtures. Tests use synthetic/captured fixtures only — no live network.
+Updating the YAML does not update AWS. Follow the checkpoint sequence in
+[START_HERE.md](START_HERE.md) so collection and assembly never read different registries.
+
+## Fit Ranking
+
+The fit scorer is transparent and versioned. It considers:
+
+- Role title: agentic/applied AI, ML, research engineering, backend, platform, automation, data,
+  software engineering, and developer experience.
+- Technical evidence: agents, MCP, LLMs, evals, retrieval, Python, AWS/serverless, orchestration,
+  TypeScript/Node, APIs, and data pipelines.
+- Eligibility: remote US and NH/MA-compatible work are favored; clearly foreign-only and nonlocal
+  onsite/hybrid roles are excluded.
+- Seniority: staff/principal and management titles are downweighted rather than hidden outright.
+- Posting evidence: freshness, observed changes, repost churn, and source confidence remain separate
+  inspectable dimensions.
+
+Every non-UNKNOWN score retains evidence references. Complete events and scorecards remain in JSON
+even when the email is capped to the most useful roles.
+
+## Project Boundaries
+
+- Public ATS and company-career sources only.
+- No authenticated scraping, automated applications, or personal-contact harvesting.
+- No NAT Gateway, EC2, RDS, OpenSearch, EKS, Kinesis, paid Glue jobs, or always-on compute.
+- S3 versioning remains off.
+- AWS changes require an explicit operator checkpoint. Local implementation and tests may proceed
+  directly.
+- Never commit account identifiers, private ARNs, access keys, notification addresses, or secrets.
+
+## Development
+
+```bash
+python3.13 -m venv .venv
+. .venv/bin/activate
+pip install -e ".[dev]"
+pytest -p no:cacheprovider
+sam validate --lint --template-file infra/template.yaml
+sam build --template-file infra/template.yaml
+```
+
+The test suite is offline and uses synthetic fixtures plus mocked AWS services. Live board checks are
+an explicit operator action, not part of normal tests.
+
+## References
+
+- [Operator guide](START_HERE.md)
+- [Current plan](docs/plans/2026-08-02-real-job-radar.md)
+- [Project plan](docs/PLAN.md)
+- [Deployment guide](infra/DEPLOY.md)
+- [Committee roadmap](docs/roadmap/committee-v1/JOB_POSTING_REALITY_SCORE_MASTER_ROADMAP.md)
+- [Reliability runbook](docs/roadmap/committee-v1/RELIABILITY_RUNBOOK.md)

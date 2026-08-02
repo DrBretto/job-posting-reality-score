@@ -15,6 +15,7 @@ Hard rules honored here:
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from datetime import datetime
 
@@ -31,12 +32,12 @@ from src.common.models import (
     SnapshotStatus,
 )
 
-SCORING_PROFILE_VERSION = "1.0.0"
-FIT_RULESET_VERSION = "1.0.0"
+SCORING_PROFILE_VERSION = "1.1.0"
+FIT_RULESET_VERSION = "1.1.0"
 
 # Per-dimension scorer versions (independent semver, stamped onto each emitted score).
 _V = {
-    "brett_fit": "1.0.0",
+    "brett_fit": "1.1.0",
     "freshness": "1.0.0",
     "hiring_activity_evidence": "1.0.0",
     "repost_churn_pattern": "1.0.0",
@@ -58,30 +59,81 @@ class ScoringProfile:
     band_high: float = 0.70
     band_medium: float = 0.40
     # exclusions
-    brett_fit_floor: float = 0.20
+    brett_fit_floor: float = 0.25
     # freshness decay horizon (days)
     freshness_horizon_days: int = 180
     # min successful observations before freshness/hiring/churn are assessable
     min_observations: int = 2
 
 
-# fit_ruleset (versioned): deterministic keyword weights over canonical title + description.
-_FIT_KEYWORDS: dict[str, float] = {
-    "python": 0.15,
-    "aws": 0.15,
-    "serverless": 0.10,
-    "lambda": 0.10,
-    "machine learning": 0.20,
-    "ml": 0.10,
-    "llm": 0.15,
-    "ai": 0.15,
-    "automation": 0.15,
-    "data": 0.10,
-    "backend": 0.10,
-    "engineer": 0.10,
-    "platform": 0.08,
-    "infrastructure": 0.08,
-}
+# Fit is intentionally role-first. A generic job description can mention AI, data, Python, or an
+# engineering team without making the actual role relevant. Title signals establish the lane; skill
+# signals then distinguish Brett's strongest applied-AI, agentic, backend, and AWS work.
+_TITLE_SIGNALS: tuple[tuple[str, re.Pattern[str], float], ...] = (
+    ("agentic-ai", re.compile(r"\b(agentic|ai agents?|agent systems?|multi[- ]agent)\b", re.I), 0.30),
+    ("applied-ai", re.compile(r"\b(applied ai|generative ai|genai|ai engineer|llm engineer)\b", re.I), 0.28),
+    ("ai-focus", re.compile(r"\b(ai|artificial intelligence|ml|llm)\b", re.I), 0.18),
+    ("machine-learning", re.compile(r"\b(machine learning|ml engineer|data scientist)\b", re.I), 0.24),
+    ("research-engineering", re.compile(r"\b(research engineer|research scientist)\b", re.I), 0.20),
+    ("forward-deployed", re.compile(r"\bforward[- ]deployed engineer\b", re.I), 0.18),
+    ("backend", re.compile(r"\b(back[- ]?end|api)\b", re.I), 0.18),
+    ("platform", re.compile(r"\b(platform|infrastructure|developer experience|devex)\b", re.I), 0.18),
+    ("automation", re.compile(r"\b(automation|workflow)\b", re.I), 0.18),
+    ("data-engineering", re.compile(r"\b(data engineer|data platform)\b", re.I), 0.16),
+    ("software-engineering", re.compile(r"\b(software engineer|software developer|full[- ]stack)\b", re.I), 0.14),
+)
+
+_SKILL_SIGNALS: tuple[tuple[str, re.Pattern[str], float], ...] = (
+    ("agents", re.compile(r"\b(agentic|ai agents?|agent systems?|multi[- ]agent|tool[- ]using)\b", re.I), 0.12),
+    ("mcp", re.compile(r"\b(model context protocol|mcp)\b", re.I), 0.10),
+    ("llms", re.compile(r"\b(llms?|large language models?|generative ai|genai)\b", re.I), 0.09),
+    ("evals", re.compile(r"\b(evals?|evaluation harness|model evaluation)\b", re.I), 0.07),
+    ("retrieval", re.compile(r"\b(rag|retrieval[- ]augmented|semantic search|vector (database|store))\b", re.I), 0.06),
+    ("python", re.compile(r"\bpython\b", re.I), 0.08),
+    ("aws-serverless", re.compile(r"\b(aws|amazon web services|bedrock|lambda|serverless|step functions?)\b", re.I), 0.08),
+    ("orchestration", re.compile(r"\b(orchestrat(?:e|ion)|workflow engine|structured outputs?)\b", re.I), 0.07),
+    ("typescript-node", re.compile(r"\b(typescript|node(?:\.js|js)?)\b", re.I), 0.05),
+    ("apis-backend", re.compile(r"\b(apis?|back[- ]?end|microservices?)\b", re.I), 0.05),
+    ("data-pipelines", re.compile(r"\b(data pipelines?|etl|elt)\b", re.I), 0.04),
+)
+
+_TECHNICAL_TITLE_RE = re.compile(
+    r"\b(engineer|developer|architect|scientist|devops|sre|site reliability|technical)\b", re.I
+)
+_NON_TARGET_TITLE_RE = re.compile(
+    r"\b(account executive|sales|marketing|recruit(?:er|ing)|talent|customer success|"
+    r"product manager|program manager|project manager|finance|legal|counsel|designer|"
+    r"people operations|human resources|business development|analyst)\b",
+    re.I,
+)
+_MANAGEMENT_TITLE_RE = re.compile(r"\b(manager|director|head of|vice president|vp)\b", re.I)
+_STRETCH_TITLE_RE = re.compile(r"\b(staff|principal|distinguished)\b", re.I)
+_BLOCKED_TECH_TITLE_RE = re.compile(
+    r"\b(pre[- ]sales|sales engineer|top secret|ts/sci|security clearance)\b", re.I
+)
+
+_LOCAL_LOCATION_RE = re.compile(
+    r"\b(new hampshire|nh|massachusetts|ma|boston|cambridge|waltham|lowell|andover|"
+    r"portsmouth|manchester|nashua|concord)\b",
+    re.I,
+)
+_US_ELIGIBLE_RE = re.compile(
+    r"\b(united states|u\.?s\.?a?|north america|anywhere|global)\b", re.I
+)
+_NON_US_RE = re.compile(
+    r"\b(canada|united kingdom|uk|europe|emea|ireland|sweden|netherlands|germany|france|"
+    r"spain|portugal|poland|italy|belgium|denmark|norway|finland|switzerland|austria|"
+    r"czechia|czech republic|romania|serbia|croatia|greece|hungary|bulgaria|estonia|"
+    r"latvia|lithuania|ukraine|israel|south africa|india|singapore|japan|australia|"
+    r"new zealand|latin america|latam|mexico|brazil|argentina|colombia|chile|peru)\b",
+    re.I,
+)
+_REMOTE_BODY_RE = re.compile(
+    r"\b(location\s*:?\s*remote|available for remote work|remote role|fully remote|remote-first|"
+    r"work remotely|home-based|distributed team)\b",
+    re.I,
+)
+_US_WIDE_ONLY_RE = re.compile(r"^(united states|us|usa|u\.s\.)$", re.I)
 
 
 @dataclass
@@ -114,18 +166,73 @@ def _canonical_field_ref(job_id: str, field_name: str, as_of: datetime | None) -
     return EvidenceRef(kind=EvidenceKind.CANONICAL_FIELD, ref_id=f"{job_id}#{field_name}", as_of=as_of)
 
 
+def _geography(job: CanonicalJob) -> tuple[str, float, bool]:
+    """Return (classification, adjustment, ineligible) for Brett's remote/NH/MA search."""
+    location = f"{job.raw_location or ''} {job.canonical_location}".strip()
+    local = bool(_LOCAL_LOCATION_RE.search(location))
+    us_eligible = bool(_US_ELIGIBLE_RE.search(location))
+    says_remote = bool(re.search(r"\bremote\b", location, re.I))
+    non_us = bool(_NON_US_RE.search(location))
+    body_remote = bool(_REMOTE_BODY_RE.search(job.description_text or ""))
+    effective_remote = job.remote_hybrid_language.value == "REMOTE" or says_remote or body_remote
+
+    if effective_remote:
+        if non_us and not us_eligible:
+            return "remote-outside-us", 0.0, True
+        return "remote-compatible", 0.05, False
+    if local:
+        return "nh-ma-compatible", 0.05, False
+    if job.remote_hybrid_language.value in ("HYBRID", "ONSITE"):
+        return "nonlocal-hybrid-or-onsite", 0.0, True
+    if non_us and not us_eligible:
+        return "outside-us", 0.0, True
+    canonical = (job.canonical_location or "").strip()
+    if canonical and _US_WIDE_ONLY_RE.fullmatch(canonical):
+        return "us-wide-location", -0.03, False
+    if location:
+        return "nonlocal-location-without-remote-evidence", 0.0, True
+    return "location-compatible-or-unspecified", 0.0, False
+
+
 # --------------------------------------------------------------------------------------------------
 # Dimension scorers
 # --------------------------------------------------------------------------------------------------
 def score_brett_fit(ctx: ScoreContext, profile: ScoringProfile) -> DimensionScore:
     job = ctx.job
-    hay = f"{job.title}\n{job.description_text}".lower()
-    matched: list[str] = []
-    total = 0.0
-    for kw, w in _FIT_KEYWORDS.items():
-        if kw in hay:
-            total += w
-            matched.append(kw)
+    title = job.title or ""
+    description = job.description_text or ""
+    title_signals: list[str] = []
+    skill_signals: list[str] = []
+    title_total = 0.0
+    skill_total = 0.0
+    for label, pattern, weight in _TITLE_SIGNALS:
+        if pattern.search(title):
+            title_total += weight
+            title_signals.append(label)
+    for label, pattern, weight in _SKILL_SIGNALS:
+        if pattern.search(description):
+            skill_total += weight
+            skill_signals.append(label)
+
+    technical_title = bool(_TECHNICAL_TITLE_RE.search(title))
+    blocked_role = (
+        (bool(_NON_TARGET_TITLE_RE.search(title)) and not technical_title)
+        or bool(_BLOCKED_TECH_TITLE_RE.search(title))
+    )
+    blocked_title_lane = not title_signals
+    geography, geography_adjustment, geography_blocked = _geography(job)
+    # Overlapping phrases (for example "agentic AI engineer") are evidence of one strong lane, not
+    # three independent careers. Caps prevent overlap from erasing seniority/location adjustments.
+    total = min(0.55, title_total) + min(0.40, skill_total) + geography_adjustment
+    seniority_adjustment = 0.0
+    if _MANAGEMENT_TITLE_RE.search(title):
+        seniority_adjustment = -0.20
+    elif _STRETCH_TITLE_RE.search(title):
+        seniority_adjustment = -0.08
+    total += seniority_adjustment
+    if blocked_role or blocked_title_lane or geography_blocked:
+        total = 0.0
+
     score = _clamp(total)
     # confidence: full text available => confident; title-only => half
     confidence = 1.0 if job.description_text else 0.5
@@ -136,7 +243,18 @@ def score_brett_fit(ctx: ScoreContext, profile: ScoringProfile) -> DimensionScor
     return DimensionScore(
         score=score, band=_band(score, profile), confidence=confidence,
         evidence_refs=refs, version=_V["brett_fit"],
-        detail={"matched_keywords": ",".join(sorted(matched)), "ruleset_version": FIT_RULESET_VERSION},
+        detail={
+            "title_signals": ",".join(sorted(title_signals)),
+            "skill_signals": ",".join(sorted(skill_signals)),
+            "geography": geography,
+            "blocked_role": int(blocked_role),
+            "blocked_title_lane": int(blocked_title_lane),
+            "blocked_geography": int(geography_blocked),
+            "title_signal_score": round(min(0.55, title_total), 3),
+            "skill_signal_score": round(min(0.40, skill_total), 3),
+            "seniority_adjustment": seniority_adjustment,
+            "ruleset_version": FIT_RULESET_VERSION,
+        },
     )
 
 

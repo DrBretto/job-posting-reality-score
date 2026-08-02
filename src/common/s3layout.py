@@ -80,6 +80,10 @@ def report_md_key(dt: str) -> str:
     return f"reports/dt={dt}/daily_report.md"
 
 
+def digest_delivery_key(dt: str) -> str:
+    return f"reports/dt={dt}/digest_delivery.json"
+
+
 # ----- Manifest (ENUMERATE-owned) — M1 completeness backbone ------------------------------------
 
 
