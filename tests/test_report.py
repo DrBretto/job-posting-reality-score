@@ -12,6 +12,7 @@ from src.report.handler import (
     NeverFakeViolation,
     ReportInput,
     _load_json,
+    _load_optional_json,
     assert_no_banned_vocab,
     compute_run_health,
     render_report,
@@ -191,3 +192,27 @@ def test_load_json_does_not_hide_access_denied():
 
     with pytest.raises(ClientError):
         _load_json(DeniedS3(), "bucket", "current/jobs.json", default=[])
+
+
+def test_load_optional_json_uses_exact_prefix_listing_for_absence():
+    class EmptyS3:
+        def list_objects_v2(self, **kwargs):
+            assert kwargs == {"Bucket": "bucket", "Prefix": "reports/digest.json", "MaxKeys": 1}
+            return {"Contents": []}
+
+        def get_object(self, **kwargs):
+            raise AssertionError("an absent optional object must not be fetched")
+
+    assert _load_optional_json(EmptyS3(), "bucket", "reports/digest.json") is None
+
+
+def test_load_optional_json_does_not_hide_listing_access_denied():
+    class DeniedS3:
+        def list_objects_v2(self, **kwargs):
+            raise ClientError(
+                {"Error": {"Code": "AccessDenied", "Message": "denied"}},
+                "ListObjectsV2",
+            )
+
+    with pytest.raises(ClientError):
+        _load_optional_json(DeniedS3(), "bucket", "reports/digest.json")

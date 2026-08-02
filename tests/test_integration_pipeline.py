@@ -115,6 +115,26 @@ def test_report_assembles_nonempty_from_s3(s3):
     assert "1/1 sources succeeded" in md
 
 
+def test_report_ignores_success_sentinels_outside_current_manifest(s3):
+    from src.differ import handler as differ
+    from src.report import handler as report
+
+    _seed_manifest(s3, sources=(SID,))
+    _seed_collection(s3, [_job("j1")])
+    _put(
+        s3,
+        s3layout.collect_sentinel_key(DT, "greenhouse", "retired-board"),
+        {"run_id": DT, "source_id": "greenhouse:retired-board", "status": "SUCCESS"},
+    )
+    differ.run_diff(s3, BUCKET, PROVIDER, BOARD, run_id=DT, dt=DT, today=datetime.now(timezone.utc))
+
+    out = report.handler({"mode": "assemble", "run_id": DT}, None)
+    rj = _get(s3, s3layout.report_json_key(DT))
+
+    assert rj["succeeded_sources"] == [SID]
+    assert out["expected"] == 1 and out["succeeded"] == 1
+
+
 def test_report_scores_and_links_current_jobs(s3):
     from src.differ import handler as differ
     from src.report import handler as report

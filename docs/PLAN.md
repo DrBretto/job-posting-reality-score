@@ -45,7 +45,7 @@ The collector owns `raw/`, `normalized/`, and `status/`. The differ alone owns `
 | P4 | Scheduled collection and enumerate step | COMPLETE |
 | P5 | Multi-source fan-out and complete-run manifest | COMPLETE |
 | P6 | Evidence-backed differ and mass-drop protection | COMPLETE |
-| P7 | Daily report, SES path, monitoring, and runbook | DEPLOYED; USEFULNESS UPDATE PENDING |
+| P7 | Daily report, SES path, monitoring, and runbook | DEPLOYED AND VERIFIED |
 | P8 | Optional constrained Bedrock narration | DEFERRED / OFF |
 | P9 | SAM infrastructure reconstruction | COMPLETE AND DEPLOYED |
 | P10 | Parquet/Athena historical analysis | DEFERRED UNTIL HISTORY JUSTIFIES IT |
@@ -55,18 +55,16 @@ The collector owns `raw/`, `normalized/`, and `status/`. The differ alone owns `
 The active plan is
 [2026-08-02 real-job radar](plans/2026-08-02-real-job-radar.md).
 
-Local work is complete when the full test suite, SAM validation, SAM build, live registry check, and
-feature-branch push pass. The next gate is explicit approval to deploy the code, update
-`/jprs/companies`, and verify one controlled 15-source run.
+The usefulness pass is deployed. Its controlled run completed 15/15 targets and produced a ranked
+519-job report with 41 useful matches. SES delivery and same-day duplicate suppression are verified.
 
 ## Next Product Steps
 
-1. Deploy and verify the August 2 usefulness pass.
-2. Let history accumulate while using the digest for daily applications.
-3. Record application outcomes in a small explicit schema before changing score weights from
+1. Let history accumulate while using the digest for daily applications.
+2. Record application outcomes in a small explicit schema before changing score weights from
    outcomes.
-4. Add a target-board health review and prune companies that stop producing relevant roles.
-5. Consider Parquet/Athena only when accumulated history answers a concrete question better than the
+3. Add a target-board health review and prune companies that stop producing relevant roles.
+4. Consider Parquet/Athena only when accumulated history answers a concrete question better than the
    existing JSON records.
 
 ## Non-Goals

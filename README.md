@@ -18,10 +18,13 @@ collect personal contact details, or make claims about a company's intent.
 
 - The `jprs-v1` stack is deployed and running in `us-east-1`.
 - Daily collection and assembly have been verified end to end.
-- Production still watches the original build targets until the August 2 usefulness pass is deployed.
-- The pending pass replaces them with 15 live-validated Greenhouse boards selected for Brett's lane.
-- It connects deterministic fit scoring to the daily report, adds readable titles/locations/links,
-  sends the report through SES, and preserves authoritative first-seen dates.
+- Production watches 15 live-validated Greenhouse boards selected for Brett's lane.
+- Deterministic fit scoring is connected to the daily report with readable titles, locations, and
+  direct links; authoritative first-seen dates persist across runs.
+- The August 2 controlled run collected 15/15 targets and scored 519 postings, surfacing 41 useful
+  matches. The queues and DLQ finished empty.
+- SES delivery is verified: the first digest was sent and a same-day retry was suppressed by its
+  delivery marker.
 - Bedrock narration remains off. Scoring and reporting are deterministic.
 
 Start with [START_HERE.md](START_HERE.md). The active implementation record is
@@ -52,7 +55,7 @@ off.
 
 ## Target Registry
 
-`config/companies.yaml` is the local source of truth. The August 2 registry covers 15 companies with
+`config/companies.yaml` is the local source of truth. The live registry covers 15 companies with
 current agentic AI, applied AI, platform, backend, or developer-tooling openings. The deployed
 enumerator reads the production copy from SSM parameter `/jprs/companies`.
 

@@ -9,10 +9,11 @@ supersede its old phase forecasts.
 Current truth as of 2026-08-02:
 
 - `jprs-v1` is deployed and scheduled in `us-east-1`.
-- The production registry still contains three original build targets.
-- Branch `codex/real-job-radar` contains the pending usefulness pass: 15 validated targets,
-  Brett-specific deterministic ranking, readable links, SES delivery, timing repair, and tests.
-- AWS deployment and `/jprs/companies` have not been changed for this pass.
+- The production registry contains 15 validated targets.
+- Branch `codex/real-job-radar` contains the deployed usefulness pass: Brett-specific deterministic
+  ranking, readable links, SES delivery, timing repair, and tests.
+- A controlled run completed 15/15 collection and produced 519 scorecards with 41 useful matches.
+- SES identity, first digest delivery, and same-day duplicate suppression are verified.
 - Bedrock narration and Ashby collection remain disabled.
 
 ## Operating Mode
@@ -36,8 +37,8 @@ Read in this order:
 4. `git status` and the latest commit
 5. Live AWS state when a deployment decision depends on it
 
-The current sequence is: finish local validation -> commit/push feature branch -> request deployment
-approval -> deploy code -> update SSM between runs -> force and verify one complete run.
+The current sequence is: read the daily shortlist -> choose one to three roles -> verify each live
+posting -> tailor and apply manually -> let history accumulate.
 
 ## State Resolution Order
 

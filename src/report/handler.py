@@ -370,13 +370,15 @@ def assemble_report_input(s3, bucket: str, run_id: str, dt: str) -> ReportInput:
     expected_sources = list(manifest.get("expected_sources", [])) if manifest_present else []
     source_labels = dict(manifest.get("source_labels", {})) if manifest_present else {}
 
+    expected_source_set = set(expected_sources)
     succeeded: list[str] = []
     for key in _list_keys(s3, bucket, f"status/run={run_id}/"):
         if key.endswith("/SUCCESS.json"):
             segs = dict(s.split("=", 1) for s in key.split("/") if "=" in s)
             p, b = segs.get("provider"), segs.get("board")
-            if p and b:
-                succeeded.append(f"{p}:{b}")
+            source_id = f"{p}:{b}" if p and b else ""
+            if source_id in expected_source_set:
+                succeeded.append(source_id)
 
     events: list[ChangeEvent] = []
     for sid in expected_sources:
@@ -471,7 +473,7 @@ def handler(event, context):
         raise ValueError("SES_SENDER and DIGEST_RECIPIENT must be configured together")
     if sender and recipient:
         marker_key = s3layout.digest_delivery_key(dt)
-        prior_delivery = _load_json(s3, bucket, marker_key, default=None)
+        prior_delivery = _load_optional_json(s3, bucket, marker_key)
         if prior_delivery is not None:
             digest_delivery = "already-sent"
         else:
@@ -527,6 +529,14 @@ def _load_json(s3, bucket, key, default="__raise__"):
         if default != "__raise__" and code in ("NoSuchKey", "NoSuchObject", "404", "NotFound"):
             return default
         raise
+
+
+def _load_optional_json(s3, bucket, key):
+    """Load an optional object without treating a permission failure as absence."""
+    listing = s3.list_objects_v2(Bucket=bucket, Prefix=key, MaxKeys=1)
+    if not any(item.get("Key") == key for item in listing.get("Contents", [])):
+        return None
+    return _load_json(s3, bucket, key)
 
 
 def _list_keys(s3, bucket, prefix):

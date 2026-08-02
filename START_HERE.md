@@ -5,19 +5,21 @@ This is the operator entrypoint. Read it before changing AWS or resuming the pro
 ## Current Position
 
 - **Live system:** `jprs-v1` is deployed and running in `us-east-1`.
-- **Live registry:** the original three build targets remain in production until the next deployment.
-- **Prepared locally:** 15 target boards, Brett-specific fit ranking, linked daily results, SES digest
-  delivery, authoritative observation dates, and expanded tests.
+- **Live registry:** 15 validated Greenhouse boards selected for Brett's strongest job lanes.
+- **Deployed usefulness pass:** Brett-specific fit ranking, linked daily results, SES digest delivery,
+  authoritative observation dates, and expanded tests.
 - **Active branch:** `codex/real-job-radar`.
-- **Current checkpoint:** feature-branch delivery, then explicit approval before AWS deployment or
-  SSM changes.
+- **Verified production run:** 15/15 current targets collected; 519 postings scored; 41 useful
+  matches surfaced; queues and DLQ empty.
+- **Current checkpoint:** daily radar active. SES identity, first delivery, and duplicate-suppression
+  marker are verified.
 - **Active plan:** `docs/plans/2026-08-02-real-job-radar.md`.
 
 As of August 2, all 15 selected public boards returned successfully. Their 519 current postings
 produced 41 roles above the useful-fit threshold. The highest results included agentic-system roles
 at Machinify, Legion Intelligence, ICON, Grafana Labs, Future, and Cargomatic.
 
-## What The Pending Pass Changes
+## What The Live Pass Does
 
 1. Replaces Stripe, Figma, and GitLab with 15 companies selected for agentic/applied AI,
    backend/platform, automation, and developer-tooling work.
@@ -28,10 +30,17 @@ at Machinify, Legion Intelligence, ICON, Grafana Labs, Future, and Cargomatic.
    ordinary retries from sending it twice.
 6. Preserves the first date JPRS observed a posting across future collections.
 
-## Deployment Checkpoint
+## Email Delivery
 
-Do not update `/jprs/companies` while collection or assembly is running. Deploy the code first, then
-change the registry, then run both legs against the same target set.
+The configured SES identity was verified on August 2. The controlled report returned
+`digest_delivery=sent`, wrote `digest_delivery.json`, and an immediate second invocation returned
+`already-sent`. No manual email activation remains.
+
+## Future Target Changes
+
+Do not update `/jprs/companies` while collection or assembly is running. Change
+`config/companies.yaml`, run the checks, deploy code first when needed, then change the registry and
+run both legs against the same target set.
 
 ### 1. Confirm Local State
 
@@ -44,12 +53,12 @@ sam validate --lint --template-file infra/template.yaml
 sam build --template-file infra/template.yaml
 ```
 
-The feature branch should be committed and pushed. Deployment and merge to `main` each require Brett's
-explicit approval.
+The working branch should be committed and pushed. Deployment and merge to `main` each require
+Brett's explicit approval.
 
 ### 2. Deploy The Code And Permission Update
 
-After approval:
+After approval for a future code change:
 
 ```bash
 sam deploy --config-file infra/samconfig.toml

@@ -377,6 +377,8 @@ Resources:
     Properties:
       FunctionName: jprs-report
       Handler: src.report.handler.handler
+      Timeout: 90
+      MemorySize: 512
       Description: Step Functions task. Reads manifest + sentinels (completeness judge) + events, writes reports/, sends the SES digest.
       Environment:
         Variables:
@@ -394,13 +396,15 @@ Resources:
                 - !Sub arn:aws:s3:::${BucketName}/status/*
                 - !Sub arn:aws:s3:::${BucketName}/runs/*
                 - !Sub arn:aws:s3:::${BucketName}/reports/*
-            - Sid: ReportListStatusSentinels
+            - Sid: ReportListStatusAndDeliveryMarkers
               Effect: Allow
               Action: s3:ListBucket
               Resource: !Sub arn:aws:s3:::${BucketName}
               Condition:
                 StringLike:
-                  s3:prefix: status/*
+                  s3:prefix:
+                    - status/*
+                    - reports/*
             - Sid: ReportWriteReportsOnly
               Effect: Allow
               Action: s3:PutObject

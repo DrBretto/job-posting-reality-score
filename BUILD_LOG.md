@@ -13,7 +13,7 @@ Region: `us-east-1` | Cost target: `< $5/month` | S3 versioning: `OFF`
 | P4 | EventBridge scheduled collection | COMPLETE |
 | P5 | Step Functions fan-out with isolated failures | COMPLETE |
 | P6 | Differ, disappearance invariant, and cumulative mass-drop guards | COMPLETE |
-| P7 | Deterministic daily Markdown/JSON report and observability | DEPLOYED |
+| P7 | Deterministic daily Markdown/JSON report and observability | DEPLOYED AND VERIFIED |
 | P8 | Optional Bedrock narration | OFF / DEFERRED |
 | P9 | SAM stack | DEPLOYED |
 | P10 | Parquet and Athena | DEFERRED |
@@ -21,8 +21,8 @@ Region: `us-east-1` | Cost target: `< $5/month` | S3 versioning: `OFF`
 ## Verified Live Baseline
 
 - The `jprs-v1` stack collects and assembles on a daily schedule.
-- The original registry has three build targets and has produced complete manifests, sentinels,
-  current records, events, and reports.
+- The live registry has 15 targets and has produced complete manifests, sentinels, current records,
+  events, and ranked reports.
 - The DLQ was empty at the last inspection.
 - Bedrock is not on the daily path.
 - The optional budget-lockdown resources were removed by operator decision; the stack remains
@@ -30,8 +30,8 @@ Region: `us-east-1` | Cost target: `< $5/month` | S3 versioning: `OFF`
 
 ## 2026-08-02 - Personal Radar Usefulness Pass
 
-- Verified the live pipeline before changing code. Production still watches Stripe, Figma, and
-  GitLab; the latest completed report had complete collection but no scorecards or actionable links.
+- Verified the old three-target pipeline before changing code; its report had complete collection
+  but no scorecards or actionable links.
 - Confirmed that the report assembler hardcoded an empty scorecard list and that the report handler
   never invoked SES despite having sender/recipient configuration.
 - Replaced the local registry with 15 public Greenhouse boards selected for agentic/applied AI,
@@ -47,13 +47,19 @@ Region: `us-east-1` | Cost target: `< $5/month` | S3 versioning: `OFF`
 - Added SES delivery with a per-date delivery marker and made AccessDenied fail loudly instead of
   silently producing an empty report.
 - Added `python -m src.cli registry --compact` to render the exact SSM payload.
-- Local implementation is complete; AWS and SSM remain unchanged pending the deployment checkpoint.
+- Deployed the Lambda package and report-role update, then replaced `/jprs/companies` between runs.
+- Controlled production collection completed 15/15 with empty work and dead-letter queues.
+- Controlled assembly scored 519 current postings and surfaced 41 useful matches with readable
+  direct links.
+- Production verification exposed and fixed a 30-second report timeout, an optional-marker IAM
+  check, and stale same-day sentinels inflating the displayed source count.
+- Completed the one-time SES identity verification. The first digest returned `sent`, created its
+  delivery marker, and an immediate retry returned `already-sent` without a duplicate email.
 
-## Remaining Checkpoint
+## Active Operation
 
-Local validation is complete: 62 tests, repository checks, source and built-template SAM lint, live
-15-board validation, registry rendering, and SAM build all pass.
+Validation is complete: 65 tests, repository checks, source and built-template SAM lint, live
+15-board validation, registry rendering, SAM build, and controlled production collection all pass.
 
-1. Deliver `codex/real-job-radar` and obtain explicit deployment approval.
-2. Deploy code before changing `/jprs/companies`.
-3. Force one controlled collection and assembly, then verify linked matches and SES delivery.
+Use the daily digest for one to three focused applications while history accumulates. Review target
+health periodically and change the registry only between runs.

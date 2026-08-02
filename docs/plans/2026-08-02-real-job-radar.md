@@ -2,7 +2,7 @@
 
 ## Context
 
-The deployed JPRS pipeline is healthy, but its production registry still contains the three build
+The original JPRS pipeline was healthy, but its production registry still contained the three build
 targets (`stripe`, `figma`, and `gitlab`). The live report also leaves the deterministic scoring
 module disconnected, renders job IDs instead of useful application links, and does not send the SES
 digest described by the stack. Replacing only the registry would therefore produce more relevant
@@ -27,6 +27,11 @@ preserving the evidence-first and no-automated-application boundaries.
 - [x] Run the full test/check suite plus SAM validation/build; fix all failures.
 - [x] Stop before changing `/jprs/companies` or deploying the stack and ask for the required AWS
       deployment approval.
+- [x] Deploy the code and IAM update, replace the registry between runs, and execute a controlled
+      15-source production collection.
+- [x] Verify ranked production output and repair report timeout, delivery-marker IAM, and stale
+      same-day sentinel counting issues exposed by the controlled run.
+- [x] Confirm the one-time SES identity verification and record a successful delivery marker.
 
 ## Execution Log
 
@@ -44,11 +49,18 @@ preserving the evidence-first and no-automated-application boundaries.
   replaced it with a regression test plus non-private operator guidance.
 - 2026-08-02: Local gate passed: 62 tests, repository checks, source and built SAM lint validation,
   `git diff --check`, registry rendering, and SAM build.
+- 2026-08-02: Deployed the usefulness pass after inspecting non-replacement CloudFormation change
+  sets; replaced the live registry only while the pipeline and both queues were idle.
+- 2026-08-02: Controlled collection completed 15/15. The ranked report contains 519 scorecards and
+  41 useful matches with readable titles, locations, and direct application links.
+- 2026-08-02: Production rehearsal found and fixed the report's 30-second runtime limit, optional
+  delivery-marker permission check, and stale same-day sentinel count. The suite now passes 65 tests.
+- 2026-08-02: Verified the SES identity, sent the first digest, confirmed the delivery marker, and
+  proved an immediate retry returns `already-sent` without sending twice.
 
 ## Follow-ups
 
-- Production SSM and Lambda deployment remain unchanged until Brett approves the deployment
-  checkpoint.
+- The live usefulness pass is complete; continue accumulating history and application outcomes.
 - Ashby stays disabled until its identity-permanence gate is resolved; unsupported Breezy and
   Trakstar targets remain outside automated collection.
 - Historical outcome learning remains a later feature; this pass ranks current public evidence.
