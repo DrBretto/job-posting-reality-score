@@ -736,7 +736,8 @@ _BEFORE_HUMAN_RE = re.compile(
 )
 _VOICE_TITLE_RE = re.compile(
     r"\b(voice(?: ai| agents?| assistants?| bots?| applications?| platform)?|speech|telephony|"
-    r"voip|conversational audio|text to speech|speech to text|tts|asr|ivr)\b",
+    # Not "ASR"/"TTS" alone: "Cisco ASR & ISR" is a router line (measured on the 11-11 corpus).
+    r"voip|conversational audio|text to speech|speech to text|speech recognition|ivr)\b",
     re.I,
 )
 _VOICE_DUTY_RE = re.compile(
@@ -748,6 +749,31 @@ _VOICE_DUTY_RE = re.compile(
 )
 _PREFERRED_CONTEXT_RE = re.compile(
     r"\b(preferred|nice[- ]to[- ]have|bonus|a plus|is a plus|desirable|ideally)\b", re.I)
+
+
+_NO_CASH_PAY_RE = re.compile(
+    # Each alternative states the ROLE's pay. Bare "unpaid" and "deferred payment" were measured on the
+    # 2026-11-11 corpus and removed: they are billing vocabulary ("follow up on unpaid claims",
+    # "deferred payment solutions") and leave policy, not compensation.
+    r"\b(equity[- ]only|equity compensation only|(?:paid|compensated) (?:entirely |only |solely )?"
+    r"(?:in|with) equity|sweat equity|no (?:base )?(?:salary|cash compensation)\b|"
+    r"unpaid (?:role|position|internship|opportunity|volunteer)|(?:this|the) (?:role|position) is "
+    r"unpaid|volunteer (?:role|position|basis|opportunity)|"
+    r"(?:salary|compensation|pay) (?:is|will be) deferred|deferred (?:salary|cash compensation) until|"
+    r"salary (?:begins |starts )?(?:after|once|upon|when) (?:we )?(?:raise|close|funding|our)|"
+    r"commission[- ]only)",
+    re.I,
+)
+_AI_TRAINING_TITLE_RE = re.compile(
+    r"\b(ai (?:trainer|tutor|training specialist|data trainer|writing evaluator)|"
+    r"data annotat\w+|(?:llm|ai|search) (?:rater|annotator)|prompt (?:writer|rater))\b",
+    re.I,
+)
+_AI_TRAINING_DUTY_RE = re.compile(
+    r"\b(?:train|training|improve|improving) (?:ai|llm|large language|frontier) models? by "
+    r"(?:writing|rating|ranking|reviewing|evaluating|labell?ing)\b",
+    re.I,
+)
 
 
 # --------------------------------------------------------------------------------------------------
@@ -1140,7 +1166,11 @@ def screen_job(job: CanonicalJob) -> ScreenResult:
     voice_required = [f for f in mandatory(voice_findings)
                       if not _PREFERRED_CONTEXT_RE.search(f.context)]
     # Only duties count toward "centered"; a requirement line is evidence for a check, not a center.
-    voice_duties = [f for f in voice_required if f.section != Section.REQUIREMENTS]
+    # A duty is the candidate's own work: a responsibilities line, or prose whose subject is "you".
+    # A company blurb ("the trillion-dollar Voice AI economy") describes the employer, and the operator
+    # said this is not a company-wide blacklist.
+    voice_duties = [f for f in voice_required if f.section != Section.REQUIREMENTS
+                    and (f.is_own_duty or f.section == Section.RESPONSIBILITIES)]
     voice_distinct = sorted({f.matched_text.lower() for f in voice_duties})
     voice_findings = voice_findings + voice_preferred
     if voice_title:
@@ -1170,6 +1200,28 @@ def screen_job(job: CanonicalJob) -> ScreenResult:
             "voice or telephony appears only as an optional or preferred qualification, not as the "
             "work the role is centered on",
             suppressed_by="not-centered guard",
+        ))
+
+    # ---- 5d. no cash pay / AI-training-only gigs (packet 2026-11-11) ------------------------------
+    # "An equity-only, deferred-pay, volunteer or AI-training-only offer does not belong in the target
+    # shortlist." A founding title with stated duties looks identical to a real opening until the
+    # compensation sentence; that sentence is what decides.
+    cash_findings = mandatory(collect_findings(
+        all_segments, _NO_CASH_PAY_RE, _ROLE_SECTIONS + (Section.BENEFITS, Section.PROCESS)))
+    if cash_findings:
+        hit = cash_findings[0]
+        result.exclusions.append(RuleHit(
+            "no-cash-pay", ScreenOutcome.EXCLUDED.value, hit.context, hit.section,
+            f"the posting states the work is not paid in cash ({hit.matched_text})",
+        ))
+    training_title = _AI_TRAINING_TITLE_RE.search(title_norm)
+    seg, m = _find(all_segments, _AI_TRAINING_DUTY_RE, _ROLE_SECTIONS)
+    if training_title or (seg is not None and not _SOFTWARE_ROLE_RE.search(title_norm)):
+        evidence = training_title.group(0) if training_title else _context(seg.text, m)
+        result.exclusions.append(RuleHit(
+            "ai-training-only", ScreenOutcome.EXCLUDED.value, evidence,
+            Section.TITLE if training_title else seg.section,
+            f"the work is producing or rating AI training data ({evidence[:80]}), not engineering",
         ))
 
     # ---- 6. external customer service / call-center work -----------------------------------------

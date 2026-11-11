@@ -38,6 +38,8 @@ class Provider(str, Enum):
     JOBICY = "jobicy"
     HIMALAYAS = "himalayas"
     ADZUNA = "adzuna"
+    # Founder- and employer-written posts in the monthly Hacker News "Who is hiring?" thread.
+    HN_HIRING = "hn_hiring"
     # --- operator-assisted / unsupported-page paths ---
     MANUAL = "manual"
     CAREERS_PAGE = "careers_page"
@@ -60,6 +62,7 @@ class SourceKind(str, Enum):
 # Providers that are employer-independent discovery feeds.
 DISCOVERY_PROVIDERS = frozenset({
     Provider.REMOTIVE, Provider.REMOTEOK, Provider.JOBICY, Provider.HIMALAYAS, Provider.ADZUNA,
+    Provider.HN_HIRING,
 })
 # Providers that monitor exactly one known employer's board.
 ATS_PROVIDERS = frozenset({Provider.GREENHOUSE, Provider.LEVER, Provider.ASHBY})

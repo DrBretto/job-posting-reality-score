@@ -69,6 +69,15 @@ RULE_SOURCE_MAP: dict[str, tuple[str, ...]] = {
     # mapped here for the same reason every exclusion is: so a change to the source shows up as a
     # stale projection rather than as screening that quietly means something else.
     "broad-ownership-retention": ("workflow",),
+    # 2026-11-11 (PKT-CAREER-RADAR-END-TO-END-REPAIR-V1): the human-first rule (workflow, 10-12)
+    # now HOLDS recorded-video / AI-interview / pre-interview evaluations rather than excluding
+    # them; the voice/telephony exclusion is the workflow's 10-17 section.
+    "pre-interview-evaluation": ("workflow",),
+    "voice-telephony": ("workflow", "preferences"),
+    # Packet-stated boundary for the funded-small-company search, carried by the operating plan's
+    # objective (money and a job) and the workflow's contract/continuity sections.
+    "no-cash-pay": ("workflow", "operating_plan"),
+    "ai-training-only": ("workflow",),
 }
 
 # Calibration knobs, mapped from Target Calibration. Orientations, never gates — the plan is explicit

@@ -539,6 +539,22 @@ def run_discovery(
             # locally. Coverage is therefore "everything this feed published", which is recorded
             # per family so the report can say which questions the feed actually answered.
             board_token = "all"
+            resolver = getattr(connector, "resolve_board_token", None)
+            if resolver is not None:
+                # A feed whose current slice must be looked up first (HN: this month's thread).
+                # The lookup is a real request and is charged to the source's budget.
+                try:
+                    board_token = resolver(
+                        lambda url: fetcher(provider, "resolve", url))
+                except Exception as exc:  # noqa: BLE001 - one source must not fail the stage
+                    budget.failures += 1
+                    outcome.inaccessible.append({
+                        "target": provider,
+                        "reason": f"could not resolve the current feed: {type(exc).__name__}: {exc}",
+                    })
+                    continue
+                finally:
+                    budget.requests_spent += 1
             try:
                 fr = fetcher(provider, board_token, connector.endpoint(board_token))
             except Exception as exc:  # noqa: BLE001 - one source must not fail the stage
@@ -1163,6 +1179,7 @@ def handler(event, context):  # pragma: no cover - AWS glue
         env=_resolve_secrets(),
     )
     result = persist(s3, bucket, outcome, run_id=run_id, dt=dt, now=now)
+    signal_summary = persist_signal_round(s3, bucket, run_id=run_id, now=now, jobs=outcome.jobs)
     return {
         "run_id": run_id,
         "discovery_attempted": sorted(outcome.attempted),
@@ -1170,7 +1187,35 @@ def handler(event, context):  # pragma: no cover - AWS glue
         "jobs_discovered": len(outcome.jobs),
         "employers_observed": len(outcome.growth.candidates),
         "credential_gated": [g["provider"] for g in outcome.credential_gated],
+        "company_signals": signal_summary,
         **result,
+    }
+
+
+def persist_signal_round(s3, bucket: str, *, run_id: str, now: datetime, jobs, fetch=None) -> dict:
+    """Run the company-first financing round and store it beside discovery's own outputs.
+
+    Strictly additive and strictly separate: a failure here is recorded on the round and never
+    affects the postings discovery already persisted, and its output is a watchlist the report keeps
+    out of the candidate list.
+    """
+    from src.discovery.signals import live_fetch, run_signal_round
+
+    # Off unless the deployment turns it on (infra/template.yaml sets it for jprs-discovery), so no
+    # test, replay or local run reaches the SEC by accident.
+    if os.environ.get("JPRS_COMPANY_SIGNALS", "off").lower() not in ("1", "on", "true"):
+        return {"enabled": False}
+    try:
+        round_ = run_signal_round(run_id=run_id, now=now, fetch=fetch or live_fetch, jobs=jobs)
+    except Exception as exc:  # noqa: BLE001 - never fail discovery over the watchlist
+        return {"enabled": True, "error": f"{type(exc).__name__}: {exc}"}
+    body = round_.model_dump_json().encode()
+    for key in (s3layout.discovery_signals_run_key(run_id), s3layout.discovery_signals_key()):
+        s3.put_object(Bucket=bucket, Key=key, Body=body, ContentType="application/json")
+    return {
+        "enabled": True, "signals": len(round_.signals),
+        "graduated": sum(1 for s in round_.signals if s.status == "graduated"),
+        "requests": round_.requests_spent, "failures": round_.failures,
     }
 
 

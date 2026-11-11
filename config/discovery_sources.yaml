@@ -52,6 +52,21 @@ discovery_sources:
       Richest structure of the keyless feeds: published salary bounds, seniority and location
       restrictions. Supports cursor paging, so two pages per run is the polite ceiling.
 
+  # Founder / direct-employer route (added 2026-11-11). Every top-level comment in the monthly
+  # "Ask HN: Who is hiring?" thread is written by someone at the hiring company, often the founder
+  # or CTO, and many point at a static careers page or an email address — employers no ATS monitor
+  # can see. Two keyless requests per run against the public HN Search API: find this month's
+  # thread, then read its whole comment tree.
+  - provider: hn_hiring
+    kind: bulk_feed
+    enabled: true
+    max_requests_per_run: 2
+    auth: none
+    attribution_required: true
+    notes: >-
+      Link each row to the poster's own comment on news.ycombinator.com. A post is first-hand text
+      from the employer, not an ATS requisition: confirm the opening is still live before acting.
+
   # The breadth engine. Implemented and fixture-tested; its LIVE path is an explicitly unpassed
   # gate until the operator provisions a free developer credential. This is the only configured
   # source that spans ordinary industries and supports a New Hampshire / US location filter, so

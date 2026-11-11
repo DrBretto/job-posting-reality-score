@@ -249,6 +249,15 @@ def test_every_keyless_provider_maps_its_own_payload_shape():
             "minSalary": "140000", "maxSalary": "170000", "currency": "USD",
             "salaryPeriod": "yearly",
         }]}, "Ridge Health Partners"),
+        # 2026-11-11: the founder/direct route. One story tree; each top-level comment is a post.
+        "hn_hiring": ({"id": 1, "title": "Ask HN: Who is hiring? (November 2026)", "children": [
+            {"id": 7, "type": "comment", "author": "cto-granite", "created_at":
+             "2026-11-03T15:00:00Z",
+             "text": "Granite Ledger Co | Founding Engineer | REMOTE (US) | $140K-$160K | Full-time"
+                     "<p>I'm the CTO. You'll be our first engineer and own the platform in Python "
+                     "on AWS. Email jobs@granite-ledger.example."},
+            {"id": 8, "type": "comment", "author": "someone", "text": "Great thread, thanks!"},
+        ]}, "Granite Ledger Co"),
     }
     assert set(payloads) == set(keyless_discovery_providers())
     for provider, (payload, expected_employer) in payloads.items():

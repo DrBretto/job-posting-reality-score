@@ -44,6 +44,7 @@ _BOARD_PATTERNS: tuple[tuple[Provider, re.Pattern[str]], ...] = (
 # Hosts that are aggregators, not employers. Their URLs must never be read as a board token.
 _AGGREGATOR_HOSTS = frozenset({
     "remotive.com", "remoteok.com", "jobicy.com", "himalayas.app", "adzuna.com",
+    "news.ycombinator.com",
     "www.adzuna.com", "api.adzuna.com", "linkedin.com", "www.linkedin.com",
     "indeed.com", "www.indeed.com", "glassdoor.com", "ziprecruiter.com", "monster.com",
     "arbeitnow.com", "www.arbeitnow.com",

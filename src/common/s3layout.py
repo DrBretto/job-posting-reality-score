@@ -170,3 +170,12 @@ def manual_import_key(dt: str) -> str:
 def proposed_registry_key(run_id: str) -> str:
     """Registry rows discovery PROPOSES. Applying them stays an operator action."""
     return f"discovery/run={run_id}/proposed_registry.json"
+
+
+def discovery_signals_key() -> str:
+    """The latest company-first watchlist round (financing signals; never candidates)."""
+    return "discovery/signals/latest.json"
+
+
+def discovery_signals_run_key(run_id: str) -> str:
+    return f"discovery/signals/run={run_id}/signals.json"

@@ -23,7 +23,10 @@ records `attribution` and the report renders it. Raw provider payloads are never
 
 from __future__ import annotations
 
+import html
+import json
 import os
+import re
 from datetime import datetime, timezone
 from urllib.parse import urlencode
 
@@ -544,6 +547,169 @@ class AdzunaConnector(DiscoveryConnector):
 # --------------------------------------------------------------------------------------------------
 # helpers
 # --------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
+# Founder / direct-employer route: Hacker News "Who is hiring?"
+# --------------------------------------------------------------------------------------------------
+_HN_LINK_RE = re.compile(r"""<a\s[^>]*href=["']([^"']+)["']""", re.I)
+_HN_TAG_RE = re.compile(r"<[^>]+>")
+_HN_ROLE_RE = re.compile(
+    r"\b(engineer|engineering|developer|architect|cto|swe|sre|devops|programmer|scientist|"
+    r"founding|hacker|tech lead|technical lead|full[- ]?stack|back[- ]?end|front[- ]?end|"
+    r"platform|infrastructure|ml|ai|data|analyst|operations|roles?|positions?|hiring)\b",
+    re.I,
+)
+_HN_LOCATION_RE = re.compile(
+    r"\b(remote|onsite|on-site|hybrid|in[- ]office|anywhere|usa?|united states|"
+    r"[A-Z][a-z]+,\s*[A-Z]{2}\b|new york|nyc|san francisco|sf|bay area|boston|seattle|austin|"
+    r"london|berlin|toronto|chicago|denver|los angeles|la)\b",
+    re.I,
+)
+_HN_EMPLOYMENT_RE = re.compile(
+    r"\b(full[- ]?time|part[- ]?time|contract(?:or)?|freelance|intern(?:ship)?)\b", re.I)
+_HN_MONEY_RE = re.compile(r"[$€£]\s?\d")
+
+
+class HackerNewsHiringConnector(BulkFeedConnector):
+    """Founder- and employer-written openings from the monthly HN "Who is hiring?" thread.
+
+    Why this source: every top-level comment is written by someone at the hiring company — often the
+    founder or CTO — and states the work, stage, pay and location in their own words. It reaches small
+    funded companies whose careers page is a single static page with no supported ATS (BuildQ's is
+    `buildq.ai/careers/...`, and the application is an email), which no board monitor can see.
+
+    Access: the public HN Search API (hn.algolia.com), keyless and read-only. Two requests per run:
+    one to find the current thread (`resolve_board_token`), one for the whole comment tree.
+    """
+
+    provider = Provider.HN_HIRING
+    max_requests_per_run = 2
+    attribution = (
+        "Posts via Hacker News \"Who is hiring?\" (news.ycombinator.com) — each row links to the "
+        "poster's own comment."
+    )
+    SEARCH_URL = (
+        "https://hn.algolia.com/api/v1/search_by_date?tags=story,author_whoishiring&hitsPerPage=6"
+    )
+    ITEM_URL = "https://hn.algolia.com/api/v1/items/{story_id}"
+
+    def resolve_board_token(self, fetch) -> str:
+        """The id of the newest "Who is hiring?" story. `fetch(url) -> FetchResult`."""
+        fr = fetch(self.SEARCH_URL)
+        if not fr.raw_bytes:
+            raise ValueError(f"hn_hiring: thread search failed ({fr.error_class})")
+        payload = json.loads(fr.raw_bytes.decode("utf-8"))
+        for hit in payload.get("hits", []):
+            if "who is hiring" in str(hit.get("title", "")).lower():
+                return str(hit["objectID"])
+        raise ValueError("hn_hiring: no 'Who is hiring?' story in the search results")
+
+    def fetch_raw(self, board_token: str, **kwargs):
+        """Retry a body that arrives cut short without any transport error.
+
+        Measured 2026-11-11: the ~400 KB thread tree came back truncated (valid HTTP 200, no
+        IncompleteRead, unparseable JSON) on 2 of 4 consecutive fetches. A parse check is the only
+        signal, so up to three fetches are made; the last body is returned either way and the
+        snapshot's own parse labels it PARTIAL if it is still short.
+        """
+        result = None
+        for _ in range(3):
+            result = super().fetch_raw(board_token, **kwargs)
+            if not result.raw_bytes:
+                return result
+            try:
+                json.loads(result.raw_bytes.decode("utf-8"))
+                return result
+            except ValueError:
+                continue
+        return result
+
+    def endpoint(self, board_token: str) -> str:
+        if not board_token or board_token == "all" or not board_token.isdigit():
+            raise ValueError("hn_hiring needs a resolved story id")
+        return self.ITEM_URL.format(story_id=board_token)
+
+    def parse_jobs(self, payload) -> list[dict]:
+        if not isinstance(payload, dict) or "children" not in payload:
+            raise ValueError("hn_hiring: missing 'children' in the story tree")
+        posts = []
+        for child in payload.get("children") or []:
+            text = child.get("text") or ""
+            if not text or child.get("type") != "comment" or not child.get("author"):
+                continue  # deleted / dead
+            header = _hn_header(text)
+            if "|" not in header:
+                continue  # not in the thread's "Company | Role | Location" convention
+            posts.append(dict(child, _story_id=payload.get("id"),
+                              _story_title=payload.get("title")))
+        return posts
+
+    def employer_of(self, raw: dict) -> str:
+        parts = [p.strip() for p in _hn_header(raw.get("text") or "").split("|")]
+        name = re.sub(r"\s*\(.*?\)\s*$", "", parts[0]) if parts else ""
+        name = re.sub(r"^https?://", "", name).strip(" -–:")
+        return norm_text(name)[:120]
+
+    def map_job(
+        self, source_id: str, raw: dict, *, now: datetime, employer_name: str | None = None
+    ) -> CanonicalJob:
+        native_id = str(raw.get("id"))
+        text = raw.get("text") or ""
+        header = _hn_header(text)
+        parts = [p.strip() for p in header.split("|") if p.strip()]
+        rest = parts[1:]
+        roles = [p for p in rest if _HN_ROLE_RE.search(p) and not _HN_MONEY_RE.search(p)
+                 and not _HN_LOCATION_RE.fullmatch(p)]
+        locations = [p for p in rest if _HN_LOCATION_RE.search(p) and p not in roles]
+        employment = next((p for p in rest if _HN_EMPLOYMENT_RE.search(p)), "")
+        money = next((p for p in rest if _HN_MONEY_RE.search(p)), "")
+        links = [html.unescape(link) for link in _HN_LINK_RE.findall(text)]
+        body = norm_text(html.unescape(_HN_TAG_RE.sub(" ", text.replace("<p>", "\n"))))
+        post_url = f"https://news.ycombinator.com/item?id={native_id}"
+        apply = links[0] if links else post_url
+        job = CanonicalJob(
+            source_id=source_id,
+            job_id=f"{source_id}#{native_id}",
+            id_kind=IdKind.NATIVE_ID,
+            provider_native_id=native_id,
+            employer_name=self.employer_of(raw),
+            employer_careers_url=links[0] if links else None,
+            source_kind=SourceKind.DISCOVERY_FEED,
+            title=norm_text(roles[0] if roles else next(
+                (p for p in rest if not (_HN_LOCATION_RE.search(p) or _HN_MONEY_RE.search(p)
+                                         or _HN_EMPLOYMENT_RE.search(p))),
+                "Opening described in the post"))[:200],
+            description_text=body,
+            description_native=text,
+            posting_url=post_url,
+            apply_url=apply,
+            apply_host=url_host(apply),
+            employment_type=_first_employment([employment]) if employment else
+            EmploymentType.UNSPECIFIED,
+            provider_published_at=_iso(raw.get("created_at")),
+            # The poster is the employer, so the text is first-hand; what is NOT established is that
+            # the opening is still open on any later day, or that a role list names one requisition.
+            verification_state=VerificationState.FEED_COMPLETE,
+            uncertainty=[
+                "employer_written_post_not_an_ats_requisition",
+                f"hn_thread:{raw.get('_story_title') or raw.get('_story_id')}",
+            ],
+        )
+        job.discovery_query_family = ",".join(
+            match_families(job.title, job.description_text, header)
+        ) or None
+        return self._finish_job(
+            job, raw_location=", ".join(locations)[:200] or None,
+            explicit_workmode=None, stated_salary=_salary_from_text(money) if money else None,
+            now=now,
+        )
+
+
+def _hn_header(text: str) -> str:
+    """The first line of a post, where the thread convention puts `Company | Role | Location | ...`."""
+    first = re.split(r"<p>|\n", text, maxsplit=1)[0]
+    return norm_text(html.unescape(_HN_TAG_RE.sub("", first)))
+
+
 def _stable_key(value: str) -> str:
     import hashlib
 
@@ -618,6 +784,7 @@ _DISCOVERY_REGISTRY: dict[str, DiscoveryConnector] = {
     Provider.JOBICY.value: JobicyConnector(),
     Provider.HIMALAYAS.value: HimalayasConnector(),
     Provider.ADZUNA.value: AdzunaConnector(),
+    Provider.HN_HIRING.value: HackerNewsHiringConnector(),
 }
 
 

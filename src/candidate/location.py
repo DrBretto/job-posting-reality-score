@@ -245,8 +245,25 @@ def parse_places(*blobs: str | None) -> list[Place]:
 def best_worksite(places: list[Place]) -> WorksiteClass:
     """The most favorable stated worksite. Judging a multi-site posting on its worst option would
     reject a posting that offers a local office alongside a distant one."""
+    # An UNKNOWN fragment that is only a piece of a place already resolved elsewhere in the same
+    # posting is not a second worksite. The canonical form "austin | onsite | tx" splits into "austin"
+    # and "tx", each UNKNOWN on its own; because UNKNOWN ranks above OUT_OF_STATE, those pieces turned
+    # "ONSITE, Austin, TX" into "worksite could not be identified" (found 2026-11-11).
+    resolved = [p for p in places if p.worksite != WorksiteClass.UNKNOWN]
+
+    def _subsumed(place: Place) -> bool:
+        token = (place.city or "").strip().lower()
+        for other in resolved:
+            words = set((other.city or "").lower().split())
+            if token and (token in words or token == (other.state or "").lower()
+                          or token == (other.city or "").lower()):
+                return True
+        return False
+
+    considered = [p for p in places
+                  if not (p.worksite == WorksiteClass.UNKNOWN and p.state is None and _subsumed(p))]
     for candidate in _PREFERENCE:
-        if any(p.worksite == candidate for p in places):
+        if any(p.worksite == candidate for p in considered):
             return candidate
     return WorksiteClass.UNKNOWN
 

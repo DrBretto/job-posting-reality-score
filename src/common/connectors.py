@@ -69,6 +69,10 @@ HOST_ALLOWLIST = frozenset({
     "jobicy.com",
     "himalayas.app",
     "api.adzuna.com",
+    # Hacker News "Who is hiring?" via the public HN Search API (Algolia). Read-only, keyless.
+    "hn.algolia.com",
+    # SEC EDGAR full-text search, for the company-first financing watchlist (Form D). Read-only.
+    "efts.sec.gov",
 })
 
 # Ashby identity concern RESOLVED 2026-09-24 with live evidence, so the flag is ON.
@@ -206,6 +210,7 @@ class Connector:
         timeout: int = 20,
         max_attempts: int = 3,
         url: str | None = None,
+        user_agent: str | None = None,
     ) -> FetchResult:
         """Fetch one source. `url` overrides the endpoint this connector would build.
 
@@ -228,11 +233,18 @@ class Connector:
         last_error_class = "unknown"
         for attempt in range(1, max_attempts + 1):
             try:
-                req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+                req = urllib.request.Request(url, headers={"User-Agent": user_agent or USER_AGENT})
                 with urllib.request.urlopen(req, timeout=timeout) as resp:  # noqa: S310 (allowlisted)
                     try:
                         raw = resp.read()
                     except http.client.IncompleteRead as short:
+                        # A short read with attempts left is retried first (2026-11-11: the HN
+                        # thread, ~400 KB chunked, arrived cut short on roughly one fetch in three).
+                        if attempt < max_attempts:
+                            last_error_class = "incomplete_read"
+                            time.sleep(backoff)
+                            backoff *= 2
+                            continue
                         # Observed live 2026-09-24: a response can deliver fewer bytes than its
                         # Content-Length. Keep what arrived — the JSON parse in build_snapshot is
                         # the authority, so a genuinely truncated body lands as PARTIAL (removals

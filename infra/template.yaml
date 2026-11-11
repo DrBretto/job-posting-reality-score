@@ -52,7 +52,7 @@ Parameters:
     Type: String
     Default: ''
     Description: >-
-      Optional comma-separated discovery provider subset (remotive,remoteok,jobicy,himalayas,adzuna).
+      Optional comma-separated discovery provider subset (remotive,remoteok,jobicy,himalayas,hn_hiring,adzuna).
       Empty means every keyless provider; credential-gated providers stay gated until their secret
       exists and are named in the coverage receipt rather than silently skipped.
   SecretsSsmPrefix:
@@ -422,6 +422,9 @@ Resources:
           JPRS_DISCOVERY_PROVIDERS: !Ref DiscoveryProviders
           JPRS_SECRETS_SSM_PREFIX: !Ref SecretsSsmPrefix
           JPRS_RESOLVE_CAREERS_URLS: !Ref ResolveCareersUrls
+          # Company-first financing watchlist (SEC EDGAR Form D full-text search; <= 5 keyless
+          # requests per round). Off by default in code so no test or replay reaches the SEC.
+          JPRS_COMPANY_SIGNALS: "on"
       Policies:
         - Version: '2012-10-17'
           Statement:

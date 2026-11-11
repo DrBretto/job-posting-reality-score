@@ -112,7 +112,7 @@ def test_report_assembles_nonempty_from_s3(s3):
     # the two first-seen changes are actually in the report
     assert sum(1 for e in rj["events"] if e["event_type"] == "first-seen") == 2
     md = s3.get_object(Bucket=BUCKET, Key=s3layout.report_md_key(DT))["Body"].read().decode()
-    assert "1/1 sources succeeded" in md
+    assert "Tracked employer boards: 1/1 succeeded" in md
 
 
 def test_report_ignores_success_sentinels_outside_current_manifest(s3):

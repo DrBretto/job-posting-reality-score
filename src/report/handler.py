@@ -476,6 +476,8 @@ class ReportInput:
     # What the round actually evaluated. Empty for a ReportInput built directly (tests, fixtures),
     # which the renderer treats as "everything in `jobs` was evaluated".
     evaluation: dict = field(default_factory=dict)
+    # The company-first financing watchlist (discovery/signals/latest.json). Never candidates.
+    company_signals: dict | None = None
     # Memo for `_cold_start(inp)`. Keyed on the job list's identity and length so a caller that
     # replaces or extends `jobs` after construction gets a fresh answer rather than a stale one.
     _cold_start_memo: tuple | None = field(default=None, repr=False, compare=False)
@@ -964,9 +966,64 @@ def _source_values(inp: ReportInput) -> list[str]:
     # Ids of postings the round did not evaluate are provider-derived identifiers like any other
     # job id ("…-real-estate-analyst"); they reach the JSON through `evaluation`.
     values.update((inp.evaluation or {}).get("not_evaluated_job_ids") or ())
+    # Company names and places from the financing watchlist are the filers' own words.
+    for sig in (inp.company_signals or {}).get("signals") or ():
+        values.update(str(v) for v in (sig.get("company"), sig.get("location"),
+                                        sig.get("evidence_url")) if v)
     # The differ's segment spelling ("real estate & workplace"), which its notes quote.
     values.update(_segment_form(v) for v in inp.state_source_text)
     return sorted((str(value) for value in values if value), key=len, reverse=True)
+
+
+_MAX_WATCHLIST_ROWS = 15
+
+
+def _graduated_signals(inp: ReportInput) -> list[dict]:
+    """The stored round's signals, re-graduated against THIS report's population.
+
+    Discovery graduates against the postings of its own round; the report holds three weeks of
+    carried postings, so an employer that posted earlier is matched here too.
+    """
+    from src.common.normalize import normalize_employer
+
+    sigs = [dict(s) for s in (inp.company_signals or {}).get("signals") or []]
+    by_employer: dict[str, list[str]] = {}
+    for job in inp.jobs:
+        key = normalize_employer(job.employer_name or "")
+        if key:
+            by_employer.setdefault(key, []).append(job.job_id)
+    for sig in sigs:
+        ids = by_employer.get(normalize_employer(sig.get("company") or ""))
+        if ids:
+            sig["status"] = "graduated"
+            sig["graduated_by"] = sorted(set(sig.get("graduated_by") or []) | set(ids))
+            sig["mandate"] = "an opening at this employer is in this report (see graduated_by)"
+    sigs.sort(key=lambda s: (s.get("status") != "graduated", s.get("priority", 2),
+                             "".join(chr(105 - ord(c)) if c.isdigit() else c
+                                     for c in str(s.get("filing_date") or "")),
+                             s.get("company") or ""))
+    return sigs
+
+
+def _watchlist_rows(inp: ReportInput):
+    if not inp.company_signals:
+        return None
+    sigs = _graduated_signals(inp)
+    meta = {
+        "lookback_days": inp.company_signals.get("lookback_days"),
+        "signals": len(sigs),
+        "graduated": sum(1 for s in sigs if s.get("status") == "graduated"),
+        "failures": inp.company_signals.get("failures") or [],
+    }
+    return sigs[:_MAX_WATCHLIST_ROWS], meta
+
+
+def _watchlist_json(inp: ReportInput) -> dict | None:
+    if not inp.company_signals:
+        return None
+    body = {k: v for k, v in inp.company_signals.items() if k != "signals"}
+    body["signals"] = _graduated_signals(inp)
+    return body
 
 
 def _segment_form(value: str) -> str:
@@ -1150,7 +1207,15 @@ def render_report(inp: ReportInput) -> tuple[str, dict]:
     relevance_order = {card.job_id: i for i, (card, _) in enumerate(pairs)}
 
     # ---- header ----
-    if health == RunHealth.VERIFIED_QUIET:
+    if health == RunHealth.VERIFIED_QUIET and not inp.expected_sources:
+        # The fixed employer registry is a verification aid, not the search. With nothing tracked,
+        # "every expected source succeeded" would be vacuously true and read as a clean bill of
+        # health; say what is actually the case instead.
+        collection_line = (
+            "no employer boards are tracked this round; nothing here depends on a hand-maintained "
+            "employer list, and the discovery line below is the search"
+        )
+    elif health == RunHealth.VERIFIED_QUIET:
         collection_line = (
             "every expected source produced a successful download"
             + ("; nothing material changed." if axes.freshness == "NO-CHANGE-OBSERVED"
@@ -1167,8 +1232,10 @@ def render_report(inp: ReportInput) -> tuple[str, dict]:
         f"# Job Posting Reality Score — daily report {inp.dt}",
         "",
         f"Run: {inp.run_id}  ·  scoring profile v{_profile_version(inp)}",
-        f"Completeness: {len(set(inp.succeeded_sources) & set(inp.expected_sources))}/"
-        f"{len(set(inp.expected_sources))} sources succeeded",
+        f"Tracked employer boards: {len(set(inp.succeeded_sources) & set(inp.expected_sources))}/"
+        f"{len(set(inp.expected_sources))} succeeded · discovery feeds: "
+        f"{len((inp.coverage.discovery_succeeded if inp.coverage else []) or [])}/"
+        f"{len((inp.coverage.discovery_attempted if inp.coverage else []) or [])} returned results",
         "",
         "## Run health",
         "",
@@ -1475,6 +1542,34 @@ def render_report(inp: ReportInput) -> tuple[str, dict]:
             )
         lines.append("")
 
+    # ---- company-first watchlist ----
+    watch = _watchlist_rows(inp)
+    if watch is not None:
+        rows, meta = watch
+        lines += [
+            "## Pre-opening research watchlist (financing signals, not openings)", "",
+            f"Companies with a verified SEC Form D financing filing in the last "
+            f"{meta.get('lookback_days')} days, classified by the filer as technology "
+            f"({meta.get('signals')} companies; {meta.get('graduated')} with an observed opening). "
+            "Financing is not a hiring plan, a budget or a contract: none of these is a candidate "
+            "or an application target until an opening or a paid mandate is evidenced.",
+            "",
+        ]
+        for sig in rows:
+            status = ("OPENING OBSERVED: " + ", ".join(sig.get("graduated_by", [])[:2])
+                      if sig.get("status") == "graduated" else "watchlist, mandate unknown")
+            lines.append(
+                f"- {_md_text(sig.get('company', ''))} — {_md_text(sig.get('location') or 'location '
+                'not stated')} · Form {sig.get('form')} filed {sig.get('filing_date')} · "
+                f"[filing]({sig.get('evidence_url')}) · {status}"
+            )
+        if meta.get("signals", 0) > len(rows):
+            lines.append(f"- and {meta['signals'] - len(rows)} more in `daily_report.json` "
+                         "(`company_watchlist.signals`)")
+        for failure in meta.get("failures") or []:
+            lines.append(f"- Source note: {_md_text(str(failure))}")
+        lines.append("")
+
     # ---- exclusions with reasons ----
     if excluded_rows:
         lines += ["## Excluded by candidate policy", "",
@@ -1658,6 +1753,8 @@ def render_report(inp: ReportInput) -> tuple[str, dict]:
         "dedup": inp.dedup or None,
         # What this round evaluated, and what it did not. Absent (None) for a directly built input.
         "evaluation": inp.evaluation or None,
+        # Company-first financing signals, kept apart from every candidate list.
+        "company_watchlist": _watchlist_json(inp),
         "events": [_event_json(e) for e in inp.events],
         # Counted and named, so a differ regression that starts writing accusatory notes is visible
         # here and in the logs rather than absorbed.
@@ -2017,6 +2114,8 @@ def assemble_report_input(
         history_projection=history_projection,
     )
 
+    company_signals = _load_optional_json(s3, bucket, s3layout.discovery_signals_key())
+
     return ReportInput(
         run_id=run_id,
         dt=dt,
@@ -2040,6 +2139,7 @@ def assemble_report_input(
         timing=timing.to_json(),
         state_source_text=state_source_text,
         evaluation=evaluation,
+        company_signals=company_signals,
     )
 
 

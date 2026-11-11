@@ -797,10 +797,13 @@ def test_a_broad_ownership_role_behind_a_commute_question_is_never_silently_clea
     assert {h.rule_id for h in excluded_outright.exclusions} & {
         "location-eligibility", "location-residency"}
 
-    downgraded = screen_job(make_job("geo-2", title="Applications Engineer",
+    # Repaired 2026-11-11 (PKT-CAREER-RADAR-END-TO-END-REPAIR-V1): `best_worksite` no longer lets the
+    # canonical form's stray `ma` fragment outrank the resolved place, so `City, ST` now reaches the
+    # same verdict as the bare city instead of a softer PENDING_CHECK.
+    city_state = screen_job(make_job("geo-2", title="Applications Engineer",
                                      description=body, location="Boston, MA"))
-    assert downgraded.outcome != ScreenOutcome.ELIGIBLE.value
-    assert any(h.rule_id == "location-eligibility" for h in downgraded.pending_checks)
+    assert city_state.outcome == ScreenOutcome.EXCLUDED.value
+    assert any(h.rule_id == "location-eligibility" for h in city_state.exclusions)
 
 
 def test_a_sole_engineer_role_a_new_hampshire_resident_cannot_take_is_still_excluded(harness):

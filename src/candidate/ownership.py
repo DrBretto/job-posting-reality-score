@@ -48,7 +48,7 @@ from src.candidate.screening import (
 from src.common.models import CanonicalJob
 from src.common.normalize import normalize_title_for_matching
 
-OWNERSHIP_RULESET_VERSION = "1.2.0"
+OWNERSHIP_RULESET_VERSION = "1.3.0"
 
 
 class TeamStructure(str, Enum):
@@ -112,7 +112,9 @@ _SOLE_ENGINEER_RE = re.compile(
     r"(?:build|writ|maintain|run|own)\w*\b|"
     r"work(?:ing)? alone on (?:this|it)\b|"
     r"(?:a )?team of one\b|it would just be you\b|(?:just|only) you\b(?=[^.;]{0,30}(?:here|on this))|"
-    r"first (?:technology|technical|software|it|engineering) (?:hire|role|position)|"
+    # "our first in-house software hire" (2026-11-11 acceptance case) was lost to the modifier.
+    r"first (?:in[- ]house |internal |dedicated |full[- ]time )?"
+    r"(?:technology|technical|software|it|engineering) (?:hire|role|position)|"
     r"(?:the|our) first (?:person|employee) (?:we have )?(?:ever )?(?:hired|employed)\b|"
     r"first (?:person|one) (?:we have )?ever (?:hired|employed)\b|"
     r"employee (?:number|#) ?one\b|"
