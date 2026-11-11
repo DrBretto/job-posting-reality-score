@@ -658,7 +658,7 @@ class HackerNewsHiringConnector(BulkFeedConnector):
         parts = [p.strip() for p in header.split("|") if p.strip()]
         rest = parts[1:]
         roles = [p for p in rest if _HN_ROLE_RE.search(p) and not _HN_MONEY_RE.search(p)
-                 and not _HN_LOCATION_RE.fullmatch(p)]
+                 and not _HN_LOCATION_RE.fullmatch(p) and not re.match(r"^(?:https?://|www\.)", p)]
         locations = [p for p in rest if _HN_LOCATION_RE.search(p) and p not in roles]
         employment = next((p for p in rest if _HN_EMPLOYMENT_RE.search(p)), "")
         money = next((p for p in rest if _HN_MONEY_RE.search(p)), "")
@@ -676,7 +676,8 @@ class HackerNewsHiringConnector(BulkFeedConnector):
             source_kind=SourceKind.DISCOVERY_FEED,
             title=norm_text(roles[0] if roles else next(
                 (p for p in rest if not (_HN_LOCATION_RE.search(p) or _HN_MONEY_RE.search(p)
-                                         or _HN_EMPLOYMENT_RE.search(p))),
+                                         or _HN_EMPLOYMENT_RE.search(p)
+                                         or re.match(r"^(?:https?://|www\.)", p))),
                 "Opening described in the post"))[:200],
             description_text=body,
             description_native=text,
@@ -697,9 +698,20 @@ class HackerNewsHiringConnector(BulkFeedConnector):
         job.discovery_query_family = ",".join(
             match_families(job.title, job.description_text, header)
         ) or None
+        # The poster's header is the authoritative work mode; prose further down ("we work remotely
+        # with clients") must not turn "San Francisco (Onsite)" into a remote role.
+        loc_text = " ".join(locations).lower()
+        # A remote option anywhere in the header ("REMOTE (US) or ONSITE in Reno") is a remote option.
+        workmode = (
+            "remote" if "remote" in loc_text
+            else "hybrid" if "hybrid" in loc_text
+            else "onsite" if re.search(r"onsite|on-site|in[- ]office", loc_text)
+            else None
+        )
         return self._finish_job(
             job, raw_location=", ".join(locations)[:200] or None,
-            explicit_workmode=None, stated_salary=_salary_from_text(money) if money else None,
+            explicit_workmode=workmode,
+            stated_salary=_salary_from_text(money) if money else None,
             now=now,
         )
 

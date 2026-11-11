@@ -137,7 +137,11 @@ _SMALL_TEAM_RE = re.compile(
     r"[2-9]|10)\b|"
     r"team of (?:two|three|four|five|six|seven|eight|nine|ten|[2-9]|10) (?:engineers?|developers?)|"
     r"lean (?:engineering|dev(?:elopment)?) team|"
-    r"(?:we(?:'re| are)|it(?:'s| is)) a small team)\b",
+    r"(?:we(?:'re| are)|it(?:'s| is)) a small team|"
+    # "join 2 of us on the engineering team" (BuildQ, live HN thread 2026-11-11).
+    r"join (?:the )?(?:two|three|four|five|[2-5]) of us\b(?: on (?:the|our) (?:engineering|eng|"
+    r"dev|tech(?:nical)?) team)?|"
+    r"founding (?:engineering|eng|tech(?:nical)?) team)\b",
     re.I,
 )
 

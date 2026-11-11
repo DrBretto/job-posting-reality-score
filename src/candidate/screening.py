@@ -709,7 +709,8 @@ _ONSITE_REQUIRED_RE = re.compile(
     r"relocat(?:e|ion) (?:required|to)|must (?:be|reside) (?:located )?in)\b", re.I,
 )
 _NON_US_ONLY_RE = re.compile(
-    r"\b(canada|united kingdom|\buk\b|europe|emea|eu only|ireland|germany|france|spain|poland|"
+    r"\b(canada|united kingdom|\buk\b|europe|emea|eu only|eu|eea|european union|ireland|germany|"
+    r"france|spain|poland|"
     r"netherlands|sweden|india|singapore|australia|brazil|mexico|latam|apac|japan|israel)\b", re.I,
 )
 
@@ -744,7 +745,7 @@ _VOICE_DUTY_RE = re.compile(
     r"\b(voice (?:ai|agents?|assistants?|bots?|applications?|platforms?|pipelines?|interfaces?|"
     r"experiences?)|speech (?:recognition|synthesis|models?|pipelines?)|speech[- ]to[- ]text|"
     r"text[- ]to[- ]speech|telephony|voip|sip trunk(?:ing)?|ivr|phone (?:agents?|systems?|bots?)|"
-    r"call (?:routing|recording|center software)|conversational audio|real[- ]time audio)\b",
+    r"call (?:routing|recording|center software)|conversational audio)\b",
     re.I,
 )
 _PREFERRED_CONTEXT_RE = re.compile(

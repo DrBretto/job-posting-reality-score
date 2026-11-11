@@ -93,6 +93,12 @@ _TITLE_SIGNALS: tuple[tuple[str, re.Pattern[str], float], ...] = (
     # "Field Application Engineer (Integrated Photonics)", a customer-facing hardware role. An
     # ambiguous title belongs on the work-evidence recall path, where the description decides,
     # not in a title lane that grants credit before anything about the work is known.
+    # Founding / first-engineer titles name the ownership the operator is looking for (2026-11-11).
+    # BuildQ's CTO-written "Founding Engineer" post — Python/AWS, $130-150K, remote, joining two
+    # engineers — scored 0.31 on the live HN thread because no title lane matched it.
+    ("founding-engineer", re.compile(
+        r"\b(founding (?:software |full[- ]stack |backend |platform |ai |ml )?engineer|"
+        r"first (?:software )?engineer|founding developer|engineer (?:no\.?|#) ?1)\b", re.I), 0.22),
     ("internal-tools", re.compile(
         r"\b(internal tools?|internal systems?|business systems?|business applications?|"
         r"integration developer|integration engineer|automation developer)\b",
@@ -171,7 +177,8 @@ _US_ELIGIBLE_RE = re.compile(
 )
 _NON_US_RE = re.compile(
     r"\b(canada|united kingdom|uk|europe|emea|ireland|sweden|netherlands|germany|france|"
-    r"spain|portugal|poland|italy|belgium|denmark|norway|finland|switzerland|austria|"
+    r"spain|portugal|poland|italy|belgium|denmark|norway|finland|switzerland|austria|eea|eu|"
+    r"european union|european economic area|"
     r"czechia|czech republic|romania|serbia|croatia|greece|hungary|bulgaria|estonia|"
     r"latvia|lithuania|ukraine|israel|south africa|india|singapore|japan|australia|"
     r"new zealand|latin america|latam|mexico|brazil|argentina|colombia|chile|peru)\b",
