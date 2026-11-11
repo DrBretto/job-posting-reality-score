@@ -147,7 +147,7 @@ _NON_TARGET_TITLE_RE = re.compile(
 # role's own duties do not establish engineering work (`_ENGINEERING_DUTY_RE` below, plus a technical
 # skill stated in role context). An analyst who reads dashboards is still blocked; one who builds and
 # runs the company's software is evaluated on that work.
-_DUTY_DEFERRED_TITLE_RE = re.compile(r"\b(analyst|analytics)\b", re.I)
+_DUTY_DEFERRED_TITLE_RE = re.compile(r"\banalyst\b", re.I)
 # Engineering work stated as a duty: a BUILD verb and a software-system object. Deliberately stricter
 # than screening's software-artifact guard — "own the roadmap", "design reports" and "maintain
 # dashboards" are not engineering, and a bare "own" is product ownership as often as code ownership.
@@ -342,7 +342,13 @@ def score_brett_fit(ctx: ScoreContext, profile: ScoringProfile) -> DimensionScor
 
     technical_title = bool(_TECHNICAL_TITLE_RE.search(title))
     duty_deferred_title = bool(_DUTY_DEFERRED_TITLE_RE.search(title)) and not technical_title
-    engineering_duties = bool(_ENGINEERING_DUTY_RE.search(role_text)) and role_skill_total > 0
+    # Two distinct stated engineering duties, not one: on the 2026-11-11 corpus a single phrase
+    # ("maintaining existing systems", "implement reliable pipelines") let ordinary data-analyst
+    # postings through, while the acceptance posting states three.
+    engineering_duties = (
+        len({m.group(0).lower() for m in _ENGINEERING_DUTY_RE.finditer(role_text)}) >= 2
+        and role_skill_total > 0
+    )
     # The title stands in for the work only when the work is not stated. When it is, the work decides.
     duty_established_title = duty_deferred_title and engineering_duties
     blocked_role = (
