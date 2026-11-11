@@ -29,7 +29,9 @@ baseline (working-tree `src/` byte-identical to the live package, CodeSha256 `WQ
 
 1. [x] Delivery: memoize per-report invariants; measure; profile the remaining hot path; resize the
    report function on measured evidence; no retry on deterministic timeout; real degraded mode that
-   publishes without the full-stock work; failure alarm on a metric that is actually emitted.
+   publishes without the full-stock work. (Alarm: A7 already watches a real metric and fired every
+   failed day; its SNS topic has no subscriber — operator action, see Follow-ups. A3's custom metric
+   would be a new paid metric and was not added.)
 2. [x] Duty-first screening: soft non-target titles defer to established engineering duties; voice /
    telephony exclusion; human-first holds (pre-interview evaluations are held, not rejected);
    PQ-166 (TN, internal helpdesk) verified.
