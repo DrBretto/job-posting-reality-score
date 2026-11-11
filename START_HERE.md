@@ -2,6 +2,22 @@
 
 This is the operator entrypoint. Read it before changing AWS or resuming the project in a new task.
 
+## Current Direction — November 11: no report since October 9; repair built, NOT deployed
+
+**Every scheduled report from 2026-10-10 to 2026-11-11 failed (33 days).** BuildReport hit its 300 s
+limit four times a day (three retries of a deterministic timeout), then ReportIncomplete re-ran the
+same full assembly and timed out too. The population discovery carries for 21 days grew to 4,671
+postings; at 512 MB the report needs ~330–470 s for that. The failure alarm fired daily into an SNS
+topic with no subscriber.
+
+Branch `ai/radar-end-to-end-repair` (pushed) carries the repair: budget-aware evaluation that always
+publishes, a real degraded path, no retries of deterministic timeouts, ReportFunction 1,769 MB, the
+HN "Who is hiring" founder route, an SEC Form D company-first watchlist (never candidates),
+duty-first screening (analyst titles, founding titles), and the current operator rules (human-first
+holds, voice/telephony, no-cash-pay, AI-training-only). Plan: `docs/plans/2026-11-11-radar-end-to-end-repair.md`.
+Run of record and the exact release/rollback: `../Infotropy Book/book-factory/runs/20261111_career-radar-end-to-end-repair-v1/`
+(`EXECUTION_RETURN.md`, then `RELEASE_HANDOFF.md`). **Deployment needs Brett's approval.**
+
 ## Current Direction — September 30 (later): the dedup quadratic is repaired and DEPLOYED
 
 **Deployed 2026-09-30T14:16:48Z** on explicit approval; CodeSha256

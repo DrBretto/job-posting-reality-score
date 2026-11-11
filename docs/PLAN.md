@@ -69,6 +69,7 @@ the job, not of the source.
 | P16 | Controlled deployment of the overhaul + live source verification | **DEPLOYED 2026-09-25** — four keyless feeds live-verified; discovery jobs do NOT reach the report yet |
 | P17 | P07–P10 release (2026-09-26 14:22Z) and production recovery (discovery list grant, report guard) | **DEPLOYED AND LIVE-VERIFIED 2026-09-26 18:27Z** — one ordinary round `ACCEPTANCE_MET`; unattended round not yet observed |
 | P18 | Broad-ownership / first-sole-engineer retention, ownership-scope assessment, recorded-video repair | **EXECUTED AND REVIEWED LOCALLY 2026-09-28** — reviewer returned `revise`, seven findings repaired; 551 tests pass; production unchanged |
+| P22 | End-to-end repair: always-publish report, degraded path, HN founder route, SEC Form D watchlist, duty-first screening, registry disconnected | **BUILT AND VERIFIED LOCALLY 2026-11-11** — branch `ai/radar-end-to-end-repair`; awaiting deployment approval |
 
 ## Current Work
 

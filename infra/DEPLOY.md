@@ -177,7 +177,7 @@ treated as a missing object; the run must fail loudly instead of emailing an emp
 
 | function | Timeout | MemorySize | why it is that number |
 |---|---|---|---|
-| `jprs-report` | **300** (was 90 until 2026-09-30) | 512 | The assembly is CPU-bound and **quadratic in corpus size**. Measured in production on 2026-09-30: 188.52s over 1,344 postings, 36.9% headroom, peak 209 MB of 512. |
+| `jprs-report` | **300** (was 90 until 2026-09-30) | **1769** (was 512 until the 2026-11-11 release) — see the template comment: one full vCPU for single-threaded work, measured on the real 4,671-posting corpus | The assembly is CPU-bound and **quadratic in corpus size**. Measured in production on 2026-09-30: 188.52s over 1,344 postings, 36.9% headroom, peak 209 MB of 512. |
 | `jprs-discovery` | 120 | 512 | network-bound; 18s typical |
 | `jprs-differ`, `jprs-enumerate` | 30 | 256 | per-board work, unchanged |
 
@@ -207,6 +207,15 @@ and `daily_report.json` carries the same figures plus `per_1k_population_seconds
 that rises as the corpus grows. **Watch that rate, not the elapsed seconds.** This exists because an
 80.08s run against a 90s budget was recorded as an unqualified success on 2026-09-26 and nothing
 read the margin; the next three scheduled rounds produced no report at all.
+
+**Since the 2026-11-11 release the report cannot simply time out.** It evaluates newest-first and
+stops before the reserve it needs to publish; a short round publishes a `partial` report naming every
+posting it did not evaluate, and a crashed round publishes a `degraded` fresh-cohort report via
+`ReportIncomplete`. The digest subject says `[partial]` / `[degraded]`. Watch `delivery_mode` and
+`evaluation` in `daily_report.json`.
+
+**`jprs-ops-alerts` had NO subscription on 2026-11-11**, so A7 (which did fire every failed day) reached
+nobody. Re-subscribing sends a confirmation email that must be clicked.
 
 **Do not rely on `jprs-A3-report-not-assembled` to tell you the report failed.** It watches custom
 metric `JPRS/ReportComplete`, which has never been published — zero datapoints since the alarm was
