@@ -10,7 +10,12 @@ docs/
 aws/
 policies/
 scripts/
-config/
+# config/: the YAML registries are dev-only (production reads /jprs/companies from SSM), but the
+# JSON projections ARE read at runtime by the report Lambda — the candidate-policy projection and
+# the application-history projection. Excluding the whole directory shipped a Lambda where history
+# lookups silently returned NEW for everything, so only the YAML is pruned.
+config/*.yaml
+config/*.yml
 project-factory/
 codex-skills/
 _template_archive/
@@ -20,6 +25,11 @@ __pycache__/
 *.md
 .gitignore
 .samignore
+.claude/
+.cursor/
+.pytest_cache/
+.aws-sam/
+.DS_Store
 Makefile
 LICENSE
 CODEOWNERS

@@ -1,0 +1,352 @@
+pre-P10 scratch tree at /tmp/claude-501/p10/pre_p10_tree
+FFFFFF...F.....FFFFFF....FF...F.F.FFFFF.                                 [100%]
+=================================== FAILURES ===================================
+______________________ test_call_center_agent_is_excluded ______________________
+
+    def test_call_center_agent_is_excluded():
+        job = _job("Call Center Agent", (
+            "What you'll do: answer inbound calls from customers in our contact center, "
+            "resolve billing questions, and meet a first call resolution target. " + PROCESS_OK
+        ))
+>       assert screen_job(job).outcome == ScreenOutcome.EXCLUDED.value
+E       AssertionError: assert 'ELIGIBLE' == 'EXCLUDED'
+E         
+E         - EXCLUDED
+E         + ELIGIBLE
+
+tests/test_adjacent_roles_and_customer_service.py:71: AssertionError
+____________ test_customer_service_representative_title_is_excluded ____________
+
+    def test_customer_service_representative_title_is_excluded():
+        job = _job("Customer Service Representative", (
+            "What you'll do: help customers by phone and email with orders and returns. " + PROCESS_OK
+        ))
+>       assert RULE in _rules(job)
+E       AssertionError: assert 'customer-service-queue' in set()
+E        +  where set() = _rules(CanonicalJob(source_id='t:src', job_id='t:src#47925139', id_kind=<IdKind.NATIVE_ID: 'NATIVE_ID'>, provider_native_id=N...of=[], content_hash='', field_hashes={}, schema_version='1.1.0', normalizer_version='1.1.0', ingested_snapshot_id=None))
+
+tests/test_adjacent_roles_and_customer_service.py:79: AssertionError
+________ test_phone_support_duties_exclude_even_without_a_support_title ________
+
+    def test_phone_support_duties_exclude_even_without_a_support_title():
+        """The title is not the evidence the policy asks for — the duties are."""
+        job = _job("Operations Associate", (
+            "What you'll do: handle customer calls and respond to customer inquiries throughout your "
+            "shift, keeping average handle time low. " + PROCESS_OK
+        ))
+>       assert RULE in _rules(job)
+E       AssertionError: assert 'customer-service-queue' in set()
+E        +  where set() = _rules(CanonicalJob(source_id='t:src', job_id='t:src#11040472', id_kind=<IdKind.NATIVE_ID: 'NATIVE_ID'>, provider_native_id=N...of=[], content_hash='', field_hashes={}, schema_version='1.1.0', normalizer_version='1.1.0', ingested_snapshot_id=None))
+
+tests/test_adjacent_roles_and_customer_service.py:88: AssertionError
+_ test_managed_service_provider_helpdesk_queue_is_excluded_with_duty_evidence __
+
+    def test_managed_service_provider_helpdesk_queue_is_excluded_with_duty_evidence():
+        """The real corpus case: an MSP service desk whose duties are client support requests."""
+        job = _job("Tier III Service Desk Engineer", (
+            "Duties: lead and support our helpdesk environment for managed service clients. "
+            "Respond to queries for technical assistance in person, via phone, or electronically. "
+            "Provide above and beyond support to our clients. " + PROCESS_OK
+        ))
+>       assert RULE in _rules(job)
+E       AssertionError: assert 'customer-service-queue' in set()
+E        +  where set() = _rules(CanonicalJob(source_id='t:src', job_id='t:src#87303589', id_kind=<IdKind.NATIVE_ID: 'NATIVE_ID'>, provider_native_id=N...of=[], content_hash='', field_hashes={}, schema_version='1.1.0', normalizer_version='1.1.0', ingested_snapshot_id=None))
+
+tests/test_adjacent_roles_and_customer_service.py:99: AssertionError
+________________ test_external_support_ticket_queue_is_excluded ________________
+
+    def test_external_support_ticket_queue_is_excluded():
+        job = _job("Customer Support Specialist", (
+            "The role: this role is primarily about helping customers by email, understanding their "
+            "questions and troubleshooting issues. You will work the support queue and respond to "
+            "customer questions about billing and account setup. " + PROCESS_OK
+        ))
+>       assert RULE in _rules(job)
+E       AssertionError: assert 'customer-service-queue' in set()
+E        +  where set() = _rules(CanonicalJob(source_id='t:src', job_id='t:src#36346564', id_kind=<IdKind.NATIVE_ID: 'NATIVE_ID'>, provider_native_id=N...of=[], content_hash='', field_hashes={}, schema_version='1.1.0', normalizer_version='1.1.0', ingested_snapshot_id=None))
+
+tests/test_adjacent_roles_and_customer_service.py:112: AssertionError
+____________ test_two_stated_queue_duties_are_counted_in_the_reason ____________
+
+    def test_two_stated_queue_duties_are_counted_in_the_reason():
+        job = _job("Support Associate", (
+            "What you'll do: answer inbound calls from customers. "
+            "You will also handle customer tickets and reply to customer emails. " + PROCESS_OK
+        ))
+>       assert "duties stated" in _reason(job)
+E       AssertionError: assert 'duties stated' in ''
+E        +  where '' = _reason(CanonicalJob(source_id='t:src', job_id='t:src#26202677', id_kind=<IdKind.NATIVE_ID: 'NATIVE_ID'>, provider_native_id=N...of=[], content_hash='', field_hashes={}, schema_version='1.1.0', normalizer_version='1.1.0', ingested_snapshot_id=None))
+
+tests/test_adjacent_roles_and_customer_service.py:120: AssertionError
+_ test_a_support_queue_duty_cannot_be_excused_by_a_software_sentence_elsewhere _
+
+    def test_a_support_queue_duty_cannot_be_excused_by_a_software_sentence_elsewhere():
+        """Duty-span scope, not description scope — the lesson the sales rule already learned."""
+        job = _job("Customer Support Specialist", (
+            "What you'll do: answer inbound calls from customers all day. "
+            "You will also build internal reports about ticket volume. " + PROCESS_OK
+        ))
+>       assert RULE in _rules(job)
+E       AssertionError: assert 'customer-service-queue' in set()
+E        +  where set() = _rules(CanonicalJob(source_id='t:src', job_id='t:src#55476376', id_kind=<IdKind.NATIVE_ID: 'NATIVE_ID'>, provider_native_id=N...of=[], content_hash='', field_hashes={}, schema_version='1.1.0', normalizer_version='1.1.0', ingested_snapshot_id=None))
+
+tests/test_adjacent_roles_and_customer_service.py:167: AssertionError
+_____________ test_internal_support_queue_is_pending_not_excluded ______________
+
+    def test_internal_support_queue_is_pending_not_excluded():
+        """Internal users are explicitly welcome, so an internal queue is a review item, not a negative."""
+        job = _job("IT Support Analyst", (
+            "What you'll do: work the internal help desk for employees, resolve staff tickets, and "
+            "support internal users with laptops and access. " + PROCESS_OK
+        ))
+        result = screen_job(job)
+        assert RULE not in _rules(job)
+>       assert RULE in _rules(job, "pending_checks")
+E       AssertionError: assert 'customer-service-queue' in set()
+E        +  where set() = _rules(CanonicalJob(source_id='t:src', job_id='t:src#85153047', id_kind=<IdKind.NATIVE_ID: 'NATIVE_ID'>, provider_native_id=N...of=[], content_hash='', field_hashes={}, schema_version='1.1.0', normalizer_version='1.1.0', ingested_snapshot_id=None), 'pending_checks')
+
+tests/test_adjacent_roles_and_customer_service.py:229: AssertionError
+________ test_a_queue_with_an_unnamed_audience_is_pending_not_excluded _________
+
+    def test_a_queue_with_an_unnamed_audience_is_pending_not_excluded():
+        """Policy sentence: Ambiguous or insufficient evidence stays visible for review; do not invent a negative."""
+        job = _job("Operations Specialist", (
+            "What you'll do: monitor the ticket queue and resolve requests as they arrive. " + PROCESS_OK
+        ))
+>       assert RULE in _rules(job, "pending_checks")
+E       AssertionError: assert 'customer-service-queue' in set()
+E        +  where set() = _rules(CanonicalJob(source_id='t:src', job_id='t:src#77857213', id_kind=<IdKind.NATIVE_ID: 'NATIVE_ID'>, provider_native_id=N...of=[], content_hash='', field_hashes={}, schema_version='1.1.0', normalizer_version='1.1.0', ingested_snapshot_id=None), 'pending_checks')
+
+tests/test_adjacent_roles_and_customer_service.py:238: AssertionError
+_____ test_a_vague_application_support_title_is_not_automatically_suitable _____
+
+    def test_a_vague_application_support_title_is_not_automatically_suitable():
+        """Policy sentence: Do not make a vague application-support title automatically suitable either."""
+        job = _job("Application Support Analyst", (
+            "Join our growing team. We value curiosity and ownership. " + PROCESS_OK
+        ))
+        result = screen_job(job)
+>       assert RULE in _rules(job, "pending_checks")
+E       AssertionError: assert 'customer-service-queue' in set()
+E        +  where set() = _rules(CanonicalJob(source_id='t:src', job_id='t:src#26424745', id_kind=<IdKind.NATIVE_ID: 'NATIVE_ID'>, provider_native_id=N...of=[], content_hash='', field_hashes={}, schema_version='1.1.0', normalizer_version='1.1.0', ingested_snapshot_id=None), 'pending_checks')
+
+tests/test_adjacent_roles_and_customer_service.py:248: AssertionError
+_ test_a_support_shaped_title_with_software_duties_is_eligible_with_a_recorded_guard _
+
+    def test_a_support_shaped_title_with_software_duties_is_eligible_with_a_recorded_guard():
+        job = _job("Application Support Engineer", (
+            "What you'll do: own and extend the internal applications behind our order workflow, "
+            "build integrations, and automate manual data handling. " + PROCESS_OK
+        ))
+        result = screen_job(job)
+        assert result.outcome == ScreenOutcome.ELIGIBLE.value, result.human_reason()
+>       assert RULE in _rules(job, "suppressed")
+E       AssertionError: assert 'customer-service-queue' in {'recorded-video'}
+E        +  where {'recorded-video'} = _rules(CanonicalJob(source_id='t:src', job_id='t:src#43599971', id_kind=<IdKind.NATIVE_ID: 'NATIVE_ID'>, provider_native_id=N...of=[], content_hash='', field_hashes={}, schema_version='1.1.0', normalizer_version='1.1.0', ingested_snapshot_id=None), 'suppressed')
+
+tests/test_adjacent_roles_and_customer_service.py:259: AssertionError
+______ test_a_customer_support_engineer_is_decided_by_duties_not_by_title ______
+
+    def test_a_customer_support_engineer_is_decided_by_duties_not_by_title():
+        """An engineering noun turns an external-support title into a duty question, both ways."""
+        builds = _job("Customer Support Engineer", (
+            "What you'll do: build and own the diagnostic tooling our support organization uses, and "
+            "the integrations behind it. " + PROCESS_OK
+        ))
+        assert RULE not in _rules(builds)
+    
+        works_queue = _job("Customer Support Engineer", (
+            "What you'll do: answer inbound calls from customers and resolve customer tickets to meet "
+            "our average handle time targets. " + PROCESS_OK
+        ))
+>       assert RULE in _rules(works_queue)
+E       AssertionError: assert 'customer-service-queue' in set()
+E        +  where set() = _rules(CanonicalJob(source_id='t:src', job_id='t:src#88843304', id_kind=<IdKind.NATIVE_ID: 'NATIVE_ID'>, provider_native_id=N...of=[], content_hash='', field_hashes={}, schema_version='1.1.0', normalizer_version='1.1.0', ingested_snapshot_id=None))
+
+tests/test_adjacent_roles_and_customer_service.py:274: AssertionError
+_ test_a_support_title_with_no_description_stays_visible_rather_than_passing_silently _
+
+    def test_a_support_title_with_no_description_stays_visible_rather_than_passing_silently():
+        job = _job("Technical Support Specialist", "")
+        result = screen_job(job)
+        assert result.outcome != ScreenOutcome.ELIGIBLE.value
+>       assert RULE in _rules(job) | _rules(job, "pending_checks")
+E       AssertionError: assert 'customer-service-queue' in (set() | {'process-not-inspectable'})
+E        +  where set() = _rules(CanonicalJob(source_id='t:src', job_id='t:src#93414196', id_kind=<IdKind.NATIVE_ID: 'NATIVE_ID'>, provider_native_id=N...of=[], content_hash='', field_hashes={}, schema_version='1.1.0', normalizer_version='1.1.0', ingested_snapshot_id=None))
+E        +  and   {'process-not-inspectable'} = _rules(CanonicalJob(source_id='t:src', job_id='t:src#93414196', id_kind=<IdKind.NATIVE_ID: 'NATIVE_ID'>, provider_native_id=N...of=[], content_hash='', field_hashes={}, schema_version='1.1.0', normalizer_version='1.1.0', ingested_snapshot_id=None), 'pending_checks')
+
+tests/test_adjacent_roles_and_customer_service.py:281: AssertionError
+______________ test_the_new_rule_is_mapped_to_its_policy_sources _______________
+
+    def test_the_new_rule_is_mapped_to_its_policy_sources():
+>       assert RULE in RULE_SOURCE_MAP
+E       AssertionError: assert 'customer-service-queue' in {'sales-ownership': ('workflow', 'preferences', 'operating_plan'), 'clearance-government': ('workflow', 'preferences', 'operating_plan'), 'frontend-specialist': ('workflow', 'preferences'), 'recorded-video': ('workflow',), ...}
+
+tests/test_adjacent_roles_and_customer_service.py:333: AssertionError
+_________________ test_the_ruleset_version_records_the_change __________________
+
+    def test_the_ruleset_version_records_the_change():
+>       assert SCREENING_RULESET_VERSION == "1.5.0"
+E       AssertionError: assert '1.4.0' == '1.5.0'
+E         
+E         - 1.5.0
+E         ?   ^
+E         + 1.4.0
+E         ?   ^
+
+tests/test_adjacent_roles_and_customer_service.py:338: AssertionError
+_ test_the_real_queue_duty_is_still_found_when_a_documentation_duty_sits_beside_it _
+
+    def test_the_real_queue_duty_is_still_found_when_a_documentation_duty_sits_beside_it():
+        """The same corpus posting that misfired also has a genuine queue duty. It must still exclude,
+        and the recorded evidence must be the queue duty rather than the documentation sentence."""
+        job = _job("Sales Support Specialist", (
+            "Responsibilities will include translating and creating Help Desk content (manuals, "
+            "installation guides, troubleshooting articles). "
+            "Field Inbound Sales & Support Calls, Website Chats & Emails. "
+            "Assist customers with printer installation questions. " + PROCESS_OK
+        ))
+>       assert RULE in _rules(job)
+E       AssertionError: assert 'customer-service-queue' in set()
+E        +  where set() = _rules(CanonicalJob(source_id='t:src', job_id='t:src#30430683', id_kind=<IdKind.NATIVE_ID: 'NATIVE_ID'>, provider_native_id=N...of=[], content_hash='', field_hashes={}, schema_version='1.1.0', normalizer_version='1.1.0', ingested_snapshot_id=None))
+
+tests/test_adjacent_roles_and_customer_service.py:389: AssertionError
+__________ test_internal_help_desk_ownership_stays_visible_for_review __________
+
+    def test_internal_help_desk_ownership_stays_visible_for_review():
+        """Not excluded is not the same as silently passed: the third state must actually be used."""
+        for title, description in M1_INTERNAL_CASES:
+            job = _job(title, description + " " + PROCESS_OK)
+>           assert RULE in _rules(job, "pending_checks"), title
+E           AssertionError: IT Systems Engineer
+E           assert 'customer-service-queue' in set()
+E            +  where set() = _rules(CanonicalJob(source_id='t:src', job_id='t:src#56897156', id_kind=<IdKind.NATIVE_ID: 'NATIVE_ID'>, provider_native_id=N...of=[], content_hash='', field_hashes={}, schema_version='1.1.0', normalizer_version='1.1.0', ingested_snapshot_id=None), 'pending_checks')
+
+tests/test_adjacent_roles_and_customer_service.py:432: AssertionError
+________ test_a_call_center_title_is_not_cleared_by_a_software_sentence ________
+
+    def test_a_call_center_title_is_not_cleared_by_a_software_sentence():
+        """Policy sentence: Do not target call centers, external customer service or customer
+        phone-support queues."""
+        for title, description in (
+            ("Call Center Representative",
+             "You will answer telephone enquiries from our customers all day. You will also build reports."),
+            ("Call Center Agent",
+             "You will write scripts to help yourself work faster. You will speak with people all day."),
+            ("Contact Centre Advisor",
+             "You will take telephone enquiries from members. You will maintain scripts."),
+        ):
+            job = _job(title, description + " " + PROCESS_OK)
+>           assert RULE in _rules(job), (title, screen_job(job).human_reason())
+E           AssertionError: ('Call Center Representative', 'no policy exclusion matched')
+E           assert 'customer-service-queue' in set()
+E            +  where set() = _rules(CanonicalJob(source_id='t:src', job_id='t:src#131266', id_kind=<IdKind.NATIVE_ID: 'NATIVE_ID'>, provider_native_id=Non...of=[], content_hash='', field_hashes={}, schema_version='1.1.0', normalizer_version='1.1.0', ingested_snapshot_id=None))
+
+tests/test_adjacent_roles_and_customer_service.py:460: AssertionError
+_ test_a_customer_service_title_is_never_returned_as_eligible_on_keyword_evidence _
+
+    def test_a_customer_service_title_is_never_returned_as_eligible_on_keyword_evidence():
+        """A title the policy rejects outright is not cleared by a software keyword. Where the duties
+        genuinely read as software the honest answer is a look at the posting, not a pass."""
+        for title, description in (
+            ("Customer Service Representative",
+             "You will speak with our customers on the telephone about their accounts. You will "
+             "configure systems as needed."),
+            ("Customer Service Representative",
+             "You will build reports in Excel and speak with our customers every day about their orders."),
+            ("Customer Care Associate", "You will develop workflows and maintain our documentation."),
+            ("Member Services Coordinator",
+             "You will build integrations between our CRM and billing platform."),
+            ("Help Desk Analyst",
+             "You will provide first-line assistance to our clients over the telephone. You will also "
+             "maintain scripts used by the team."),
+            ("Application Support Analyst",
+             "You will be the voice of our customers: answer their questions by telephone and live "
+             "chat, resolve their issues, and write scripts to speed up common fixes."),
+            ("Service Desk Advisor",
+             "You will provide telephone assistance to our customers and maintain reporting."),
+        ):
+            job = _job(title, description + " " + PROCESS_OK)
+            result = screen_job(job)
+>           assert result.outcome != ScreenOutcome.ELIGIBLE.value, (title, result.human_reason())
+E           AssertionError: ('Customer Service Representative', 'no policy exclusion matched')
+E           assert 'ELIGIBLE' != 'ELIGIBLE'
+E            +  where 'ELIGIBLE' = ScreenResult(job_id='t:src#80930518', outcome='ELIGIBLE', exclusions=[], pending_checks=[], suppressed=[RuleHit(rule_i...one-way recorded submissions are excluded', suppressed_by='live-human-call guard')], notes=[], ruleset_version='1.4.0').outcome
+E            +  and   'ELIGIBLE' = <ScreenOutcome.ELIGIBLE: 'ELIGIBLE'>.value
+E            +    where <ScreenOutcome.ELIGIBLE: 'ELIGIBLE'> = ScreenOutcome.ELIGIBLE
+
+tests/test_adjacent_roles_and_customer_service.py:486: AssertionError
+_______ test_ordinary_external_support_phrasings_are_not_silently_passed _______
+
+    def test_ordinary_external_support_phrasings_are_not_silently_passed():
+        for title, description in (
+            ("Support Consultant",
+             "In this role you will answer phone calls and emails from our customers."),
+            ("Technical Support Specialist",
+             "In this role you will answer phone calls and emails from our customers, troubleshoot "
+             "their account problems, and document each case in Zendesk."),
+            ("Support Advisor", "You will answer telephone enquiries from our customers."),
+            ("Product Support Analyst", "You will field questions from customers by phone all day."),
+            ("Operations Support Analyst",
+             "You will respond to emails from our clients and log each one."),
+        ):
+            job = _job(title, description + " " + PROCESS_OK)
+            result = screen_job(job)
+>           assert result.outcome != ScreenOutcome.ELIGIBLE.value, (title, result.human_reason())
+E           AssertionError: ('Support Consultant', 'no policy exclusion matched')
+E           assert 'ELIGIBLE' != 'ELIGIBLE'
+E            +  where 'ELIGIBLE' = ScreenResult(job_id='t:src#96200167', outcome='ELIGIBLE', exclusions=[], pending_checks=[], suppressed=[RuleHit(rule_i...one-way recorded submissions are excluded', suppressed_by='live-human-call guard')], notes=[], ruleset_version='1.4.0').outcome
+E            +  and   'ELIGIBLE' = <ScreenOutcome.ELIGIBLE: 'ELIGIBLE'>.value
+E            +    where <ScreenOutcome.ELIGIBLE: 'ELIGIBLE'> = ScreenOutcome.ELIGIBLE
+
+tests/test_adjacent_roles_and_customer_service.py:506: AssertionError
+__________ test_an_audience_split_across_a_coordinator_is_still_found __________
+
+    def test_an_audience_split_across_a_coordinator_is_still_found():
+        """`answer phone calls and emails from our customers` splits on `and`, so duty-span scope lost
+        the audience and discarded the finding. Audience is read at clause scope; guards are not."""
+        job = _job("Operations Associate",
+                   "You will answer phone calls and emails from our customers. " + PROCESS_OK)
+>       assert RULE in _rules(job)
+E       AssertionError: assert 'customer-service-queue' in set()
+E        +  where set() = _rules(CanonicalJob(source_id='t:src', job_id='t:src#37010691', id_kind=<IdKind.NATIVE_ID: 'NATIVE_ID'>, provider_native_id=N...of=[], content_hash='', field_hashes={}, schema_version='1.1.0', normalizer_version='1.1.0', ingested_snapshot_id=None))
+
+tests/test_adjacent_roles_and_customer_service.py:515: AssertionError
+________ test_the_guards_are_still_duty_span_scoped_after_that_widening ________
+
+    def test_the_guards_are_still_duty_span_scoped_after_that_widening():
+        """Widening the AUDIENCE scope must not widen the GUARD scope."""
+        job = _job("Customer Support Specialist", (
+            "What you'll do: answer inbound calls from customers all day. "
+            "You will also build internal reports about ticket volume. " + PROCESS_OK
+        ))
+>       assert RULE in _rules(job)
+E       AssertionError: assert 'customer-service-queue' in set()
+E        +  where set() = _rules(CanonicalJob(source_id='t:src', job_id='t:src#55476376', id_kind=<IdKind.NATIVE_ID: 'NATIVE_ID'>, provider_native_id=N...of=[], content_hash='', field_hashes={}, schema_version='1.1.0', normalizer_version='1.1.0', ingested_snapshot_id=None))
+
+tests/test_adjacent_roles_and_customer_service.py:524: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_call_center_agent_is_excluded
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_customer_service_representative_title_is_excluded
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_phone_support_duties_exclude_even_without_a_support_title
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_managed_service_provider_helpdesk_queue_is_excluded_with_duty_evidence
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_external_support_ticket_queue_is_excluded
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_two_stated_queue_duties_are_counted_in_the_reason
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_a_support_queue_duty_cannot_be_excused_by_a_software_sentence_elsewhere
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_internal_support_queue_is_pending_not_excluded
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_a_queue_with_an_unnamed_audience_is_pending_not_excluded
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_a_vague_application_support_title_is_not_automatically_suitable
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_a_support_shaped_title_with_software_duties_is_eligible_with_a_recorded_guard
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_a_customer_support_engineer_is_decided_by_duties_not_by_title
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_a_support_title_with_no_description_stays_visible_rather_than_passing_silently
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_the_new_rule_is_mapped_to_its_policy_sources
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_the_ruleset_version_records_the_change
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_the_real_queue_duty_is_still_found_when_a_documentation_duty_sits_beside_it
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_internal_help_desk_ownership_stays_visible_for_review
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_a_call_center_title_is_not_cleared_by_a_software_sentence
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_a_customer_service_title_is_never_returned_as_eligible_on_keyword_evidence
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_ordinary_external_support_phrasings_are_not_silently_passed
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_an_audience_split_across_a_coordinator_is_still_found
+FAILED tests/test_adjacent_roles_and_customer_service.py::test_the_guards_are_still_duty_span_scoped_after_that_widening
+22 failed, 18 passed in 0.12s
+pytest exit=1

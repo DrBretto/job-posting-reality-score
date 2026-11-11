@@ -1,0 +1,17 @@
+Starting Build use cache
+Manifest is not changed for (EnumerateFunction, CollectorFunction, DifferFunction, DiscoveryFunction, ReportFunction, NarratorFunction), running incremental build
+Building codeuri: /Users/drbretto/Desktop/Projects/job-posting-reality-score runtime: python3.13 architecture: arm64 functions: EnumerateFunction, CollectorFunction, DifferFunction, DiscoveryFunction, ReportFunction, NarratorFunction
+ Running PythonPipBuilder:CopySource
+ Running PythonPipBuilder:CopySource
+
+Build Succeeded
+
+Built Artifacts  : ../../../../../private/tmp/claude-501/jprs-candidate-build
+Built Template   : ../../../../../private/tmp/claude-501/jprs-candidate-build/template.yaml
+
+Commands you can use next
+=========================
+[*] Validate SAM template: sam validate
+[*] Invoke Function: sam local invoke -t ../../../../../private/tmp/claude-501/jprs-candidate-build/template.yaml
+[*] Test Function in the Cloud: sam sync --stack-name {{stack-name}} --watch
+[*] Deploy: sam deploy --guided --template-file ../../../../../private/tmp/claude-501/jprs-candidate-build/template.yaml

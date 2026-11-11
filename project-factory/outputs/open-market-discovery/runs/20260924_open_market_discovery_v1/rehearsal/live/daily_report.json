@@ -1,0 +1,933 @@
+{
+  "run_id": "2026-09-24",
+  "dt": "2026-09-24",
+  "run_health": "VERIFIED-QUIET",
+  "health_axes": {
+    "collection": "VERIFIED-QUIET",
+    "collection_missing_sources": [],
+    "discovery_coverage": "PARTIAL",
+    "discovery_coverage_detail": "1/4 discovery sources returned results; 5/14 query families covered; failed: himalayas, jobicy, remoteok; never run yet: data-extraction, internal-tools, sector-construction, sector-healthcare, sector-hospitality, sector-logistics, sector-manufacturing, sector-professional-services, sector-retail",
+    "freshness": "NO-CHANGE-OBSERVED",
+    "interpretation": "CLEAN",
+    "interpretation_detail": "no source-level condition is suppressing removals"
+  },
+  "header": "every expected source produced a successful download; nothing material changed.",
+  "expected_sources": [
+    "remotive:all"
+  ],
+  "succeeded_sources": [
+    "remotive:all"
+  ],
+  "incomplete_sources": [],
+  "completeness_ratio": 1.0,
+  "current_job_count": 17,
+  "matching_job_count": 0,
+  "new_strong_count": 0,
+  "needs_check_count": 0,
+  "previously_engaged_count": 0,
+  "policy_excluded_count": 11,
+  "complete_candidate_list": [],
+  "top_matches": [],
+  "policy_exclusions": [
+    {
+      "source_id": "remotive:all",
+      "job_id": "remotive:all#2091141",
+      "employer": "KoboToolbox",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "ai-implementation,backend-cloud,ordinary-software,sector-insurance",
+      "title": "Frontend Web Application Developer",
+      "location": "USA, Canada, Argentina, Mexico, Peru",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "90,000-105,000 USD",
+      "posting_url": "https://remotive.com/remote-jobs/design/frontend-web-application-developer-2091141",
+      "apply_url": "https://remotive.com/remote-jobs/design/frontend-web-application-developer-2091141",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "provider_delay_24h",
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-18T16:43:22",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T14:47:04.156703+00:00",
+      "verified_at": null,
+      "fit_score": 0.482,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.258667,
+      "priority_band": "LOW",
+      "priority_confidence": 0.2,
+      "recall_path": "work-evidence",
+      "why_fit": "matches on apis-backend, llms, python, typescript-node; ordinary title, but the described work is in lane; remote compatible",
+      "gaps_and_checks": "",
+      "signals": "apis-backend, llms, python, typescript-node",
+      "screen_outcome": "EXCLUDED",
+      "screen_detail": {
+        "job_id": "remotive:all#2091141",
+        "outcome": "EXCLUDED",
+        "ruleset_version": "1.0.0",
+        "exclusions": [
+          {
+            "rule_id": "location-eligibility",
+            "outcome": "EXCLUDED",
+            "section": "location",
+            "matched_text": "USA, Canada, Argentina, Mexico, Peru argentina | canada | mexico | peru | united states",
+            "reason": "location is outside the US with no US-remote eligibility stated",
+            "suppressed_by": null
+          }
+        ],
+        "pending_checks": [],
+        "suppressed_misfires": [
+          {
+            "rule_id": "ai-interview",
+            "outcome": "ELIGIBLE",
+            "section": "requirements",
+            "matched_text": "Using AI-assisted development tools effectively while maintaining responsi",
+            "reason": "the employer builds or uses AI in its product; that says nothing about who conducts the interview",
+            "suppressed_by": "ai-in-product guard"
+          }
+        ],
+        "notes": []
+      },
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "remotive:all",
+          "provider": "remotive",
+          "job_id": "remotive:all#2091141",
+          "posting_url": "https://remotive.com/remote-jobs/design/frontend-web-application-developer-2091141",
+          "observed_at": "2026-09-24T14:47:04.156703Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "remotive:all",
+      "job_id": "remotive:all#2091139",
+      "employer": "hey contact heroes GmbH",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": null,
+      "title": "\ud83c\udde9\ud83c\uddea Kundenservice Mobilfunk Inbound - innerhalb der EU (ausgenommen: Deutschland)",
+      "location": "Europe",
+      "remote_mode": "REMOTE",
+      "employment_type": "CONTRACT",
+      "compensation": "compensation not published",
+      "posting_url": "https://remotive.com/remote-jobs/customer-service/kundenservice-mobilfunk-inbound-innerhalb-der-eu-ausgenommen-deutschland-2091139",
+      "apply_url": "https://remotive.com/remote-jobs/customer-service/kundenservice-mobilfunk-inbound-innerhalb-der-eu-ausgenommen-deutschland-2091139",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "provider_delay_24h",
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-18T13:00:47",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T14:47:04.156703+00:00",
+      "verified_at": null,
+      "fit_score": 0.0,
+      "fit_band": "LOW",
+      "priority_score": 0.044444,
+      "priority_band": "LOW",
+      "priority_confidence": 0.2,
+      "recall_path": "no-signal",
+      "why_fit": "remote outside us",
+      "gaps_and_checks": "the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements; no published compensation",
+      "signals": "",
+      "screen_outcome": "EXCLUDED",
+      "screen_detail": {
+        "job_id": "remotive:all#2091139",
+        "outcome": "EXCLUDED",
+        "ruleset_version": "1.0.0",
+        "exclusions": [
+          {
+            "rule_id": "location-eligibility",
+            "outcome": "EXCLUDED",
+            "section": "location",
+            "matched_text": "Europe europe",
+            "reason": "location is outside the US with no US-remote eligibility stated",
+            "suppressed_by": null
+          }
+        ],
+        "pending_checks": [
+          {
+            "rule_id": "process-not-inspectable",
+            "outcome": "PENDING_CHECK",
+            "section": "meta",
+            "matched_text": "<no process section>",
+            "reason": "the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+            "suppressed_by": null
+          }
+        ],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "remotive:all",
+          "provider": "remotive",
+          "job_id": "remotive:all#2091139",
+          "posting_url": "https://remotive.com/remote-jobs/customer-service/kundenservice-mobilfunk-inbound-innerhalb-der-eu-ausgenommen-deutschland-2091139",
+          "observed_at": "2026-09-24T14:47:04.156703Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "remotive:all",
+      "job_id": "remotive:all#2091131",
+      "employer": "Lemon.io",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior AI Engineer",
+      "location": "Northern America, LATAM, Europe, APAC",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://remotive.com/remote-jobs/artificial-intelligence/senior-ai-engineer-2091131",
+      "apply_url": "https://remotive.com/remote-jobs/artificial-intelligence/senior-ai-engineer-2091131",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "provider_delay_24h",
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-18T12:23:56",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T14:47:04.156703+00:00",
+      "verified_at": null,
+      "fit_score": 0.0,
+      "fit_band": "LOW",
+      "priority_score": 0.044444,
+      "priority_band": "LOW",
+      "priority_confidence": 0.2,
+      "recall_path": "title-signal",
+      "why_fit": "matches on ai-focus, applied-ai, agents, llms, python, retrieval; remote outside us",
+      "gaps_and_checks": "no published compensation",
+      "signals": "ai-focus, applied-ai, agents, llms, python, retrieval",
+      "screen_outcome": "EXCLUDED",
+      "screen_detail": {
+        "job_id": "remotive:all#2091131",
+        "outcome": "EXCLUDED",
+        "ruleset_version": "1.0.0",
+        "exclusions": [
+          {
+            "rule_id": "location-eligibility",
+            "outcome": "EXCLUDED",
+            "section": "location",
+            "matched_text": "Northern America, LATAM, Europe, APAC apac | europe | latam | northern america",
+            "reason": "location is outside the US with no US-remote eligibility stated",
+            "suppressed_by": null
+          }
+        ],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "remotive:all",
+          "provider": "remotive",
+          "job_id": "remotive:all#2091131",
+          "posting_url": "https://remotive.com/remote-jobs/artificial-intelligence/senior-ai-engineer-2091131",
+          "observed_at": "2026-09-24T14:47:04.156703Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "remotive:all",
+      "job_id": "remotive:all#2091130",
+      "employer": "Lemon.io",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior .NET Full-stack Developer",
+      "location": "Northern America, LATAM, Europe, APAC",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://remotive.com/remote-jobs/software-development/senior-net-full-stack-developer-2091130",
+      "apply_url": "https://remotive.com/remote-jobs/software-development/senior-net-full-stack-developer-2091130",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "provider_delay_24h",
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-17T13:22:05",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T14:47:04.156703+00:00",
+      "verified_at": null,
+      "fit_score": 0.0,
+      "fit_band": "LOW",
+      "priority_score": 0.044444,
+      "priority_band": "LOW",
+      "priority_confidence": 0.2,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, agents, llms, python, typescript-node; remote outside us",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, agents, llms, python, typescript-node",
+      "screen_outcome": "EXCLUDED",
+      "screen_detail": {
+        "job_id": "remotive:all#2091130",
+        "outcome": "EXCLUDED",
+        "ruleset_version": "1.0.0",
+        "exclusions": [
+          {
+            "rule_id": "location-eligibility",
+            "outcome": "EXCLUDED",
+            "section": "location",
+            "matched_text": "Northern America, LATAM, Europe, APAC apac | europe | latam | northern america",
+            "reason": "location is outside the US with no US-remote eligibility stated",
+            "suppressed_by": null
+          }
+        ],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "remotive:all",
+          "provider": "remotive",
+          "job_id": "remotive:all#2091130",
+          "posting_url": "https://remotive.com/remote-jobs/software-development/senior-net-full-stack-developer-2091130",
+          "observed_at": "2026-09-24T14:47:04.156703Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "remotive:all",
+      "job_id": "remotive:all#2091129",
+      "employer": "Lemon.io",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Data Scientist",
+      "location": "Northern America, LATAM, Europe, APAC",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://remotive.com/remote-jobs/data/senior-data-scientist-2091129",
+      "apply_url": "https://remotive.com/remote-jobs/data/senior-data-scientist-2091129",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "provider_delay_24h",
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-16T12:35:28",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T14:47:04.156703+00:00",
+      "verified_at": null,
+      "fit_score": 0.0,
+      "fit_band": "LOW",
+      "priority_score": 0.044444,
+      "priority_band": "LOW",
+      "priority_confidence": 0.2,
+      "recall_path": "title-signal",
+      "why_fit": "matches on machine-learning, agents, llms, python, retrieval, typescript-node; remote outside us",
+      "gaps_and_checks": "no published compensation",
+      "signals": "machine-learning, agents, llms, python, retrieval, typescript-node",
+      "screen_outcome": "EXCLUDED",
+      "screen_detail": {
+        "job_id": "remotive:all#2091129",
+        "outcome": "EXCLUDED",
+        "ruleset_version": "1.0.0",
+        "exclusions": [
+          {
+            "rule_id": "location-eligibility",
+            "outcome": "EXCLUDED",
+            "section": "location",
+            "matched_text": "Northern America, LATAM, Europe, APAC apac | europe | latam | northern america",
+            "reason": "location is outside the US with no US-remote eligibility stated",
+            "suppressed_by": null
+          }
+        ],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "remotive:all",
+          "provider": "remotive",
+          "job_id": "remotive:all#2091129",
+          "posting_url": "https://remotive.com/remote-jobs/data/senior-data-scientist-2091129",
+          "observed_at": "2026-09-24T14:47:04.156703Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "remotive:all",
+      "job_id": "remotive:all#1919266",
+      "employer": "A.Team",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "ai-implementation,ordinary-software",
+      "title": "Senior Independent AI Engineer / Architect",
+      "location": "Americas, Europe, Israel",
+      "remote_mode": "REMOTE",
+      "employment_type": "CONTRACT",
+      "compensation": "120-170 USD",
+      "posting_url": "https://remotive.com/remote-jobs/software-development/senior-independent-ai-engineer-architect-1919266",
+      "apply_url": "https://remotive.com/remote-jobs/software-development/senior-independent-ai-engineer-architect-1919266",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "provider_delay_24h",
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-16T10:10:53",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T14:47:04.156703+00:00",
+      "verified_at": null,
+      "fit_score": 0.0,
+      "fit_band": "LOW",
+      "priority_score": 0.044444,
+      "priority_band": "LOW",
+      "priority_confidence": 0.2,
+      "recall_path": "title-signal",
+      "why_fit": "matches on ai-focus, applied-ai, apis-backend, llms, orchestration; remote outside us",
+      "gaps_and_checks": "",
+      "signals": "ai-focus, applied-ai, apis-backend, llms, orchestration",
+      "screen_outcome": "EXCLUDED",
+      "screen_detail": {
+        "job_id": "remotive:all#1919266",
+        "outcome": "EXCLUDED",
+        "ruleset_version": "1.0.0",
+        "exclusions": [
+          {
+            "rule_id": "sales-ownership",
+            "outcome": "EXCLUDED",
+            "section": "body",
+            "matched_text": "No prospecting.",
+            "reason": "role owns sales outcomes (prospecting)",
+            "suppressed_by": null
+          },
+          {
+            "rule_id": "location-eligibility",
+            "outcome": "EXCLUDED",
+            "section": "location",
+            "matched_text": "Americas, Europe, Israel americas | europe | israel",
+            "reason": "location is outside the US with no US-remote eligibility stated",
+            "suppressed_by": null
+          }
+        ],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "remotive:all",
+          "provider": "remotive",
+          "job_id": "remotive:all#1919266",
+          "posting_url": "https://remotive.com/remote-jobs/software-development/senior-independent-ai-engineer-architect-1919266",
+          "observed_at": "2026-09-24T14:47:04.156703Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "remotive:all",
+      "job_id": "remotive:all#2069746",
+      "employer": "Mitre Media",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "ai-implementation,backend-cloud,ordinary-software",
+      "title": "Tech Lead Full-Stack Rails Engineer",
+      "location": "USA, Canada, USA timezones",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "170,000-200,000 USD",
+      "posting_url": "https://remotive.com/remote-jobs/software-development/tech-lead-full-stack-rails-engineer-2069746",
+      "apply_url": "https://remotive.com/remote-jobs/software-development/tech-lead-full-stack-rails-engineer-2069746",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "provider_delay_24h",
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-14T20:33:27",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T14:47:04.156703+00:00",
+      "verified_at": null,
+      "fit_score": 0.33,
+      "fit_band": "LOW",
+      "priority_score": 0.191111,
+      "priority_band": "LOW",
+      "priority_confidence": 0.2,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, llms, orchestration; remote compatible",
+      "gaps_and_checks": "",
+      "signals": "software-engineering, apis-backend, llms, orchestration",
+      "screen_outcome": "EXCLUDED",
+      "screen_detail": {
+        "job_id": "remotive:all#2069746",
+        "outcome": "EXCLUDED",
+        "ruleset_version": "1.0.0",
+        "exclusions": [
+          {
+            "rule_id": "location-eligibility",
+            "outcome": "EXCLUDED",
+            "section": "location",
+            "matched_text": "USA, Canada, USA timezones canada | united states | usa timezones",
+            "reason": "location is outside the US with no US-remote eligibility stated",
+            "suppressed_by": null
+          }
+        ],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "remotive:all",
+          "provider": "remotive",
+          "job_id": "remotive:all#2069746",
+          "posting_url": "https://remotive.com/remote-jobs/software-development/tech-lead-full-stack-rails-engineer-2069746",
+          "observed_at": "2026-09-24T14:47:04.156703Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "remotive:all",
+      "job_id": "remotive:all#2091126",
+      "employer": "iMerit Technology",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": null,
+      "title": "AI Response Evaluator",
+      "location": "France, Japan, Turkey, Vietnam, Mexico, Norway",
+      "remote_mode": "REMOTE",
+      "employment_type": "CONTRACT",
+      "compensation": "10,000-20,000 USD",
+      "posting_url": "https://remotive.com/remote-jobs/artificial-intelligence/ai-response-evaluator-2091126",
+      "apply_url": "https://remotive.com/remote-jobs/artificial-intelligence/ai-response-evaluator-2091126",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "provider_delay_24h",
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-11T06:49:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T14:47:04.156703+00:00",
+      "verified_at": null,
+      "fit_score": 0.0,
+      "fit_band": "LOW",
+      "priority_score": 0.044444,
+      "priority_band": "LOW",
+      "priority_confidence": 0.2,
+      "recall_path": "title-signal",
+      "why_fit": "matches on ai-focus; remote outside us",
+      "gaps_and_checks": "the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "signals": "ai-focus",
+      "screen_outcome": "EXCLUDED",
+      "screen_detail": {
+        "job_id": "remotive:all#2091126",
+        "outcome": "EXCLUDED",
+        "ruleset_version": "1.0.0",
+        "exclusions": [
+          {
+            "rule_id": "location-eligibility",
+            "outcome": "EXCLUDED",
+            "section": "location",
+            "matched_text": "France, Japan, Turkey, Vietnam, Mexico, Norway france | japan | mexico | norway | turkey | vietnam",
+            "reason": "location is outside the US with no US-remote eligibility stated",
+            "suppressed_by": null
+          }
+        ],
+        "pending_checks": [
+          {
+            "rule_id": "process-not-inspectable",
+            "outcome": "PENDING_CHECK",
+            "section": "meta",
+            "matched_text": "<no process section>",
+            "reason": "the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+            "suppressed_by": null
+          }
+        ],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "remotive:all",
+          "provider": "remotive",
+          "job_id": "remotive:all#2091126",
+          "posting_url": "https://remotive.com/remote-jobs/artificial-intelligence/ai-response-evaluator-2091126",
+          "observed_at": "2026-09-24T14:47:04.156703Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "remotive:all",
+      "job_id": "remotive:all#2091101",
+      "employer": "Lemon.io",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior React Full-stack Developer",
+      "location": "LATAM, Europe, USA, Canada, APAC",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://remotive.com/remote-jobs/software-development/senior-react-full-stack-developer-2091101",
+      "apply_url": "https://remotive.com/remote-jobs/software-development/senior-react-full-stack-developer-2091101",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "provider_delay_24h",
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-08-27T14:36:09",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T14:47:04.156703+00:00",
+      "verified_at": null,
+      "fit_score": 0.67,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.342222,
+      "priority_band": "LOW",
+      "priority_confidence": 0.2,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, agents, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, agents, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "EXCLUDED",
+      "screen_detail": {
+        "job_id": "remotive:all#2091101",
+        "outcome": "EXCLUDED",
+        "ruleset_version": "1.0.0",
+        "exclusions": [
+          {
+            "rule_id": "location-eligibility",
+            "outcome": "EXCLUDED",
+            "section": "location",
+            "matched_text": "LATAM, Europe, USA, Canada, APAC apac | canada | europe | latam | united states",
+            "reason": "location is outside the US with no US-remote eligibility stated",
+            "suppressed_by": null
+          }
+        ],
+        "pending_checks": [],
+        "suppressed_misfires": [
+          {
+            "rule_id": "ai-interview",
+            "outcome": "ELIGIBLE",
+            "section": "requirements",
+            "matched_text": "s: 2+ years Expertise in AWS, TypeScript and AI-assisted coding is a must.",
+            "reason": "the employer builds or uses AI in its product; that says nothing about who conducts the interview",
+            "suppressed_by": "ai-in-product guard"
+          }
+        ],
+        "notes": []
+      },
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "remotive:all",
+          "provider": "remotive",
+          "job_id": "remotive:all#2091101",
+          "posting_url": "https://remotive.com/remote-jobs/software-development/senior-react-full-stack-developer-2091101",
+          "observed_at": "2026-09-24T14:47:04.156703Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "remotive:all",
+      "job_id": "remotive:all#2091100",
+      "employer": "Lemon.io",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior QA Engineer",
+      "location": "Europe",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://remotive.com/remote-jobs/qa/senior-qa-engineer-2091100",
+      "apply_url": "https://remotive.com/remote-jobs/qa/senior-qa-engineer-2091100",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "provider_delay_24h",
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-08-26T13:10:58",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T14:47:04.156703+00:00",
+      "verified_at": null,
+      "fit_score": 0.0,
+      "fit_band": "LOW",
+      "priority_score": 0.044444,
+      "priority_band": "LOW",
+      "priority_confidence": 0.2,
+      "recall_path": "work-evidence",
+      "why_fit": "matches on agents, llms, python, typescript-node; ordinary title, but the described work is in lane; remote outside us",
+      "gaps_and_checks": "the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements; no published compensation",
+      "signals": "agents, llms, python, typescript-node",
+      "screen_outcome": "EXCLUDED",
+      "screen_detail": {
+        "job_id": "remotive:all#2091100",
+        "outcome": "EXCLUDED",
+        "ruleset_version": "1.0.0",
+        "exclusions": [
+          {
+            "rule_id": "location-eligibility",
+            "outcome": "EXCLUDED",
+            "section": "location",
+            "matched_text": "Europe europe",
+            "reason": "location is outside the US with no US-remote eligibility stated",
+            "suppressed_by": null
+          }
+        ],
+        "pending_checks": [
+          {
+            "rule_id": "process-not-inspectable",
+            "outcome": "PENDING_CHECK",
+            "section": "meta",
+            "matched_text": "<no process section>",
+            "reason": "the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+            "suppressed_by": null
+          }
+        ],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "remotive:all",
+          "provider": "remotive",
+          "job_id": "remotive:all#2091100",
+          "posting_url": "https://remotive.com/remote-jobs/qa/senior-qa-engineer-2091100",
+          "observed_at": "2026-09-24T14:47:04.156703Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "remotive:all",
+      "job_id": "remotive:all#2091099",
+      "employer": "Lemon.io",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior DevOps Engineer",
+      "location": "LATAM, Europe, USA, Canada, APAC",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://remotive.com/remote-jobs/devops/senior-devops-engineer-2091099",
+      "apply_url": "https://remotive.com/remote-jobs/devops/senior-devops-engineer-2091099",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "provider_delay_24h",
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-08-25T13:57:53",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T14:47:04.156703+00:00",
+      "verified_at": null,
+      "fit_score": 0.65,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.333333,
+      "priority_band": "LOW",
+      "priority_confidence": 0.2,
+      "recall_path": "work-evidence",
+      "why_fit": "matches on agents, aws-serverless, llms, python, typescript-node; ordinary title, but the described work is in lane; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "agents, aws-serverless, llms, python, typescript-node",
+      "screen_outcome": "EXCLUDED",
+      "screen_detail": {
+        "job_id": "remotive:all#2091099",
+        "outcome": "EXCLUDED",
+        "ruleset_version": "1.0.0",
+        "exclusions": [
+          {
+            "rule_id": "location-eligibility",
+            "outcome": "EXCLUDED",
+            "section": "location",
+            "matched_text": "LATAM, Europe, USA, Canada, APAC apac | canada | europe | latam | united states",
+            "reason": "location is outside the US with no US-remote eligibility stated",
+            "suppressed_by": null
+          }
+        ],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "remotive:all",
+          "provider": "remotive",
+          "job_id": "remotive:all#2091099",
+          "posting_url": "https://remotive.com/remote-jobs/devops/senior-devops-engineer-2091099",
+          "observed_at": "2026-09-24T14:47:04.156703Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    }
+  ],
+  "coverage": {
+    "discovery_attempted": [
+      "himalayas",
+      "jobicy",
+      "remoteok",
+      "remotive"
+    ],
+    "discovery_succeeded": [
+      "remotive"
+    ],
+    "query_families_total": 14,
+    "query_families_covered": 5,
+    "query_families_saturated": [],
+    "query_families_deferred": [],
+    "query_families_never_run": [
+      "data-extraction",
+      "internal-tools",
+      "sector-construction",
+      "sector-healthcare",
+      "sector-hospitality",
+      "sector-logistics",
+      "sector-manufacturing",
+      "sector-professional-services",
+      "sector-retail"
+    ],
+    "backlog_items": 0,
+    "backlog_reason": null,
+    "budgets": {
+      "himalayas": {
+        "max_requests_per_run": 2,
+        "requests_spent": 1,
+        "exhausted": false,
+        "rate_limited": false,
+        "failures": 0
+      },
+      "jobicy": {
+        "max_requests_per_run": 1,
+        "requests_spent": 1,
+        "exhausted": true,
+        "rate_limited": false,
+        "failures": 0
+      },
+      "remoteok": {
+        "max_requests_per_run": 1,
+        "requests_spent": 1,
+        "exhausted": true,
+        "rate_limited": false,
+        "failures": 0
+      },
+      "remotive": {
+        "max_requests_per_run": 1,
+        "requests_spent": 1,
+        "exhausted": true,
+        "rate_limited": false,
+        "failures": 0
+      }
+    },
+    "credential_gated": [],
+    "inaccessible": [
+      {
+        "target": "himalayas",
+        "reason": "download labelled PARTIAL (parse_error)"
+      },
+      {
+        "target": "jobicy",
+        "reason": "download labelled PARTIAL (parse_error)"
+      },
+      {
+        "target": "remoteok",
+        "reason": "download labelled PARTIAL (parse_error)"
+      }
+    ],
+    "previously_unseen_employers": [
+      "A.Team",
+      "Coalition Technologies",
+      "Credit Wellness, LLC",
+      "IAPWE",
+      "KoboToolbox",
+      "Lemon.io",
+      "Mitre Media",
+      "Sanctuary Computer Inc",
+      "TELUS Digital",
+      "Unio Digital",
+      "hey contact heroes GmbH",
+      "iMerit Technology"
+    ],
+    "admission_summary": {
+      "admitted_this_pass": 0,
+      "by_state": {
+        "QUEUED_UNSUPPORTED": [
+          "A.Team",
+          "Coalition Technologies",
+          "Credit Wellness, LLC",
+          "IAPWE",
+          "KoboToolbox",
+          "Lemon.io",
+          "Mitre Media",
+          "Sanctuary Computer Inc",
+          "TELUS Digital",
+          "Unio Digital",
+          "hey contact heroes GmbH",
+          "iMerit Technology"
+        ]
+      },
+      "monitored_after": 15,
+      "policy": {
+        "min_observations": 1,
+        "require_supported_board": true,
+        "require_public_scope": true,
+        "max_monitored_sources": 60,
+        "max_admissions_per_run": 10
+      }
+    },
+    "attributions": [
+      "Jobs via Himalayas (himalayas.app) \u2014 linked back to the Himalayas posting URL.",
+      "Jobs via Jobicy (jobicy.com) \u2014 apply links point at the original Jobicy posting URL.",
+      "Jobs via Remote OK (remoteok.com) \u2014 linked back to the Remote OK posting URL.",
+      "Jobs via Remotive (remotive.com) \u2014 linked back to the Remotive posting URL."
+    ],
+    "policy_projection_note": "projection 1.0.0 built 2026-09-24 \u2014 projection matches all policy sources"
+  },
+  "dedup": {
+    "dedup_groups": 17,
+    "hard_merges": 0,
+    "soft_possible_duplicate_links": 0,
+    "links_blocked_as_distinct_requisitions": 0,
+    "blocked_examples": [],
+    "records_kept": 17,
+    "records_absorbed_into_a_survivor": 0
+  },
+  "narration_enabled": false,
+  "_trimmed_note": "Per-job scorecards (17) and the event list were removed from this committed copy: they are bulk, not evidence, and every number in VALIDATION.md is reproducible from the counts, health axes, coverage block and complete_candidate_list that remain. Regenerate the full object with: python -m src.cli discover --live --out <dir>"
+}

@@ -1,0 +1,34 @@
+=== new P09 regressions run against the PRESERVED PRE-REPAIR source ===
+scratch tree: /tmp/claude-501/jprs-prerepair (repository copy; P09 source edits reversed; new tests and new
+  script entrypoints copied in so the source defect is what is being measured)
+the actual working checkout was not modified to produce this
+
+--- collection against pre-repair source ---
+tests/test_publication_commit_boundary.py:62: in <module>
+    OWED_KEY = s3layout.discovery_owed_publication_key(PROVIDER)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: module 'src.common.s3layout' has no attribute 'discovery_owed_publication_key'. Did you mean: 'discovery_pending_publication_key'?
+=========================== short test summary info ============================
+ERROR tests/test_publication_commit_boundary.py - AttributeError: module 'src...
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.26s
+
+--- the regressions that can be collected ---
+
+tests/test_release_gates_reject.py:319: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_durable_discovery_publication.py::test_the_owed_ledger_is_bounded_by_compacting_and_never_by_discarding
+FAILED tests/test_durable_discovery_publication.py::test_the_first_healthy_round_after_that_backlog_publishes_every_owed_posting
+FAILED tests/test_durable_discovery_publication.py::test_an_owed_posting_older_than_the_view_retention_is_removed_and_says_so
+FAILED tests/test_release_gates_reject.py::test_the_consumer_states_the_identities_a_reconciliation_needs
+4 failed, 32 passed in 3.48s
+
+--- pre-repair baseline suite (unmodified P08 tests) ---
+FAILED tests/test_durable_discovery_publication.py::test_the_first_healthy_round_after_that_backlog_publishes_every_owed_posting
+FAILED tests/test_durable_discovery_publication.py::test_an_owed_posting_older_than_the_view_retention_is_removed_and_says_so
+FAILED tests/test_runtime_boundary_and_fresh_first.py::test_r4_baseline_reader_rejects_current_records_before_downgrade
+FAILED tests/test_runtime_boundary_and_fresh_first.py::test_r4_downgrade_makes_records_readable_by_the_exact_baseline_model
+FAILED tests/test_runtime_boundary_and_fresh_first.py::test_r4_downgrade_preserves_diff_state_job_ids_and_grace_clocks
+FAILED tests/test_runtime_boundary_and_fresh_first.py::test_r4_downgrade_drops_event_types_the_baseline_enum_cannot_parse
+FAILED tests/test_runtime_boundary_and_fresh_first.py::test_r4_forward_run_then_rollback_read_then_restart_without_removals
+8 failed, 344 passed in 13.78s

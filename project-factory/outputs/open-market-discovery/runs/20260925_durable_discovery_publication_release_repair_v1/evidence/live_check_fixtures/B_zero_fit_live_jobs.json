@@ -1,0 +1,77 @@
+{
+  "source_id": "himalayas:all",
+  "jobs": {
+    "himalayas:all#enterprise-ae": {
+      "job": {
+        "source_id": "himalayas:all",
+        "job_id": "himalayas:all#enterprise-ae",
+        "id_kind": "URL_SLUG",
+        "provider_native_id": "enterprise-ae",
+        "provider_internal_id": null,
+        "requisition_id": null,
+        "identity_low_confidence": false,
+        "employer_name": "Northgate Revenue Group",
+        "employer_domain": null,
+        "employer_careers_url": "https://himalayas.app/companies/northgate-revenue",
+        "title": "Enterprise Account Executive",
+        "department": null,
+        "team": null,
+        "canonical_location": "united states",
+        "raw_location": "United States",
+        "secondary_locations": [],
+        "remote_hybrid_language": "REMOTE",
+        "employment_type": "FULL_TIME",
+        "salary": null,
+        "description_text": "Own a named-account territory and carry an annual quota. Responsibilities: close new business, run the full sales cycle from prospecting to signature, and forecast pipeline weekly. Remote throughout the United States.",
+        "description_native": "Own a named-account territory and carry an annual quota. Responsibilities: close new business, run the full sales cycle from prospecting to signature, and forecast pipeline weekly. Remote throughout the United States.",
+        "industry": null,
+        "job_level": null,
+        "posting_url": "https://himalayas.app/companies/northgate/jobs/enterprise-ae",
+        "apply_url": "https://himalayas.app/companies/northgate/jobs/enterprise-ae",
+        "apply_host": "himalayas.app",
+        "source_kind": "DISCOVERY_FEED",
+        "discovery_query": null,
+        "discovery_query_family": null,
+        "verification_state": "FEED_COMPLETE",
+        "verified_at": null,
+        "uncertainty": [
+          "employer_posting_not_directly_confirmed"
+        ],
+        "provider_created_at": null,
+        "provider_updated_at": null,
+        "provider_published_at": "2026-09-25T10:00:00Z",
+        "first_seen_at": "2026-09-25T12:00:00Z",
+        "last_seen_at": "2026-09-25T18:17:24.062113Z",
+        "provenance": [],
+        "dedup_group_id": null,
+        "duplicate_of": null,
+        "possible_duplicate_of": [],
+        "content_hash": "d106a8d3f2f65a8a293a945c4b8a12c3de23470a77ef6787fc4895d544550787",
+        "field_hashes": {
+          "title_hash": "c50015b267a9bb600538e863169a0fa3ea9fd6b6895a310e097b629df0359ec9",
+          "location_hash": "981e5b396726008318fcca73b116e69d1680fdbe17a7fb078d10197731f1e700",
+          "salary_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "workmode_hash": "2131cd6371005fcc97970ed7f9f16fa5dcee10496951f4a909f01b0fb5855297",
+          "body_hash": "ae6a7e4ca98ac7ca84c6637c7541b0c9abfe4172a6741e9ae9a7b7ead9e358b5"
+        },
+        "schema_version": "1.1.0",
+        "normalizer_version": "1.1.0",
+        "ingested_snapshot_id": null
+      },
+      "first_seen_run_id": "2026-09-25",
+      "last_seen_run_id": "2026-09-25",
+      "observation_count": 1,
+      "observed_run_ids": [
+        "2026-09-25"
+      ],
+      "alias_job_ids": []
+    }
+  },
+  "observed_run_ids": [
+    "2026-09-25"
+  ],
+  "last_observed_run_id": "2026-09-25",
+  "last_observed_at": "2026-09-25T18:17:24.062113Z",
+  "retired_for_retention": [],
+  "schema_version": "1.1.0"
+}

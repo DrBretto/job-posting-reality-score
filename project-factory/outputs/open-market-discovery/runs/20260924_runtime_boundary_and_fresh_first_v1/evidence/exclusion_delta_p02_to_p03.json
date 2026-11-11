@@ -1,0 +1,53 @@
+{
+  "note": "Effect of the R3 evidence-aggregation repair (screening 1.1.0 -> 1.2.0), measured on the INTERSECTION of the two corpora so the populations match. A newly excluded row states a duty or process step the policy forbids that ruleset 1.1.0 failed to see; the repair is strictly more discerning, not more permissive.",
+  "counting_method": "job ids present in both the P02 report and this re-screen",
+  "ruleset_before": "1.1.0",
+  "ruleset_after": "1.2.0",
+  "postings_in_both_corpora": 379,
+  "excluded_under_1_1_0": 337,
+  "excluded_under_1_2_0": 334,
+  "net_change": -3,
+  "newly_excluded_count": 0,
+  "released_count": 3,
+  "newly_excluded_by_rule": {},
+  "released_by_rule": {
+    "sales-ownership": 3
+  },
+  "released_that_reach_the_candidate_list": [],
+  "newly_excluded_examples": [],
+  "released_examples": [
+    {
+      "job_id": "greenhouse:grafanalabs#6163556004",
+      "employer": "Grafana Labs",
+      "title": "Manager, Solutions Engineering | AMER | Remote",
+      "p02_rules": [
+        "sales-ownership"
+      ],
+      "p03_rules": [],
+      "fit": 0.0,
+      "reaches_candidate_list": false
+    },
+    {
+      "job_id": "greenhouse:grafanalabs#6191900004",
+      "employer": "Grafana Labs",
+      "title": "Manager, Solutions Engineering | West Coast | Remote",
+      "p02_rules": [
+        "sales-ownership"
+      ],
+      "p03_rules": [],
+      "fit": 0.0,
+      "reaches_candidate_list": false
+    },
+    {
+      "job_id": "greenhouse:grafanalabs#6126959004",
+      "employer": "Grafana Labs",
+      "title": "Senior Director, Solutions Engineering | Americas | Remote",
+      "p02_rules": [
+        "sales-ownership"
+      ],
+      "p03_rules": [],
+      "fit": 0.0,
+      "reaches_candidate_list": false
+    }
+  ]
+}

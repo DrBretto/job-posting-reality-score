@@ -1,0 +1,18 @@
+=== discovery integration inspection ===
+report: /Users/drbretto/Desktop/Projects/job-posting-reality-score/project-factory/outputs/open-market-discovery/runs/20260925_durable_discovery_publication_release_repair_v1/evidence/live_check_fixtures/B_zero_fit_daily_report.json  run 2026-09-25  dt 2026-09-25
+registry monitors 24 board/slug identit(ies)
+
+--- every stored discovery identity, reconciled to a disposition ---
+  excluded             himalayas:all#enterprise-ae
+                         employer Northgate Revenue Group — rule(s) sales-ownership
+
+--- reconciliation totals ---
+  excluded: 1
+  stored discovery identities: 1
+  discovery-origin rows in the report: 1
+  report below-fit-threshold count (both populations): 0
+
+--- verdict ---
+INTEGRATION_OK — discovery postings were consumed and reconciled, and none qualified
+  for the shortlist today. A legitimate zero-fit discovery day, not a broken
+  connection: the dispositions above account for every stored posting.

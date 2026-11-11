@@ -1,0 +1,54 @@
+# Pre-existing working-tree state, captured before P07 touched anything
+
+HEAD: e549a73c98038eb4acaed59f515ac1bd3f163547
+branch: codex/real-job-radar
+captured_at: 2026-09-25T14:10:56Z
+
+## git status --porcelain (baseline)
+
+ M .samignore
+ M START_HERE.md
+ M docs/PLAN.md
+ M infra/DEPLOY.md
+ M infra/template.yaml
+ M project-factory/ORCHESTRATOR_BOOTSTRAP.md
+ M project-factory/claude_handoff/PACKET_REGISTRY.tsv
+ M project-factory/meta/DECISION_LOG.md
+ M project-factory/meta/EXECUTION_TIMELINE.md
+ M project-factory/meta/PHASE_LEDGER.md
+ M project-factory/meta/SESSION_STATUS.md
+ M src/cli.py
+ M src/collector/handler.py
+ M src/common/connectors.py
+ M src/common/models.py
+ M src/common/normalize.py
+ M src/common/s3layout.py
+ M src/differ/handler.py
+ M src/enumerate/handler.py
+ M src/report/handler.py
+ M src/scoring/scoring.py
+ M tests/test_connectors.py
+ M tests/test_differ.py
+ M tests/test_enumerate_and_narrator.py
+ M tests/test_scoring.py
+?? config/application_history.json
+?? config/candidate_policy.json
+?? config/discovery_sources.yaml
+?? docs/plans/2026-09-24-open-market-job-discovery.md
+?? docs/plans/2026-09-25-resumable-discovery-release-repair.md
+?? project-factory/claude_handoff/packets/
+?? project-factory/outputs/open-market-discovery/
+?? src/candidate/
+?? src/common/dedup.py
+?? src/common/fetch_guard.py
+?? src/common/rollback.py
+?? src/discovery/
+?? tests/test_dedup_and_history.py
+?? tests/test_discovery.py
+?? tests/test_fetch_guard.py
+?? tests/test_location_and_freshness_boundaries.py
+?? tests/test_recall_and_coverage.py
+?? tests/test_release_repair.py
+?? tests/test_resumable_discovery_and_release_binding.py
+?? tests/test_runtime_boundary_and_fresh_first.py
+?? tests/test_screening.py

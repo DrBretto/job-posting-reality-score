@@ -1,0 +1,79 @@
+{
+  "location": [
+    {
+      "location": "Belmont, NH",
+      "mode": "ONSITE",
+      "condition": "On-site at our office five days per week.",
+      "verdict": "EXCLUDED",
+      "reason": "location-eligibility: onsite or hybrid presence required at a location that is not commutable from New Hampshire, and no remote option is stated"
+    },
+    {
+      "location": "Belmont NH",
+      "mode": "ONSITE",
+      "condition": "On-site at our office five days per week.",
+      "verdict": "ELIGIBLE",
+      "reason": "no policy exclusion matched"
+    },
+    {
+      "location": "Alton, IL",
+      "mode": "ONSITE",
+      "condition": "On-site at our office five days per week.",
+      "verdict": "ELIGIBLE",
+      "reason": "no policy exclusion matched"
+    },
+    {
+      "location": "Remote / Boston, MA",
+      "mode": "HYBRID",
+      "condition": "Hybrid: must attend the Boston office three days per week.",
+      "verdict": "ELIGIBLE",
+      "reason": "no policy exclusion matched"
+    },
+    {
+      "location": "Remote, US",
+      "mode": "REMOTE",
+      "condition": "This remote role may only employ residents of California or New York.",
+      "verdict": "ELIGIBLE",
+      "reason": "no policy exclusion matched"
+    }
+  ],
+  "head_gap": {
+    "requests": [
+      null,
+      "OLDER_CURSOR",
+      "OLDER_AGAIN",
+      "EVEN_OLDER",
+      "STILL_OLDER"
+    ],
+    "new_page_two_requested": false,
+    "employers_seen": [
+      "Employer even-older",
+      "Employer new-page-one",
+      "Employer old-page",
+      "Employer older-again",
+      "Employer still-older"
+    ],
+    "next_backfill_cursor": "DEEPER_BACKLOG"
+  },
+  "report_boundary": {
+    "production_timing_fields": {
+      "run_started_at": null,
+      "previous_run_at": null
+    },
+    "persisted_fresh_count": 0,
+    "fresh_count_when_actual_timing_is_supplied": 2,
+    "retained": [
+      {
+        "job_id": "remotive:all#newly-observed-undated",
+        "fresh": false
+      },
+      {
+        "job_id": "remotive:all#twenty-hours-old",
+        "fresh": false
+      },
+      {
+        "job_id": "remotive:all#established",
+        "fresh": false
+      }
+    ]
+  }
+}

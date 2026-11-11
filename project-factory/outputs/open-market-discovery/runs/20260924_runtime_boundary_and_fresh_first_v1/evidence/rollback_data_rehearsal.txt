@@ -1,0 +1,21 @@
+ROLLBACK DATA-COMPATIBILITY REHEARSAL
+date 2026-09-24 | AWS mocked (moto) | baseline revision e549a73 read via `git show`, no checkout
+NOTHING was deployed and no real bucket was touched.
+
+1. forward run wrote 6 jobs, diff state, 6 events
+2. baseline read of current_jobs.json: FAILS on 18 extra fields  <- the defect
+   baseline read of _diff_state.json: FAILS on 5 extra fields
+3. dry run: would touch 3 objects; fields to drop: 23
+   ['apply_host', 'dedup_group_id', 'description_native', 'discovery_query', 'discovery_query_family', 'duplicate_of'] ...
+4. downgrade: backed up 3 objects under rollback-backup/20260924T120000Z/
+   current_jobs records preserved: 6
+   diff-state tracked jobs preserved: 6
+   events dropped (type unknown to baseline): 0
+   all 3 backups verified present
+5. baseline read after downgrade: OK — 6 jobs, 6 tracked
+6. baseline restart: 6 events, DISAPPEARED=0  <- must be 0
+7. one job absent on the next baseline run: DISAPPEARED=0 (grace), state=PENDING_REMOVAL
+   -> the ordinary grace clock governs, exactly as before the release. No manufactured removal.
+
+RESULT: source rollback alone is NOT sufficient; source rollback + this downgrade IS.
+The downgrade is a deployment-time operator action with a preserved backup. Rehearsed only.

@@ -1,0 +1,17 @@
+LIVE cursor walk against https://himalayas.app/jobs/api  (limit=20, cursor pagination)
+date: 2026-09-24   public, read-only, unauthenticated
+
+page 1: url=...https://himalayas.app/jobs/api?limit=20
+         jobs= 20  new employers this page= 10  nextCursor=yes
+page 2: url=...it=20&cursor=MjAyNi0wOS0yNFQwOTo1OTo1NS45ODU0NzRafDIyNzI2MzM
+         jobs= 20  new employers this page= 18  nextCursor=yes
+page 3: url=...it=20&cursor=MjAyNi0wOS0yNFQwOTowMDoyMS40ODk2NzdafDIyNzIzMjU
+         jobs= 20  new employers this page= 18  nextCursor=yes
+page 4: url=...it=20&cursor=MjAyNi0wOS0yNFQwODo1NToxOC40MDE0NTNafDIyNzE1ODc
+         jobs= 20  new employers this page= 14  nextCursor=yes
+page 5: url=...it=20&cursor=MjAyNi0wOS0yNFQwODo0OTo0Mi41MzU5MTZafDIyNzI3NjA
+         jobs= 20  new employers this page= 16  nextCursor=yes
+
+TOTAL across 5 pages: 76 distinct employers
+P01 made ONE request and asked for limit=100; the provider caps at 20, so it saw at most
+the first page and reported complete coverage.

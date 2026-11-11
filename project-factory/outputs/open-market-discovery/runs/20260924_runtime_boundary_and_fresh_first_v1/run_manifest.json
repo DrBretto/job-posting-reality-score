@@ -1,0 +1,126 @@
+{
+  "packet_id": "JPRS-L2-P03-runtime-boundary-and-fresh-first-v01",
+  "execution_profile": "FULL_BUILD",
+  "project_slug": "jprs",
+  "phase_key": "runtime-boundary-and-fresh-first",
+  "run_id": "20260924_runtime_boundary_and_fresh_first_v1",
+  "stage": "repair_and_fresh_first_complete",
+  "handoff_target": "Claude Code",
+  "status": "stage_complete",
+  "active_roles": [
+    "implementation executor",
+    "self-review (independent review NOT obtained)"
+  ],
+  "source_of_findings": "project-factory/outputs/open-market-discovery/runs/20260924_open_market_release_repair_v1/ORCHESTRATOR_REVIEW.md",
+  "outputs_emitted": [
+    "VALIDATION.md",
+    "DEPLOYMENT_HANDOFF.md",
+    "OPERATOR_RETURN.md",
+    "checkpoint.md",
+    "gate_decision.md",
+    "run_manifest.json",
+    "evidence/review_probe_reproduction.txt",
+    "evidence/review_probe_after_repair.txt",
+    "evidence/tests_before_repair.txt",
+    "evidence/after_repair_verification.txt",
+    "evidence/rollback_data_rehearsal.txt",
+    "evidence/himalayas_cursor_ordering.txt",
+    "evidence/exclusion_delta_p02_to_p03.json",
+    "rehearsal/combined_fresh_first/{daily_report.md,daily_report.json,discovery_coverage.json}"
+  ],
+  "acceptance_result": {
+    "R1_real_runtime_boundary": "PASS locally; live authenticated search remains unpassed",
+    "R3_screening_evidence_aggregation": "PASS",
+    "R4_data_compatible_rollback": "PASS, rehearsed on mocked AWS only",
+    "F1_fresh_first": "PASS; sub-24h capture explicitly NOT promised",
+    "verify_reconcile_and_sync": "PASS",
+    "whole_object_review": "PASS with the gates below open"
+  },
+  "defects_reproduced_before_repair": {
+    "R1": "_live_fetcher discarded the authenticated URL and let the unbound connector rebuild it from os.environ; observed app_id=[''] at urlopen with credentials injected. P02's test replaced the broken function, so it asserted the URL passed IN, not the request sent OUT.",
+    "R3": "_find returned only the first match, so a negation ended the search before a later mandatory requirement; the software-artifact guard blanketed a whole clause; optional fell through to required.",
+    "R4": "baseline e549a73 uses extra=forbid and rejects 18 CanonicalJob fields and 5 DiffState fields; source-only rollback leaves the previous release unable to read its own state.",
+    "F1": "the Himalayas cursor is a descending timestamp, so resuming from a saved cursor walks away from new arrivals; day two requested only the older cursor."
+  },
+  "checks_run": {
+    "pytest": "252 passed (209 before P03, 43 added)",
+    "runtime_boundary_suite": "43 passed",
+    "tests_failing_before_repair": "22 of 38",
+    "review_probe_unmodified": "re-run before and after; all six observations show repaired behavior except the raw rollback reader, which no repair can change",
+    "sam_validate_lint": "valid",
+    "sam_build": "succeeded (clean build dir)",
+    "policy_check": "projection matches all policy sources after a semantic comparison",
+    "rollback_rehearsal": "mocked AWS; forward -> downgrade -> baseline read -> restart, DISAPPEARED=0"
+  },
+  "headline_measurements": {
+    "himalayas_postings_and_employers": {
+      "p01": [
+        20,
+        19
+      ],
+      "p03": [
+        96,
+        74
+      ]
+    },
+    "postings_considered": 821,
+    "discovery_employers_observed": 216,
+    "discovery_employers_absent_from_registry": 216,
+    "retained_credible": 44,
+    "retained_partition_freshness": {
+      "fresh": 4,
+      "older_but_strong": 12
+    },
+    "retained_partition_history": {
+      "new": 16,
+      "needs_check": 21,
+      "previously_engaged": 7
+    },
+    "policy_exclusions": 383,
+    "below_fit_threshold": 394,
+    "cohort_note": "821 postings != 216 employers != 44 retained roles. The retained set partitions two independent ways (freshness and application history); they are not one number. NEW means no application history, not newly posted."
+  },
+  "corrections_made_to_my_own_prior_claims": [
+    "P02's '$0 additional in practice' and its GB-second arithmetic were wrong by ~20x; corrected to ~$0.11-0.13/month with the alarm price sourced from the AWS Price List API",
+    "P02's claim that additive fields are ignored by the previous reader was false; the baseline rejects them and a downgrade step is required",
+    "the first P03 rehearsal reported 44 of 44 retained roles as fresh, which a cold start makes meaningless; corrected with cold_start_sources",
+    "my first exclusion-delta figure (+9) compared two different populations; recomputed on the intersection (337 -> 334, net -3, 0 reaching the candidate list) with the limitation stated",
+    "a test-helper bug hardcoded canonical_location='remote, us' regardless of the location passed, so every location fixture looked remote; fixed, and noted because such a helper makes location tests pass for the wrong reason"
+  ],
+  "unpassed_gates": [
+    "Adzuna live authenticated search \u2014 no credential exists; the boundary is proven to carry one",
+    "production fetch transport for 3 of 4 keyless feeds \u2014 local egress proxy truncates them",
+    "rollback downgrade against real production state \u2014 rehearsed on mocked AWS only",
+    "sub-24-hour capture \u2014 not achievable on a single daily run with delayed providers; achievable latency stated, no schedule changed",
+    "careers-URL resolution live path \u2014 off by default",
+    "discovery -> monitoring \u2014 proposes registry rows only, by design",
+    "independent review of this repair \u2014 not obtained; the review's own probe was re-run instead"
+  ],
+  "budget_caps": "no candidate or employer quota; provider rate limits respected; $0 spend",
+  "acceptance_condition": "R1/R3/R4 closed locally with regression tests and reproducible evidence; fresh-first implemented within the existing architecture; remaining activation requirements explicit",
+  "stop_condition": "locally verified repair and fresh-first readiness; no deployment under this packet",
+  "checkpoint_path": "checkpoint.md",
+  "next_stage": "operator decision: deploy, or a third orchestrator review of the repaired code and artifacts",
+  "spend_usd": 0,
+  "aws_mutations": "none",
+  "git_actions": "none \u2014 working tree uncommitted on codex/real-job-radar, preserved",
+  "top_risks": [
+    "Adzuna general-industry coverage is still unproven end to end",
+    "two consecutive reviews each found defects the implementing context missed, including in its own tests; a third independent review is the highest-value next step",
+    "the rollback downgrade has never run against real persisted state"
+  ],
+  "mid_run_policy_change_implemented": {
+    "source": "APPLICATION_WORKFLOW.md, new operator-confirmed 'Location and Compensation' section, 2026-09-24",
+    "why_acted_on": "the screener actively contradicted it; shipping that would be worse than the scope stretch",
+    "changes": [
+      "commutable-for-onsite narrowed from all of MA/ME/VT plus Portsmouth and Boston to genuinely local Lakes Region towns",
+      "Portsmouth/Boston/Cambridge/Somerville/Waltham onsite-or-hybrid now excluded; the same employer stays eligible when the role is remote",
+      "Plymouth NH routes to review, per 'an exception to discuss with Brett'",
+      "dropped the Boston Adzuna location scope; remote Boston-HQ roles still arrive via the nationwide and remote scopes",
+      "NO compensation rule added \u2014 the targets are explicitly not gates, and a test asserts nothing is excluded on pay"
+    ],
+    "screening_ruleset_version": "1.2.0 -> 1.3.0",
+    "reviewer_note": "the 30-minute radius town list is my interpretation; the policy states a drive time, not a list. Confirm the reading.",
+    "beyond_packet_scope": true
+  }
+}

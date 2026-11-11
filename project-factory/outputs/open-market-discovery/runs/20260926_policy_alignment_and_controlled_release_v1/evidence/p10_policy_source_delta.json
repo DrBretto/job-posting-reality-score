@@ -1,0 +1,111 @@
+{
+  "checked_at": "2026-09-26",
+  "policy_check_before": {
+    "exit": 1,
+    "stderr": "changed since the projection was built: operating_plan, workflow"
+  },
+  "policy_check_after": {
+    "exit": 0,
+    "stdout": "projection matches all policy sources"
+  },
+  "sources": [
+    {
+      "key": "workflow",
+      "path": "../Infotropy Book/INBOX/Employment Search/APPLICATION_WORKFLOW.md",
+      "recorded_sha256": "6ecc92c4d7f7dcb9642db27145ab95f717ed5e51b1ce3b4135b944f287842086",
+      "recorded_bytes": 15659,
+      "current_sha256": "231c68062630b5180fd81cc13eabb633ed249d2ee3c436302260e49a7a31f916",
+      "current_bytes": 21249,
+      "changed": true
+    },
+    {
+      "key": "preferences",
+      "path": "../Infotropy Book/INBOX/Employment Search/SEARCH_PREFERENCES.md",
+      "recorded_sha256": "7b5f8bc5dd84cc490838bcea0be0a8a0a8fac20a47723f6bbf6ac3d5845947d1",
+      "recorded_bytes": 4108,
+      "current_sha256": "7b5f8bc5dd84cc490838bcea0be0a8a0a8fac20a47723f6bbf6ac3d5845947d1",
+      "current_bytes": 4108,
+      "changed": false
+    },
+    {
+      "key": "operating_plan",
+      "path": "../Infotropy Book/INBOX/Employment Search/OPERATING_PLAN.md",
+      "recorded_sha256": "2c37b8033be5f0a7d18fbcdb827e6f0b77bd5bb9dada1888f96091b2b8a0fc54",
+      "recorded_bytes": 5359,
+      "current_sha256": "5adc2cd20ac8d51bcf6144f8d34faf7524b4aa086ed0b10c8cefa8597c9c66d1",
+      "current_bytes": 5757,
+      "changed": true
+    },
+    {
+      "key": "candidate_facts",
+      "path": "../Infotropy Book/INBOX/Employment Search/CANDIDATE_FACTS.md",
+      "recorded_sha256": "a97e40f9d3b3f317e48a07513f057a91c3b3f34bf35d66b6c96ee9c31045020b",
+      "recorded_bytes": 1462,
+      "current_sha256": "a97e40f9d3b3f317e48a07513f057a91c3b3f34bf35d66b6c96ee9c31045020b",
+      "current_bytes": 1462,
+      "changed": false
+    },
+    {
+      "key": "master_resume",
+      "path": "../Infotropy Book/career-factory/outputs/candidates/brett-westerlund/master-resume/MASTER_RESUME.latest.md",
+      "recorded_sha256": "1b95bbe82b56be5a7c156e08cef8b7fef20715d8c86274f0a3dabe032f31dbad",
+      "recorded_bytes": 13484,
+      "current_sha256": "1b95bbe82b56be5a7c156e08cef8b7fef20715d8c86274f0a3dabe032f31dbad",
+      "current_bytes": 13484,
+      "changed": false
+    }
+  ],
+  "note": "The two changed sources are untracked in their own repository, so no previous revision exists to diff against. The delta below is therefore classified from the current text's own operator-dated markers, not from a byte diff, and is labelled inference where that matters.",
+  "september_26_additions": [
+    {
+      "source": "workflow",
+      "section": "Adjacent roles: software problem-solving, not customer service",
+      "marker": "Operator clarification, September 26, 2026",
+      "kind": "screening",
+      "in_scope_for_this_run": true,
+      "implemented_as": "screening rule customer-service-queue (ruleset 1.5.0)",
+      "pre_p10_implementation": "none \u2014 no call-center, customer-service, phone-support or help-desk handling existed anywhere under src/ (verified by search), so this was absent behavior rather than a stale hash"
+    },
+    {
+      "source": "workflow",
+      "section": "Screen Before Preparing \u2014 'Reject call-center and external customer-service/phone-support jobs'",
+      "kind": "screening",
+      "in_scope_for_this_run": true,
+      "implemented_as": "same rule; the line delegates to the clarification above it"
+    },
+    {
+      "source": "workflow",
+      "section": "Tailoring \u2014 reviewed role-family core-resume reuse",
+      "marker": "Operator update, September 26, 2026",
+      "kind": "application_process",
+      "in_scope_for_this_run": false,
+      "why_not": "a permission about how application MATERIALS are produced. It is not a job exclusion and it is not permission to submit anything in this packet."
+    },
+    {
+      "source": "workflow",
+      "section": "Backlog Catch-up and Automated Submission Pilot",
+      "marker": "Operator direction, September 26, 2026",
+      "kind": "application_process",
+      "in_scope_for_this_run": false,
+      "why_not": "explicitly a queued follow-up, and explicitly not permission to submit applications now or to expand this packet"
+    },
+    {
+      "source": "operating_plan",
+      "section": "pointers to the two workflow process additions above",
+      "kind": "application_process",
+      "in_scope_for_this_run": false,
+      "why_not": "it states that it must not create a second hiring policy, and does not"
+    }
+  ],
+  "rules_not_changed_by_this_run": [
+    "sales-ownership",
+    "clearance-government",
+    "frontend-specialist",
+    "recorded-video",
+    "ai-interview",
+    "location-eligibility",
+    "location-residency",
+    "process-not-inspectable"
+  ],
+  "calibration_unchanged": true
+}

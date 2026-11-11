@@ -1,0 +1,108 @@
+{
+  "packet_id": "JPRS-L2-P07-discovery-to-report-integration-v01",
+  "execution_profile": "BOUNDED_IMPLEMENTATION_AND_INTEGRATION_VERIFICATION",
+  "project_slug": "jprs",
+  "phase_key": "discovery-to-report-integration",
+  "run_id": "20260925_discovery_to_report_integration_v1",
+  "stage": "implementation_and_local_verification",
+  "handoff_target": "Claude Code",
+  "status": "stage_complete",
+  "started_at": "2026-09-25T14:05:00Z",
+  "completed_at": "2026-09-25T14:35:00Z",
+  "active_roles": [
+    "implementer",
+    "integration_verifier"
+  ],
+  "baseline_identity": {
+    "head": "e549a73c98038eb4acaed59f515ac1bd3f163547",
+    "branch": "codex/real-job-radar",
+    "working_tree": "uncommitted overhaul preserved; 46 entries at baseline (25 modified + 21 untracked), 47 after this run \u2014 the one addition is tests/test_discovery_to_report_integration.py; src/discovery/live.py and this run directory sit inside already-untracked parents",
+    "git_actions_taken": "none \u2014 no commit, branch, stage, push, reset, stash or checkout"
+  },
+  "inputs_used": [
+    "project-factory/claude_handoff/packets/jprs/JPRS-L2-P07-discovery-to-report-integration-v01.md",
+    "project-factory/claude_handoff/RUN_OUTPUT_CONTRACT.md",
+    "project-factory/shared-contracts/PROVENANCE_AND_STATUS.md",
+    "project-factory/shared-contracts/QUALITY_GATES.md",
+    "CLAUDE.md, AGENTS.md, .cursorrules",
+    "docs/plans/2026-09-24-open-market-job-discovery.md",
+    "project-factory/outputs/open-market-discovery/runs/20260925_controlled_discovery_deployment_v1/ORCHESTRATOR_REVIEW.md",
+    "project-factory/outputs/open-market-discovery/runs/20260925_controlled_discovery_deployment_v1/evidence/p06_independent_producer_consumer_probe.py",
+    "project-factory/outputs/open-market-discovery/runs/20260925_controlled_discovery_deployment_v1/evidence/pre_discovery_report_2026-09-25/daily_report_summary.json",
+    "project-factory/outputs/open-market-discovery/runs/20260925_resumable_discovery_release_repair_v1/DEPLOYMENT_HANDOFF.md",
+    "project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/ (captured provider payloads, 2026-09-24)",
+    "config/candidate_policy.json, config/application_history.json, config/companies.yaml, config/discovery_sources.yaml",
+    "infra/template.yaml, infra/statemachine/jprs-daily-assemble.asl.json, infra/samconfig.toml",
+    "src/{enumerate,collector,discovery,differ,report,candidate,scoring,common}/"
+  ],
+  "outputs_emitted": [
+    "run_manifest.json",
+    "checkpoint.md",
+    "gate_decision.md",
+    "VALIDATION.md",
+    "DEPLOYMENT_HANDOFF.md",
+    "OPERATOR_RETURN.md",
+    "evidence/p07_baseline_working_tree.txt",
+    "evidence/p07_before_repair_p06_probe.json",
+    "evidence/p07_after_repair_p06_probe.json",
+    "evidence/p07_stage_trace_probe.py",
+    "evidence/p07_stage_trace.json",
+    "evidence/p07_sample_report.md",
+    "evidence/p07_test_results.txt",
+    "evidence/p07_policy_check.txt",
+    "evidence/p07_sam_validate.txt",
+    "evidence/p07_sam_build.txt",
+    "evidence/p07_owned_changes.txt"
+  ],
+  "code_outputs": {
+    "created": [
+      "src/discovery/live.py",
+      "tests/test_discovery_to_report_integration.py"
+    ],
+    "edited": [
+      "src/common/connectors.py",
+      "src/common/s3layout.py",
+      "src/discovery/connectors.py",
+      "src/discovery/handler.py",
+      "src/report/handler.py",
+      "tests/test_resumable_discovery_and_release_binding.py",
+      "docs/plans/2026-09-24-open-market-job-discovery.md"
+    ],
+    "infrastructure_changed": false,
+    "iam_changed": false,
+    "schedule_or_routing_changed": false
+  },
+  "budget_caps": {
+    "aws_mutations": 0,
+    "aws_invocations": 0,
+    "network_calls_to_providers": 0,
+    "model_calls": 0,
+    "spend_usd": 0,
+    "emails_sent": 0,
+    "applications_submitted": 0
+  },
+  "acceptance_condition": "A registry-absent employer's useful job appears in the saved ordinary report, produced by the real producers and consumers, with existing screening, ranking, dedup and history engaged; matching negative and multi-round checks; declared invocation and permissions verified; no test-only bridge; monitored functionality intact; and a build-bound, data-compatible, approval-gated deployment handoff.",
+  "acceptance_result": "met locally",
+  "stop_condition": "Stop after local implementation and verification. No deploy, no AWS mutation, no commit, no further committee.",
+  "stop_result": "stopped at the packet boundary as instructed",
+  "checkpoint_path": "project-factory/outputs/open-market-discovery/runs/20260925_discovery_to_report_integration_v1/checkpoint.md",
+  "next_stage": "orchestrator inspection of the integration evidence, then a deployment decision",
+  "verification_summary": {
+    "reviewer_probe_before": "1 normalized job, 0 candidate rows",
+    "reviewer_probe_after": "1 normalized job, 1 candidate row, from an unregistered employer",
+    "suite_before": "316 passed",
+    "suite_after": "339 passed",
+    "new_acceptance_cases": 23,
+    "policy_projection": "matches all policy sources",
+    "sam_validate": "valid",
+    "sam_build": "succeeded; src/discovery/live.py present in both DiscoveryFunction and ReportFunction artifacts"
+  },
+  "top_risks": [
+    "Live acceptance is UNPROVEN. No registry-absent job has been observed in a real delivered report; a zero-candidate day is legitimate and must be distinguished from a broken integration using the three checks in DEPLOYMENT_HANDOFF.md 5.1.",
+    "Discovery job ids change shape (cursor-bound to feed-bound). Nothing downstream reads the old ids, but the first post-deploy run rebuilds the live view, so those postings carry that run as their first observation in the new store.",
+    "The report Lambda now imports src.discovery.live and reaches it only because packaging ships the whole repository. A future packaging fix must carry that dependency explicitly.",
+    "The 21-day retention bound on the live view has not been calibrated against a measured feed churn rate.",
+    "Mocked storage does not establish runtime IAM; the template's declared grants were checked, a deployed policy evaluation was not."
+  ],
+  "provenance_note": "Claims in VALIDATION.md and OPERATOR_RETURN.md are labeled evidence / inference / speculation / operator_preference per PROVENANCE_AND_STATUS.md. Captured provider payloads are labeled REAL CAPTURE (2026-09-24) and synthetic controls are labeled SYNTHETIC; no fixture outcome is presented as a live offer."
+}

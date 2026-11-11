@@ -188,7 +188,15 @@ def test_company_boilerplate_cannot_rescue_unrelated_engineering_title():
         remote="remote",
     )
     card = score_job(ScoreContext(job=job), today=TODAY)
-    assert card.brett_fit.detail["blocked_title_lane"] == 1
+    # The old mechanism was `blocked_title_lane`, a hard zero whenever no title pattern matched. That
+    # gate also erased ordinary and novel titles doing real work, so it was removed. What keeps this
+    # case out now is CONTEXT: every AI term here sits in a company blurb ("Our AI company uses ..."),
+    # not in anything describing the role, so it earns only boilerplate-weight credit and no
+    # work-evidence recall path.
+    detail = card.brett_fit.detail
+    assert detail["recall_path"] == "no-signal"
+    assert detail["role_context_skill_score"] == 0.0
+    assert detail["company_blurb_skill_score"] > 0.0
     assert card.excluded is True
 
 

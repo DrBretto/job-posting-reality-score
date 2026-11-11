@@ -19,6 +19,7 @@ import re
 from dataclasses import dataclass, field
 from datetime import datetime
 
+from src.common.normalize import normalize_title_for_matching
 from src.common.models import (
     Band,
     CanonicalJob,
@@ -32,12 +33,12 @@ from src.common.models import (
     SnapshotStatus,
 )
 
-SCORING_PROFILE_VERSION = "1.1.0"
-FIT_RULESET_VERSION = "1.1.0"
+SCORING_PROFILE_VERSION = "1.2.0"
+FIT_RULESET_VERSION = "1.2.0"
 
 # Per-dimension scorer versions (independent semver, stamped onto each emitted score).
 _V = {
-    "brett_fit": "1.1.0",
+    "brett_fit": "1.2.0",
     "freshness": "1.0.0",
     "hiring_activity_evidence": "1.0.0",
     "repost_churn_pattern": "1.0.0",
@@ -74,13 +75,40 @@ _TITLE_SIGNALS: tuple[tuple[str, re.Pattern[str], float], ...] = (
     ("applied-ai", re.compile(r"\b(applied ai|generative ai|genai|ai engineer|llm engineer)\b", re.I), 0.28),
     ("ai-focus", re.compile(r"\b(ai|artificial intelligence|ml|llm)\b", re.I), 0.18),
     ("machine-learning", re.compile(r"\b(machine learning|ml engineer|data scientist)\b", re.I), 0.24),
-    ("research-engineering", re.compile(r"\b(research engineer|research scientist)\b", re.I), 0.20),
+    # A research title is NOT inherently a better target than a software-engineering title
+    # (SEARCH_PREFERENCES says so explicitly), and the September 23 clarification made getting hired
+    # quickly the priority over an impressive title. Weighted accordingly.
+    ("research-engineering", re.compile(r"\b(research engineer|research scientist)\b", re.I), 0.10),
     ("forward-deployed", re.compile(r"\bforward[- ]deployed engineer\b", re.I), 0.18),
     ("backend", re.compile(r"\b(back[- ]?end|api)\b", re.I), 0.18),
     ("platform", re.compile(r"\b(platform|infrastructure|developer experience|devex)\b", re.I), 0.18),
     ("automation", re.compile(r"\b(automation|workflow)\b", re.I), 0.18),
     ("data-engineering", re.compile(r"\b(data engineer|data platform)\b", re.I), 0.16),
-    ("software-engineering", re.compile(r"\b(software engineer|software developer|full[- ]stack)\b", re.I), 0.14),
+    # Ordinary senior software engineering is a PRIMARY target, not a consolation lane. The old 0.14
+    # was tuned when only AI-titled roles counted, and it left a legitimate full-stack internal-tools
+    # role scoring 0.24 against a 0.25 exclusion floor.
+    ("software-engineering", re.compile(r"\b(software engineer|software developer|full[- ]stack)\b", re.I), 0.22),
+    # The plan's worked scenario lives here: ordinary titles that mean internal/business systems work.
+    # Deliberately NARROW. "application engineer" was tried here and removed: it also matches
+    # "Field Application Engineer (Integrated Photonics)", a customer-facing hardware role. An
+    # ambiguous title belongs on the work-evidence recall path, where the description decides,
+    # not in a title lane that grants credit before anything about the work is known.
+    ("internal-tools", re.compile(
+        r"\b(internal tools?|internal systems?|business systems?|business applications?|"
+        r"integration developer|integration engineer|automation developer)\b",
+        re.I), 0.20),
+)
+
+# Requirements that mark a specialist track Brett cannot substantiate in an interview. The plan lists
+# "AI research requiring a specialist track record" as a false positive, and the workflow warns
+# against converting experimental work into "years of independently mastered specialist production
+# engineering". This is about the ROLE's stated bar, not about the title.
+_SPECIALIST_BAR_RE = re.compile(
+    r"\b(ph\.?d\.?|doctorate|publication record|published (?:papers|research)|"
+    r"first[- ]author|peer[- ]reviewed publications?|research track record|"
+    r"present at conferences|nips|neurips|icml|iclr|"
+    r"(?:1[0-9]|[89])\+?\s*years)\b",
+    re.I,
 )
 
 _SKILL_SIGNALS: tuple[tuple[str, re.Pattern[str], float], ...] = (
@@ -134,6 +162,58 @@ _REMOTE_BODY_RE = re.compile(
     re.I,
 )
 _US_WIDE_ONLY_RE = re.compile(r"^(united states|us|usa|u\.s\.)$", re.I)
+
+
+# Sentences that describe the COMPANY rather than the ROLE. A description saying "our AI company uses
+# LLM agents" is evidence about the employer's stack, not about what this job does — and the plan is
+# explicit: "Do not elevate a role solely because the description repeats AI terms."
+_COMPANY_FRAMING_RE = re.compile(
+    r"(\bour\s+(?:ai\s+)?(?:company|team|platform|product|mission|clients?|customers?|technology|"
+    r"stack)\b|\bwe\s+(?:are|use|build|believe|were\s+founded|have\s+built|help)\b|"
+    r"\bfounded\s+in\b|\babout\s+(?:us|the\s+company)\b|\bjoin\s+(?:us|our)\b|"
+    r"\bcompany\s+(?:uses|is\s+building)\b)",
+    re.I,
+)
+# Sentences that describe what the PERSON will do. These carry real weight.
+_ROLE_FRAMING_RE = re.compile(
+    r"(\byou(?:'ll| will)?\s+(?:be\s+)?(?:build|design|own|develop|implement|create|deliver|lead|"
+    r"work|integrate|automate|maintain|ship|architect)|\byour\s+(?:role|responsibilities|work)\b|"
+    r"\bresponsibilities\b|\brequirements\b|\bqualifications\b|\bexperience\s+(?:with|in|building)\b|"
+    r"\bmust\s+have\b|\bwe(?:'re| are)\s+looking\s+for\b|\bthe\s+role\b|\bin\s+this\s+role\b|"
+    r"\bwhat\s+you(?:'ll| will)\s+do\b|\bskills?\b|\bproficien|\bfamiliarity\s+with\b)",
+    re.I,
+)
+_SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;!?])\s+|\n+")
+
+
+def _split_role_vs_company(description: str) -> tuple[str, str]:
+    """Split a description into (role-context text, company-context-only text).
+
+    A sentence counts as role context when it describes the work or the requirements. A sentence that
+    only describes the employer is company context. Unframed sentences default to ROLE context, so an
+    ordinary unstructured posting is not penalized for lacking marketing language — the split exists
+    to stop boilerplate from *earning* credit, not to demand a particular writing style.
+    """
+    if not description:
+        return "", ""
+    role_parts: list[str] = []
+    company_parts: list[str] = []
+    for sentence in _SENTENCE_SPLIT_RE.split(description):
+        piece = sentence.strip()
+        if not piece:
+            continue
+        is_company = bool(_COMPANY_FRAMING_RE.search(piece))
+        is_role = bool(_ROLE_FRAMING_RE.search(piece))
+        if is_company and not is_role:
+            company_parts.append(piece)
+        else:
+            role_parts.append(piece)
+    return " ".join(role_parts), " ".join(company_parts)
+
+
+# How much a skill signal is worth when it appears ONLY in company boilerplate. Small but nonzero:
+# an employer's stack is weak evidence about the role, not zero evidence.
+_BOILERPLATE_SKILL_WEIGHT = 0.25
 
 
 @dataclass
@@ -199,7 +279,12 @@ def _geography(job: CanonicalJob) -> tuple[str, float, bool]:
 # --------------------------------------------------------------------------------------------------
 def score_brett_fit(ctx: ScoreContext, profile: ScoringProfile) -> DimensionScore:
     job = ctx.job
-    title = job.title or ""
+    # REPAIR 1 — title spelling. Patterns are matched against the NORMALIZED title, so an employer's
+    # choice to write `FullStack` instead of `Full Stack` no longer changes the score. The live
+    # defect: a Grafana posting titled `FullStack` scored 0.00 while the same role spelled
+    # `Full Stack` scored 0.38, because every pattern required a separator.
+    title_display = job.title or ""
+    title = normalize_title_for_matching(title_display)
     description = job.description_text or ""
     title_signals: list[str] = []
     skill_signals: list[str] = []
@@ -209,33 +294,90 @@ def score_brett_fit(ctx: ScoreContext, profile: ScoringProfile) -> DimensionScor
         if pattern.search(title):
             title_total += weight
             title_signals.append(label)
+    # Skill signals are weighted by CONTEXT. A term in "you will build X" is evidence about the role;
+    # the same term in "our AI company uses X" is evidence about the employer. Without this split a
+    # description that merely repeats AI vocabulary in its company blurb outranked a genuine
+    # ordinary-title applied-AI role — measured at 0.69 versus 0.59 before the fix.
+    role_text, company_text = _split_role_vs_company(description)
+    role_skill_total = 0.0
+    boilerplate_skill_total = 0.0
     for label, pattern, weight in _SKILL_SIGNALS:
-        if pattern.search(description):
-            skill_total += weight
+        in_role = bool(pattern.search(role_text))
+        in_company = bool(pattern.search(company_text))
+        if in_role:
+            role_skill_total += weight
             skill_signals.append(label)
+        elif in_company:
+            boilerplate_skill_total += weight
+            skill_signals.append(f"{label}(company-blurb)")
+    skill_total = role_skill_total + _BOILERPLATE_SKILL_WEIGHT * boilerplate_skill_total
 
     technical_title = bool(_TECHNICAL_TITLE_RE.search(title))
     blocked_role = (
         (bool(_NON_TARGET_TITLE_RE.search(title)) and not technical_title)
         or bool(_BLOCKED_TECH_TITLE_RE.search(title))
     )
-    blocked_title_lane = not title_signals
     geography, geography_adjustment, geography_blocked = _geography(job)
-    # Overlapping phrases (for example "agentic AI engineer") are evidence of one strong lane, not
-    # three independent careers. Caps prevent overlap from erasing seniority/location adjustments.
-    total = min(0.55, title_total) + min(0.40, skill_total) + geography_adjustment
+
+    # REPAIR 2 — the title-only hard zero is gone.
+    #
+    # `blocked_title_lane = not title_signals` used to force the score to 0.0 whenever no title
+    # pattern matched, which erased every novel or ordinary title regardless of the work described.
+    # The plan requires work-based recall and states that "a title-only empty-match gate cannot
+    # silently remove them", and the acceptance case is an ordinary title doing real applied-AI work.
+    #
+    # Replacement: when the title carries no recognized lane but IS technical and the description
+    # shows real work signals, the work itself earns credit at reduced confidence. Exclusions still
+    # zero the score — but those are verified facts about the role, not guesses about a title.
+    recall_path = "title-signal"
+    work_based_credit = 0.0
+    if not title_signals:
+        # The credit derives from ROLE-context skill only. Boilerplate cannot buy a recall path: that
+        # is what let an unrelated engineering title ride in on a company AI blurb.
+        if technical_title and role_skill_total > 0:
+            # Capped below the strong-title band: this is genuine eligibility, not a promise.
+            work_based_credit = min(0.20, role_skill_total * 0.6)
+            recall_path = "work-evidence"
+        elif role_skill_total > 0:
+            work_based_credit = min(0.08, role_skill_total * 0.3)
+            recall_path = "work-evidence-nontechnical-title"
+        else:
+            recall_path = "no-signal"
+
+    total = (
+        min(0.55, title_total)
+        + min(0.40, skill_total)
+        + work_based_credit
+        + geography_adjustment
+    )
     seniority_adjustment = 0.0
     if _MANAGEMENT_TITLE_RE.search(title):
         seniority_adjustment = -0.20
     elif _STRETCH_TITLE_RE.search(title):
+        # A Staff/Principal title is a STRETCH label, not a rejection: the policy says "Do not reject
+        # Staff or architect roles merely because of the title." A small adjustment keeps ordinary
+        # senior roles ahead without removing the stretch from consideration.
         seniority_adjustment = -0.08
     total += seniority_adjustment
-    if blocked_role or blocked_title_lane or geography_blocked:
+
+    # A stated specialist bar lowers the score without removing the role: the policy says to label
+    # credible stretches honestly rather than to hide them.
+    specialist_bar = bool(_SPECIALIST_BAR_RE.search(description))
+    specialist_adjustment = -0.15 if specialist_bar else 0.0
+    total += specialist_adjustment
+
+    if blocked_role or geography_blocked:
         total = 0.0
 
     score = _clamp(total)
-    # confidence: full text available => confident; title-only => half
-    confidence = 1.0 if job.description_text else 0.5
+    # Confidence reflects how much evidence the score rests on. A work-evidence match with no title
+    # lane is real but weaker, and says so rather than borrowing the confidence of a title match.
+    if not job.description_text:
+        confidence = 0.5
+    elif recall_path.startswith("work-evidence"):
+        confidence = 0.7
+    else:
+        confidence = 1.0
     refs = [
         _canonical_field_ref(job.job_id, "title", job.last_seen_at),
         _canonical_field_ref(job.job_id, "description_text", job.last_seen_at),
@@ -248,11 +390,18 @@ def score_brett_fit(ctx: ScoreContext, profile: ScoringProfile) -> DimensionScor
             "skill_signals": ",".join(sorted(skill_signals)),
             "geography": geography,
             "blocked_role": int(blocked_role),
-            "blocked_title_lane": int(blocked_title_lane),
             "blocked_geography": int(geography_blocked),
+            "recall_path": recall_path,
+            "normalized_title": title,
             "title_signal_score": round(min(0.55, title_total), 3),
             "skill_signal_score": round(min(0.40, skill_total), 3),
+            "role_context_skill_score": round(role_skill_total, 3),
+            "company_blurb_skill_score": round(boilerplate_skill_total, 3),
+            "work_based_credit": round(work_based_credit, 3),
             "seniority_adjustment": seniority_adjustment,
+            "specialist_bar_adjustment": specialist_adjustment,
+            "states_specialist_bar": int(specialist_bar),
+            "is_stretch_level": int(bool(_STRETCH_TITLE_RE.search(title))),
             "ruleset_version": FIT_RULESET_VERSION,
         },
     )

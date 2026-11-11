@@ -46,6 +46,28 @@ class DiffConfig:
     cumulative_drop: float = 0.60            # M3 cumulative shrink threshold across the window
     reopen_window_days: int = 30             # D5 repost reopen window
     repost_threshold: float = 0.70           # D5 repost confidence bar
+    # Segment-closure recovery: how many independent HEALTHY SUCCESS snapshots must agree that a
+    # prior-present segment is gone before its absence is treated as a real closure instead of a
+    # possible silent subset. This is what releases the latch described in `_SUSPECT_KIND` below.
+    segment_closure_confirm_snapshots: int = 2
+
+
+# The three SUSPECT conditions are NOT the same thing and must not share one warning sentence.
+#
+#   MASS_DROP        this snapshot lost most of the board in one step. Suppresses removals
+#                    indefinitely — real truncation looks exactly like this and protection wins.
+#   CUMULATIVE_BLEED the board shrank steadily across the window (the 50%+50% two-day bleed).
+#                    Also suppresses indefinitely.
+#   SILENT_SUBSET    a whole prior-present department vanished while other departments persisted.
+#                    AMBIGUOUS: a department that genuinely closed produces a byte-identical
+#                    signature. Suppressing forever is what froze Future's People Team job ACTIVE
+#                    with zero absences since August 20 and reprinted the same warning every run.
+#                    So this one is CORROBORATION-BOUNDED: it suppresses while the evidence is
+#                    ambiguous, and once N independent healthy SUCCESS snapshots agree the segment
+#                    is gone, it reclassifies to confirmed closure and the ordinary grace clock runs.
+MASS_DROP = "mass_drop"
+CUMULATIVE_BLEED = "cumulative_bleed"
+SILENT_SUBSET = "silent_subset"
 
 
 class JobStateRecord(BaseModel):
@@ -75,6 +97,16 @@ class DiffState(BaseModel):
     jobs: dict[str, JobStateRecord] = Field(default_factory=dict)
     success_count_history: list[int] = Field(default_factory=list)
     last_success_snapshot_id: str | None = None
+    # --- segment-closure corroboration (schema 1.1.0, additive) --------------------------------
+    # Per-segment count of consecutive HEALTHY SUCCESS snapshots in which a prior-present segment
+    # was absent. This is the counter that lets a real closure eventually be believed.
+    segment_absence_streak: dict[str, int] = Field(default_factory=dict)
+    # How many consecutive runs this source has been suspect, and what it actually reported while
+    # suppressed. Without these the report can only say "suspect" again with no trend.
+    suspect_streak: int = 0
+    suspect_kind: str | None = None
+    suspect_since: datetime | None = None
+    suppressed_count_history: list[int] = Field(default_factory=list)
     schema_version: str = SCHEMA_VERSION
 
 
@@ -86,6 +118,9 @@ class DiffResult:
     suspect: bool = False
     suspect_reason: str | None = None
     frozen: bool = False
+    suspect_kind: str | None = None
+    # Segments whose absence was corroborated this run and are now treated as genuinely closed.
+    confirmed_closed_segments: list[str] = field(default_factory=list)
 
 
 def _seg(job_dept: str | None) -> str:
@@ -189,44 +224,120 @@ def diff_source(
 
     current_ids = {j.job_id for j in jobs}
 
-    # ---- SUSPECT detection (single-step + M3 cumulative + M3 silent-subset) -----------------
+    # ---- SUSPECT detection (single-step + M3 cumulative + corroboration-bounded silent-subset) ---
     suspect_reason: str | None = None
+    suspect_kind: str | None = None
+    confirmed_closed: list[str] = []
+
+    # Segment census is needed for both the guard and the streak bookkeeping.
+    prior_present = [r for r in prior_jobs.values() if r.state == JobLifecycleState.ACTIVE]
+    prior_segs: dict[str, int] = {}
+    for r in prior_present:
+        prior_segs[_seg(r.department)] = prior_segs.get(_seg(r.department), 0) + 1
+    cur_segs: dict[str, int] = {}
+    for j in jobs:
+        cur_segs[_seg(j.department)] = cur_segs.get(_seg(j.department), 0) + 1
+    vanished = sorted(s for s, c in prior_segs.items() if c > 0 and cur_segs.get(s, 0) == 0)
+    survived = any(cur_segs.get(s, 0) > 0 for s in prior_segs)
+
+    # A segment that came back is no longer evidence of anything; its streak resets so a future
+    # absence has to earn corroboration again from scratch.
+    for seg_name in list(new_state.segment_absence_streak):
+        if cur_segs.get(seg_name, 0) > 0:
+            new_state.segment_absence_streak.pop(seg_name, None)
+
     if prior_count is not None and prior_count > 0:
-        # (c) single-step mass-drop
+        # (c) single-step mass-drop — protection is absolute here
         if n == 0 or (prior_count - n) / prior_count > cfg.single_step_drop:
-            suspect_reason = f"mass-drop single-step ({prior_count}->{n} vs prior SUCCESS)"
+            suspect_kind = MASS_DROP
+            suspect_reason = (
+                f"this download returned {n} postings where the last successful download returned "
+                f"{prior_count}; that is more than a {int(cfg.single_step_drop * 100)}% single-step "
+                f"loss, which is indistinguishable from a truncated response"
+            )
         else:
-            # (d) M3 cumulative/trend: compare current vs max over the rolling window of prior SUCCESS
+            # (d) M3 cumulative/trend: compare current vs max over the rolling window
             window = new_state.success_count_history[-cfg.cumulative_window:]
             if window:
                 wmax = max(window)
                 if wmax > 0 and (wmax - n) / wmax > cfg.cumulative_drop:
+                    suspect_kind = CUMULATIVE_BLEED
                     suspect_reason = (
-                        f"cumulative bleed (window max {wmax} -> {n} exceeds "
-                        f"{int(cfg.cumulative_drop * 100)}% over {len(window)} SUCCESS snapshots)"
+                        f"this source has shrunk from {wmax} to {n} postings across the last "
+                        f"{len(window)} successful downloads, exceeding "
+                        f"{int(cfg.cumulative_drop * 100)}%; a steady bleed can hide a partial feed"
                     )
-            # (e) M3 silent-subset: a whole prior-present segment vanished while others persist
-            if suspect_reason is None:
-                prior_present = [r for r in prior_jobs.values() if r.state == JobLifecycleState.ACTIVE]
-                prior_segs: dict[str, int] = {}
-                for r in prior_present:
-                    prior_segs[_seg(r.department)] = prior_segs.get(_seg(r.department), 0) + 1
-                cur_segs: dict[str, int] = {}
-                for j in jobs:
-                    cur_segs[_seg(j.department)] = cur_segs.get(_seg(j.department), 0) + 1
-                vanished = [s for s, c in prior_segs.items() if c > 0 and cur_segs.get(s, 0) == 0]
-                survived = any(cur_segs.get(s, 0) > 0 for s in prior_segs)
-                if vanished and survived and len(prior_segs) > 1:
-                    suspect_reason = f"silent-subset SUCCESS (segments omitted: {sorted(vanished)})"
+            # (e) silent-subset — AMBIGUOUS, so corroboration-bounded rather than latching
+            if suspect_reason is None and vanished and survived and len(prior_segs) > 1:
+                for seg_name in vanished:
+                    new_state.segment_absence_streak[seg_name] = (
+                        new_state.segment_absence_streak.get(seg_name, 0) + 1
+                    )
+                streaks = {s: new_state.segment_absence_streak.get(s, 0) for s in vanished}
+                needed = cfg.segment_closure_confirm_snapshots
+                corroborated = [s for s, k in streaks.items() if k >= needed]
+                still_ambiguous = [s for s, k in streaks.items() if k < needed]
+
+                if still_ambiguous:
+                    suspect_kind = SILENT_SUBSET
+                    suspect_reason = (
+                        f"whole department segment(s) {sorted(still_ambiguous)} are absent from an "
+                        f"otherwise healthy download of {n} postings while other departments "
+                        f"persisted. This is NOT a low download count — it is a missing segment, "
+                        f"which looks the same whether the department closed or the feed omitted it. "
+                        f"Holding removals until {needed} independent successful downloads agree "
+                        f"(currently "
+                        + ", ".join(f"{s}={streaks[s]}/{needed}" for s in sorted(still_ambiguous))
+                        + ")"
+                    )
+                if corroborated:
+                    # Release the latch for these segments: their absence is now corroborated by
+                    # independent healthy snapshots, so treat it as real closure and let the ordinary
+                    # grace clock run. This is the recovery path whose absence froze job state
+                    # permanently and reprinted an unexplained warning every run.
+                    confirmed_closed = sorted(corroborated)
+                    events.append(_event(
+                        ChangeEventType.SOURCE_SEGMENT_CLOSED,
+                        source_id=source_id, run_id=run_id, as_of=as_of,
+                        snapshot_id=snapshot.snapshot_id, prior_snapshot_id=prior_snap_id,
+                        notes=(
+                            f"department segment(s) {confirmed_closed} have been absent from "
+                            f"{needed} consecutive healthy successful downloads while the rest of "
+                            f"the board stayed intact ({n} postings). Treating this as a real "
+                            f"closure: the removal grace clock now runs for its postings instead of "
+                            f"being held indefinitely."
+                        ),
+                    ))
+                    for seg_name in confirmed_closed:
+                        new_state.segment_absence_streak.pop(seg_name, None)
 
     suspect = suspect_reason is not None
     if suspect:
+        new_state.suspect_streak += 1
+        new_state.suspect_kind = suspect_kind
+        if new_state.suspect_since is None:
+            new_state.suspect_since = as_of
+        new_state.suppressed_count_history.append(n)
+        new_state.suppressed_count_history = new_state.suppressed_count_history[-6:]
+        streak_note = (
+            f" This source has been in this condition for {new_state.suspect_streak} consecutive "
+            f"run(s) since {new_state.suspect_since.date()}; observed counts while suppressed: "
+            f"{new_state.suppressed_count_history}."
+        ) if new_state.suspect_streak > 1 else ""
         events.append(_event(
             ChangeEventType.SOURCE_SUSPECT,
             source_id=source_id, run_id=run_id, as_of=as_of,
             snapshot_id=snapshot.snapshot_id, prior_snapshot_id=prior_snap_id,
-            notes=f"{suspect_reason}; removals SUPPRESSED this run",
+            notes=(
+                f"[{suspect_kind}] {suspect_reason}. Removals are suppressed for this source this "
+                f"run; present postings were still recorded normally.{streak_note}"
+            ),
         ))
+    else:
+        new_state.suspect_streak = 0
+        new_state.suspect_kind = None
+        new_state.suspect_since = None
+        new_state.suppressed_count_history = []
 
     # ---- present jobs: first-seen / returned / field + material changes ----------------------
     reopen_cutoff = today - timedelta(days=cfg.reopen_window_days)
@@ -316,27 +427,40 @@ def diff_source(
         existing.field_hashes = dict(job.field_hashes)
         _refresh_repost_fields(existing, job)
 
-    # ---- absent jobs: grace clock -> PENDING_REMOVAL -> DISAPPEARED (only if NOT suspect) -----
-    if not suspect:
-        for job_id, rec in prior_jobs.items():
-            if job_id in current_ids:
-                continue
-            if rec.state == JobLifecycleState.DISAPPEARED:
-                continue  # already gone; no repeat event
-            rec.absence_count += 1
-            if rec.absence_count >= cfg.grace_successful_snapshots:
-                rec.state = JobLifecycleState.DISAPPEARED
-                rec.disappeared_at = as_of
-                events.append(_event(
-                    ChangeEventType.DISAPPEARED,
-                    source_id=source_id, run_id=run_id, as_of=as_of,
-                    snapshot_id=snapshot.snapshot_id, job_id=job_id,
-                    prior_snapshot_id=prior_snap_id,
-                    notes=f"absent in {rec.absence_count} consecutive SUCCESS snapshots (grace)",
-                ))
-            else:
-                rec.state = JobLifecycleState.PENDING_REMOVAL
-    # when suspect: absent jobs are frozen (absence_count untouched, no removal events)
+    # ---- absent jobs: grace clock -> PENDING_REMOVAL -> DISAPPEARED ---------------------------
+    # Removals run when the snapshot is trustworthy. They ALSO run for jobs in a segment whose
+    # absence has been corroborated, even while another segment is still ambiguous — otherwise one
+    # unresolved segment would keep re-freezing every other segment's confirmed closure, which is
+    # how the original latch made recovery impossible.
+    closed_segments = set(confirmed_closed)
+    for job_id, rec in prior_jobs.items():
+        if job_id in current_ids:
+            continue
+        if rec.state == JobLifecycleState.DISAPPEARED:
+            continue  # already gone; no repeat event
+        in_closed_segment = _seg(rec.department) in closed_segments
+        if suspect and not in_closed_segment:
+            continue  # frozen: absence_count untouched, no removal event
+        rec.absence_count += 1
+        if rec.absence_count >= cfg.grace_successful_snapshots:
+            rec.state = JobLifecycleState.DISAPPEARED
+            rec.disappeared_at = as_of
+            events.append(_event(
+                ChangeEventType.DISAPPEARED,
+                source_id=source_id, run_id=run_id, as_of=as_of,
+                snapshot_id=snapshot.snapshot_id, job_id=job_id,
+                prior_snapshot_id=prior_snap_id,
+                notes=(
+                    f"absent in {rec.absence_count} consecutive SUCCESS snapshots (grace)"
+                    + (
+                        f"; its department segment {_seg(rec.department)!r} was confirmed closed "
+                        f"after independent corroboration"
+                        if in_closed_segment else ""
+                    )
+                ),
+            ))
+        else:
+            rec.state = JobLifecycleState.PENDING_REMOVAL
 
     # ---- baseline / history maintenance ------------------------------------------------------
     new_state.last_success_snapshot_id = snapshot.snapshot_id
@@ -352,6 +476,8 @@ def diff_source(
         suspect=suspect,
         suspect_reason=suspect_reason,
         frozen=False,
+        suspect_kind=suspect_kind,
+        confirmed_closed_segments=confirmed_closed,
     )
 
 
@@ -455,7 +581,10 @@ def run_diff(s3, bucket: str, provider: str, board: str, *, run_id: str, dt: str
         "events": len(result.events),
         "frozen": result.frozen,
         "suspect": result.suspect,
+        "suspect_kind": result.suspect_kind,
         "suspect_reason": result.suspect_reason,
+        "confirmed_closed_segments": result.confirmed_closed_segments,
+        "suspect_streak": result.state.suspect_streak,
         "provider": provider,
         "board": board,
     }

@@ -1,0 +1,50 @@
+REPRODUCTION OF R1-R4 BEFORE REPAIR -- JPRS-L2-P02
+date: 2026-09-24   no network, no AWS, no secrets
+
+==============================================================================
+R1a  default provider path never includes or names Adzuna
+   discovery_providers()        : ['adzuna', 'himalayas', 'jobicy', 'remoteok', 'remotive']
+   keyless_discovery_providers(): ['himalayas', 'jobicy', 'remoteok', 'remotive']
+   handler default is `providers or keyless_discovery_providers()` -> adzuna unreachable
+   with credentials in env, attempted: ['himalayas', 'jobicy', 'remoteok', 'remotive']
+   credential_gated              : []
+   -> DEFECT: adzuna neither attempted nor named, despite credentials being present
+
+R1b  Adzuna endpoint reads os.environ, ignoring the injected env
+   built URL: https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=&app_key=&results_per_page=50&what=internal+tools+engineer&content-type=application%2Fjson&max_days_old=30&sort_by=date
+   app_id in URL empty?  True
+   -> DEFECT: SSM-resolved credentials in `env` can never reach the request
+
+R1c  no `where` is ever sent; the promised location coverage is not wired
+   adzuna requests made: 20
+   any request carrying `where=`: False
+   sample: https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=&app_key=&results_per_page=50&what=AI+integration+engineer&content-type=application%2Fjson&max_d
+   -> DEFECT: every query is nationwide-unscoped; NH / US-remote coverage absent
+
+==============================================================================
+R2  a paginated feed is treated as a complete bulk feed
+   HimalayasConnector is a BulkFeedConnector: True
+   feed_url: https://himalayas.app/jobs/api?limit=100  <- provider caps limit at 20 (docs, 2026-09-24)
+   response announced nextCursor='CURSOR_PAGE_2' totalCount=500
+   requests made       : 1
+   jobs captured       : 20
+   backlog items       : 0
+   families saturated  : []
+   coverage reads      : PLAN-COVERED
+   -> DEFECT: continuation metadata ignored, no backlog, coverage claims completeness
+
+==============================================================================
+R3  screening excludes look-alikes rather than actual exclusions
+   negated clearance      -> EXCLUDED       ['clearance-government']
+   negated video          -> EXCLUDED       ['recorded-video']
+   tools for sales team   -> EXCLUDED       ['sales-ownership']
+   members or prospects   -> EXCLUDED       ['sales-ownership']
+   -> DEFECT: all four are EXCLUDED; none states a forbidden duty of the candidate
+
+==============================================================================
+R4  rollback command and cost claim were not validated
+   supplied: aws scheduler update-schedule --name jprs-discovery-daily --state DISABLED
+   (validated separately with --generate-cli-skeleton; see rollback_validation.txt)
+   full rollback proposed `git checkout e549a73 -- src/ infra/ config/`
+   -> DEFECT: that would DESTROY the uncommitted P01+P02 implementation in the working tree
+   cost claim `$0 additional in practice` asserted free-tier eligibility without evidence

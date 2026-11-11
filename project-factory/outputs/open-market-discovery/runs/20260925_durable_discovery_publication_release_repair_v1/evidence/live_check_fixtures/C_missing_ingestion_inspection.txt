@@ -1,0 +1,19 @@
+=== discovery integration inspection ===
+report: /Users/drbretto/Desktop/Projects/job-posting-reality-score/project-factory/outputs/open-market-discovery/runs/20260925_durable_discovery_publication_release_repair_v1/evidence/live_check_fixtures/C_missing_ingestion_daily_report.json  run 2026-09-25  dt 2026-09-25
+registry monitors 24 board/slug identit(ies)
+
+--- every stored discovery identity, reconciled to a disposition ---
+  NOT CONSUMED         himalayas:all#internal-tools
+                         employer Granite State Mutual Insurance — no disposition anywhere in the report
+
+--- reconciliation totals ---
+  NOT CONSUMED: 1
+  stored discovery identities: 1
+  discovery-origin rows in the report: 0
+  report below-fit-threshold count (both populations): 0
+
+--- verdict ---
+MISSING_INGESTION — 1 stored posting(s) reached no disposition and
+  nothing in the report evidences a consumed discovery posting. The consumer
+  connection is the thing to check, not the feeds.
+    unconsumed: himalayas:all#internal-tools

@@ -1,0 +1,47 @@
+=== P09 rollback drill — scratch only, no AWS call, working tree never replaced ===
+date: 2026-09-26T11:57:17Z
+
+src/ fingerprint BEFORE the drill:
+13c211976f2a417db8950751b7b5508656f8fe810e7f33582b25ed60fd4b23ef  -
+
+--- 1. verify the persisted baseline archive ---
+SAME    infra/template.yaml
+
+BASELINE_VERIFIED — all 36 recorded P06 source files are present and
+  identical in the archive, and it carries no unexpected executable source.
+exit=0
+
+--- 2. restore into scratch, then return by discarding it ---
+  identical in the archive, and it carries no unexpected executable source.
+
+RESTORED — verified baseline extracted to /private/tmp/claude-501/jprs-rollback-drill/restored
+  The repository working tree was not touched.
+exit=0
+restored modules: 36
+scratch discarded; the return needs no action because the checkout was never a participant
+
+--- 3. a restore aimed at the working tree is refused ---
+
+RESTORE_REFUSED — /Users/drbretto/Desktop/Projects/job-posting-reality-score/src is inside (or contains) the repository at /Users/drbretto/Desktop/Projects/job-posting-reality-score.
+  This script never replaces the working tree's source. Restore to a scratch
+  directory and build the rollback package from there.
+exit=1
+
+--- 4. a corrupt archive halts the sequence BEFORE any restore ---
+SAME    infra/template.yaml
+
+BASELINE_NOT_VERIFIED — the archive is not an exact P06 source baseline.
+  Restoring or deploying from it is refused. STOP before the restore step.
+exit=1
+
+--- 5. a missing archive is refused rather than treated as nothing to verify ---
+Validation runs against the archive's own bytes. Nothing is written before it passes.
+
+BASELINE_UNAVAILABLE — no archive at /tmp/claude-501/jprs-rollback-drill/absent.tar.gz
+  A rollback with no verified baseline is not a rollback. STOP.
+exit=1
+  (the modified-source and unrecorded-executable cases are in p09_release_gate_controls.json
+   and in tests/test_release_gates_reject.py)
+
+src/ fingerprint AFTER the drill:
+13c211976f2a417db8950751b7b5508656f8fe810e7f33582b25ed60fd4b23ef  -

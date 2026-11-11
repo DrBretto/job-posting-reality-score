@@ -1,0 +1,2806 @@
+{
+  "run_id": "new_burst_above_saved_continuation-run5",
+  "dt": "2026-09-24",
+  "report_generated_at": "2026-09-25T12:42:35.922823+00:00",
+  "timing": {
+    "run_started_at": "2026-09-24T12:00:00+00:00",
+    "previous_run_at": null,
+    "previous_run_id": null,
+    "basis": "manifest.opened_at",
+    "cold_start_run": true,
+    "previously_reported_count": 0,
+    "boundary": "cold-start"
+  },
+  "run_health": "VERIFIED-QUIET",
+  "health_axes": {
+    "collection": "VERIFIED-QUIET",
+    "collection_missing_sources": [],
+    "discovery_coverage": "NOT-RUN",
+    "discovery_coverage_detail": "no employer-independent discovery ran in this report; the results below describe the configured employers that were monitored, which is not a search of the open market",
+    "freshness": "NO-CHANGE-OBSERVED",
+    "interpretation": "CLEAN",
+    "interpretation_detail": "no source-level condition is suppressing removals"
+  },
+  "header": "every expected source produced a successful download; nothing material changed.",
+  "expected_sources": [
+    "himalayas:B2",
+    "himalayas:B3",
+    "himalayas:NEWER_TWO",
+    "himalayas:OLD",
+    "himalayas:OLD_1",
+    "himalayas:OLD_2",
+    "himalayas:OLD_3",
+    "himalayas:OLD_4",
+    "himalayas:all"
+  ],
+  "succeeded_sources": [
+    "himalayas:B2",
+    "himalayas:B3",
+    "himalayas:NEWER_TWO",
+    "himalayas:OLD",
+    "himalayas:OLD_1",
+    "himalayas:OLD_2",
+    "himalayas:OLD_3",
+    "himalayas:OLD_4",
+    "himalayas:all"
+  ],
+  "incomplete_sources": [],
+  "completeness_ratio": 1.0,
+  "current_job_count": 10,
+  "matching_job_count": 10,
+  "new_strong_count": 10,
+  "fresh_arrival_count": 5,
+  "older_strong_count": 5,
+  "fresh_window_hours": 24,
+  "needs_check_count": 0,
+  "previously_engaged_count": 0,
+  "policy_excluded_count": 0,
+  "below_fit_threshold_count": 0,
+  "complete_candidate_list": [
+    {
+      "source_id": "himalayas:B2",
+      "job_id": "himalayas:B2#burst-two",
+      "employer": "Employer burst-two",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/burst-two",
+      "apply_url": "https://himalayas.app/companies/x/jobs/burst-two",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-24T10:00:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:B2#burst-two",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published 2h ago (provider date)",
+      "is_fresh_arrival": true,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:B2",
+          "provider": "himalayas",
+          "job_id": "himalayas:B2#burst-two",
+          "posting_url": "https://himalayas.app/companies/x/jobs/burst-two",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "himalayas:B3",
+      "job_id": "himalayas:B3#burst-three",
+      "employer": "Employer burst-three",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/burst-three",
+      "apply_url": "https://himalayas.app/companies/x/jobs/burst-three",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-24T09:00:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:B3#burst-three",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published 3h ago (provider date)",
+      "is_fresh_arrival": true,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:B3",
+          "provider": "himalayas",
+          "job_id": "himalayas:B3#burst-three",
+          "posting_url": "https://himalayas.app/companies/x/jobs/burst-three",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "himalayas:NEWER_TWO",
+      "job_id": "himalayas:NEWER_TWO#newer-two",
+      "employer": "Employer newer-two",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/newer-two",
+      "apply_url": "https://himalayas.app/companies/x/jobs/newer-two",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-24T11:48:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:NEWER_TWO#newer-two",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published under an hour ago (provider date)",
+      "is_fresh_arrival": true,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:NEWER_TWO",
+          "provider": "himalayas",
+          "job_id": "himalayas:NEWER_TWO#newer-two",
+          "posting_url": "https://himalayas.app/companies/x/jobs/newer-two",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "himalayas:OLD",
+      "job_id": "himalayas:OLD#historical-0",
+      "employer": "Employer historical-0",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/historical-0",
+      "apply_url": "https://himalayas.app/companies/x/jobs/historical-0",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-12T00:00:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:OLD#historical-0",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published 12d ago (provider date)",
+      "is_fresh_arrival": false,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:OLD",
+          "provider": "himalayas",
+          "job_id": "himalayas:OLD#historical-0",
+          "posting_url": "https://himalayas.app/companies/x/jobs/historical-0",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "himalayas:OLD_1",
+      "job_id": "himalayas:OLD_1#historical-1",
+      "employer": "Employer historical-1",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/historical-1",
+      "apply_url": "https://himalayas.app/companies/x/jobs/historical-1",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-11T23:00:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:OLD_1#historical-1",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published 12d ago (provider date)",
+      "is_fresh_arrival": false,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:OLD_1",
+          "provider": "himalayas",
+          "job_id": "himalayas:OLD_1#historical-1",
+          "posting_url": "https://himalayas.app/companies/x/jobs/historical-1",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "himalayas:OLD_2",
+      "job_id": "himalayas:OLD_2#historical-2",
+      "employer": "Employer historical-2",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/historical-2",
+      "apply_url": "https://himalayas.app/companies/x/jobs/historical-2",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-11T22:00:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:OLD_2#historical-2",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published 12d ago (provider date)",
+      "is_fresh_arrival": false,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:OLD_2",
+          "provider": "himalayas",
+          "job_id": "himalayas:OLD_2#historical-2",
+          "posting_url": "https://himalayas.app/companies/x/jobs/historical-2",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "himalayas:OLD_3",
+      "job_id": "himalayas:OLD_3#historical-3",
+      "employer": "Employer historical-3",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/historical-3",
+      "apply_url": "https://himalayas.app/companies/x/jobs/historical-3",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-11T21:00:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:OLD_3#historical-3",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published 12d ago (provider date)",
+      "is_fresh_arrival": false,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:OLD_3",
+          "provider": "himalayas",
+          "job_id": "himalayas:OLD_3#historical-3",
+          "posting_url": "https://himalayas.app/companies/x/jobs/historical-3",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "himalayas:OLD_4",
+      "job_id": "himalayas:OLD_4#historical-4",
+      "employer": "Employer historical-4",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/historical-4",
+      "apply_url": "https://himalayas.app/companies/x/jobs/historical-4",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-11T20:00:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:OLD_4#historical-4",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published 12d ago (provider date)",
+      "is_fresh_arrival": false,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:OLD_4",
+          "provider": "himalayas",
+          "job_id": "himalayas:OLD_4#historical-4",
+          "posting_url": "https://himalayas.app/companies/x/jobs/historical-4",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "himalayas:all",
+      "job_id": "himalayas:all#burst-one",
+      "employer": "Employer burst-one",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/burst-one",
+      "apply_url": "https://himalayas.app/companies/x/jobs/burst-one",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-24T11:00:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:all#burst-one",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published 1h ago (provider date)",
+      "is_fresh_arrival": true,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:all",
+          "provider": "himalayas",
+          "job_id": "himalayas:all#burst-one",
+          "posting_url": "https://himalayas.app/companies/x/jobs/burst-one",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "himalayas:all",
+      "job_id": "himalayas:all#newer-one",
+      "employer": "Employer newer-one",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/newer-one",
+      "apply_url": "https://himalayas.app/companies/x/jobs/newer-one",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-24T11:54:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:all#newer-one",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published under an hour ago (provider date)",
+      "is_fresh_arrival": true,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:all",
+          "provider": "himalayas",
+          "job_id": "himalayas:all#newer-one",
+          "posting_url": "https://himalayas.app/companies/x/jobs/newer-one",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    }
+  ],
+  "top_matches": [
+    {
+      "source_id": "himalayas:B2",
+      "job_id": "himalayas:B2#burst-two",
+      "employer": "Employer burst-two",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/burst-two",
+      "apply_url": "https://himalayas.app/companies/x/jobs/burst-two",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-24T10:00:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:B2#burst-two",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published 2h ago (provider date)",
+      "is_fresh_arrival": true,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:B2",
+          "provider": "himalayas",
+          "job_id": "himalayas:B2#burst-two",
+          "posting_url": "https://himalayas.app/companies/x/jobs/burst-two",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "himalayas:B3",
+      "job_id": "himalayas:B3#burst-three",
+      "employer": "Employer burst-three",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/burst-three",
+      "apply_url": "https://himalayas.app/companies/x/jobs/burst-three",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-24T09:00:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:B3#burst-three",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published 3h ago (provider date)",
+      "is_fresh_arrival": true,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:B3",
+          "provider": "himalayas",
+          "job_id": "himalayas:B3#burst-three",
+          "posting_url": "https://himalayas.app/companies/x/jobs/burst-three",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "himalayas:NEWER_TWO",
+      "job_id": "himalayas:NEWER_TWO#newer-two",
+      "employer": "Employer newer-two",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/newer-two",
+      "apply_url": "https://himalayas.app/companies/x/jobs/newer-two",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-24T11:48:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:NEWER_TWO#newer-two",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published under an hour ago (provider date)",
+      "is_fresh_arrival": true,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:NEWER_TWO",
+          "provider": "himalayas",
+          "job_id": "himalayas:NEWER_TWO#newer-two",
+          "posting_url": "https://himalayas.app/companies/x/jobs/newer-two",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "himalayas:OLD",
+      "job_id": "himalayas:OLD#historical-0",
+      "employer": "Employer historical-0",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/historical-0",
+      "apply_url": "https://himalayas.app/companies/x/jobs/historical-0",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-12T00:00:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:OLD#historical-0",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published 12d ago (provider date)",
+      "is_fresh_arrival": false,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:OLD",
+          "provider": "himalayas",
+          "job_id": "himalayas:OLD#historical-0",
+          "posting_url": "https://himalayas.app/companies/x/jobs/historical-0",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "himalayas:OLD_1",
+      "job_id": "himalayas:OLD_1#historical-1",
+      "employer": "Employer historical-1",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/historical-1",
+      "apply_url": "https://himalayas.app/companies/x/jobs/historical-1",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-11T23:00:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:OLD_1#historical-1",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published 12d ago (provider date)",
+      "is_fresh_arrival": false,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:OLD_1",
+          "provider": "himalayas",
+          "job_id": "himalayas:OLD_1#historical-1",
+          "posting_url": "https://himalayas.app/companies/x/jobs/historical-1",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "himalayas:OLD_2",
+      "job_id": "himalayas:OLD_2#historical-2",
+      "employer": "Employer historical-2",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/historical-2",
+      "apply_url": "https://himalayas.app/companies/x/jobs/historical-2",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-11T22:00:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:OLD_2#historical-2",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published 12d ago (provider date)",
+      "is_fresh_arrival": false,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:OLD_2",
+          "provider": "himalayas",
+          "job_id": "himalayas:OLD_2#historical-2",
+          "posting_url": "https://himalayas.app/companies/x/jobs/historical-2",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "himalayas:OLD_3",
+      "job_id": "himalayas:OLD_3#historical-3",
+      "employer": "Employer historical-3",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/historical-3",
+      "apply_url": "https://himalayas.app/companies/x/jobs/historical-3",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-11T21:00:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:OLD_3#historical-3",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published 12d ago (provider date)",
+      "is_fresh_arrival": false,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:OLD_3",
+          "provider": "himalayas",
+          "job_id": "himalayas:OLD_3#historical-3",
+          "posting_url": "https://himalayas.app/companies/x/jobs/historical-3",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "himalayas:OLD_4",
+      "job_id": "himalayas:OLD_4#historical-4",
+      "employer": "Employer historical-4",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/historical-4",
+      "apply_url": "https://himalayas.app/companies/x/jobs/historical-4",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-11T20:00:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:OLD_4#historical-4",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published 12d ago (provider date)",
+      "is_fresh_arrival": false,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:OLD_4",
+          "provider": "himalayas",
+          "job_id": "himalayas:OLD_4#historical-4",
+          "posting_url": "https://himalayas.app/companies/x/jobs/historical-4",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "himalayas:all",
+      "job_id": "himalayas:all#burst-one",
+      "employer": "Employer burst-one",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/burst-one",
+      "apply_url": "https://himalayas.app/companies/x/jobs/burst-one",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-24T11:00:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:all#burst-one",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published 1h ago (provider date)",
+      "is_fresh_arrival": true,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:all",
+          "provider": "himalayas",
+          "job_id": "himalayas:all#burst-one",
+          "posting_url": "https://himalayas.app/companies/x/jobs/burst-one",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    },
+    {
+      "source_id": "himalayas:all",
+      "job_id": "himalayas:all#newer-one",
+      "employer": "Employer newer-one",
+      "source_kind": "DISCOVERY_FEED",
+      "discovery_query": null,
+      "discovery_query_family": "internal-tools,ai-implementation,backend-cloud,ordinary-software",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "remote_mode": "REMOTE",
+      "employment_type": "FULL_TIME",
+      "compensation": "compensation not published",
+      "posting_url": "https://himalayas.app/companies/x/jobs/newer-one",
+      "apply_url": "https://himalayas.app/companies/x/jobs/newer-one",
+      "verification_state": "FEED_COMPLETE",
+      "uncertainty": [
+        "employer_posting_not_directly_confirmed"
+      ],
+      "provider_published_at": "2026-09-24T11:54:00+00:00",
+      "provider_updated_at": null,
+      "first_seen_at": "2026-09-24T12:00:00+00:00",
+      "verified_at": null,
+      "fit_score": 0.57,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.525556,
+      "priority_band": "MEDIUM",
+      "priority_confidence": 0.85,
+      "recall_path": "title-signal",
+      "why_fit": "matches on software-engineering, apis-backend, aws-serverless, llms, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "software-engineering, apis-backend, aws-serverless, llms, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "himalayas:all#newer-one",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "published under an hour ago (provider date)",
+      "is_fresh_arrival": true,
+      "first_observation_run_for_source": false,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "himalayas:all",
+          "provider": "himalayas",
+          "job_id": "himalayas:all#newer-one",
+          "posting_url": "https://himalayas.app/companies/x/jobs/newer-one",
+          "observed_at": "2026-09-24T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    }
+  ],
+  "policy_exclusions": [],
+  "coverage": {
+    "discovery_attempted": [],
+    "discovery_succeeded": [],
+    "query_families_total": 0,
+    "query_families_covered": 0,
+    "query_families_saturated": [],
+    "query_families_deferred": [],
+    "query_families_never_run": [],
+    "backlog_items": 0,
+    "backlog_reason": null,
+    "budgets": {},
+    "credential_gated": [],
+    "inaccessible": [],
+    "previously_unseen_employers": [
+      "Employer burst-one",
+      "Employer burst-three",
+      "Employer burst-two",
+      "Employer historical-0",
+      "Employer historical-1",
+      "Employer historical-2",
+      "Employer historical-3",
+      "Employer historical-4",
+      "Employer newer-one",
+      "Employer newer-two"
+    ],
+    "admission_summary": {},
+    "attributions": [],
+    "policy_projection_note": "projection 1.0.0 built 2026-09-24 \u2014 projection matches all policy sources"
+  },
+  "dedup": {
+    "dedup_groups": 10,
+    "hard_merges": 5,
+    "soft_possible_duplicate_links": 0,
+    "links_blocked_as_distinct_requisitions": 0,
+    "blocked_examples": [],
+    "records_kept": 10,
+    "records_absorbed_into_a_survivor": 5
+  },
+  "events": [],
+  "scorecards": [
+    {
+      "source_id": "himalayas:B2",
+      "job_id": "himalayas:B2#burst-two",
+      "brett_fit": {
+        "score": 0.57,
+        "band": "MEDIUM",
+        "confidence": 1.0,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B2#burst-two#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B2#burst-two#description_text",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.2.0",
+        "detail": {
+          "title_signals": "software-engineering",
+          "skill_signals": "apis-backend,aws-serverless,llms,python",
+          "geography": "remote-compatible",
+          "blocked_role": 0,
+          "blocked_geography": 0,
+          "recall_path": "title-signal",
+          "normalized_title": "senior software engineer",
+          "title_signal_score": 0.22,
+          "skill_signal_score": 0.3,
+          "role_context_skill_score": 0.3,
+          "company_blurb_skill_score": 0.0,
+          "work_based_credit": 0.0,
+          "seniority_adjustment": 0.0,
+          "specialist_bar_adjustment": 0.0,
+          "states_specialist_bar": 0,
+          "is_stretch_level": 0,
+          "ruleset_version": "1.2.0"
+        }
+      },
+      "freshness": {
+        "score": 1.0,
+        "band": "HIGH",
+        "confidence": 0.9,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B2#burst-two#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "days_since_last_material_change": 0,
+          "days_since_first_seen": 0
+        }
+      },
+      "hiring_activity_evidence": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B2#burst-two#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "material_change_events": 0,
+          "has_provider_updated_at": 0
+        }
+      },
+      "repost_churn_pattern": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B2#burst-two#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "repost_links": 0,
+          "disappear_return_events": 0
+        }
+      },
+      "source_data_confidence": {
+        "score": 0.9,
+        "band": "HIGH",
+        "confidence": 0.95,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B2#burst-two#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "id_kind": "URL_SLUG",
+          "degraded_snapshots": 0,
+          "successful_observations": 2
+        }
+      },
+      "application_priority": {
+        "score": 0.525556,
+        "band": "MEDIUM",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B2#burst-two#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B2#burst-two#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B2#burst-two#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B2#burst-two#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B2#burst-two#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "weakest_link_confidence": 0.85
+        }
+      },
+      "scoring_profile_version": "1.2.0",
+      "scored_as_of": "2026-09-24T12:00:00Z",
+      "excluded": false,
+      "exclusion_reason": null
+    },
+    {
+      "source_id": "himalayas:B3",
+      "job_id": "himalayas:B3#burst-three",
+      "brett_fit": {
+        "score": 0.57,
+        "band": "MEDIUM",
+        "confidence": 1.0,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B3#burst-three#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B3#burst-three#description_text",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.2.0",
+        "detail": {
+          "title_signals": "software-engineering",
+          "skill_signals": "apis-backend,aws-serverless,llms,python",
+          "geography": "remote-compatible",
+          "blocked_role": 0,
+          "blocked_geography": 0,
+          "recall_path": "title-signal",
+          "normalized_title": "senior software engineer",
+          "title_signal_score": 0.22,
+          "skill_signal_score": 0.3,
+          "role_context_skill_score": 0.3,
+          "company_blurb_skill_score": 0.0,
+          "work_based_credit": 0.0,
+          "seniority_adjustment": 0.0,
+          "specialist_bar_adjustment": 0.0,
+          "states_specialist_bar": 0,
+          "is_stretch_level": 0,
+          "ruleset_version": "1.2.0"
+        }
+      },
+      "freshness": {
+        "score": 1.0,
+        "band": "HIGH",
+        "confidence": 0.9,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B3#burst-three#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "days_since_last_material_change": 0,
+          "days_since_first_seen": 0
+        }
+      },
+      "hiring_activity_evidence": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B3#burst-three#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "material_change_events": 0,
+          "has_provider_updated_at": 0
+        }
+      },
+      "repost_churn_pattern": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B3#burst-three#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "repost_links": 0,
+          "disappear_return_events": 0
+        }
+      },
+      "source_data_confidence": {
+        "score": 0.9,
+        "band": "HIGH",
+        "confidence": 0.95,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B3#burst-three#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "id_kind": "URL_SLUG",
+          "degraded_snapshots": 0,
+          "successful_observations": 2
+        }
+      },
+      "application_priority": {
+        "score": 0.525556,
+        "band": "MEDIUM",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B3#burst-three#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B3#burst-three#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B3#burst-three#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B3#burst-three#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:B3#burst-three#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "weakest_link_confidence": 0.85
+        }
+      },
+      "scoring_profile_version": "1.2.0",
+      "scored_as_of": "2026-09-24T12:00:00Z",
+      "excluded": false,
+      "exclusion_reason": null
+    },
+    {
+      "source_id": "himalayas:NEWER_TWO",
+      "job_id": "himalayas:NEWER_TWO#newer-two",
+      "brett_fit": {
+        "score": 0.57,
+        "band": "MEDIUM",
+        "confidence": 1.0,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:NEWER_TWO#newer-two#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:NEWER_TWO#newer-two#description_text",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.2.0",
+        "detail": {
+          "title_signals": "software-engineering",
+          "skill_signals": "apis-backend,aws-serverless,llms,python",
+          "geography": "remote-compatible",
+          "blocked_role": 0,
+          "blocked_geography": 0,
+          "recall_path": "title-signal",
+          "normalized_title": "senior software engineer",
+          "title_signal_score": 0.22,
+          "skill_signal_score": 0.3,
+          "role_context_skill_score": 0.3,
+          "company_blurb_skill_score": 0.0,
+          "work_based_credit": 0.0,
+          "seniority_adjustment": 0.0,
+          "specialist_bar_adjustment": 0.0,
+          "states_specialist_bar": 0,
+          "is_stretch_level": 0,
+          "ruleset_version": "1.2.0"
+        }
+      },
+      "freshness": {
+        "score": 1.0,
+        "band": "HIGH",
+        "confidence": 0.9,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:NEWER_TWO#newer-two#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "days_since_last_material_change": 0,
+          "days_since_first_seen": 0
+        }
+      },
+      "hiring_activity_evidence": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:NEWER_TWO#newer-two#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "material_change_events": 0,
+          "has_provider_updated_at": 0
+        }
+      },
+      "repost_churn_pattern": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:NEWER_TWO#newer-two#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "repost_links": 0,
+          "disappear_return_events": 0
+        }
+      },
+      "source_data_confidence": {
+        "score": 0.9,
+        "band": "HIGH",
+        "confidence": 0.95,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:NEWER_TWO#newer-two#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "id_kind": "URL_SLUG",
+          "degraded_snapshots": 0,
+          "successful_observations": 2
+        }
+      },
+      "application_priority": {
+        "score": 0.525556,
+        "band": "MEDIUM",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:NEWER_TWO#newer-two#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:NEWER_TWO#newer-two#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:NEWER_TWO#newer-two#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:NEWER_TWO#newer-two#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:NEWER_TWO#newer-two#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "weakest_link_confidence": 0.85
+        }
+      },
+      "scoring_profile_version": "1.2.0",
+      "scored_as_of": "2026-09-24T12:00:00Z",
+      "excluded": false,
+      "exclusion_reason": null
+    },
+    {
+      "source_id": "himalayas:OLD",
+      "job_id": "himalayas:OLD#historical-0",
+      "brett_fit": {
+        "score": 0.57,
+        "band": "MEDIUM",
+        "confidence": 1.0,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD#historical-0#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD#historical-0#description_text",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.2.0",
+        "detail": {
+          "title_signals": "software-engineering",
+          "skill_signals": "apis-backend,aws-serverless,llms,python",
+          "geography": "remote-compatible",
+          "blocked_role": 0,
+          "blocked_geography": 0,
+          "recall_path": "title-signal",
+          "normalized_title": "senior software engineer",
+          "title_signal_score": 0.22,
+          "skill_signal_score": 0.3,
+          "role_context_skill_score": 0.3,
+          "company_blurb_skill_score": 0.0,
+          "work_based_credit": 0.0,
+          "seniority_adjustment": 0.0,
+          "specialist_bar_adjustment": 0.0,
+          "states_specialist_bar": 0,
+          "is_stretch_level": 0,
+          "ruleset_version": "1.2.0"
+        }
+      },
+      "freshness": {
+        "score": 1.0,
+        "band": "HIGH",
+        "confidence": 0.9,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD#historical-0#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "days_since_last_material_change": 0,
+          "days_since_first_seen": 0
+        }
+      },
+      "hiring_activity_evidence": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD#historical-0#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "material_change_events": 0,
+          "has_provider_updated_at": 0
+        }
+      },
+      "repost_churn_pattern": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD#historical-0#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "repost_links": 0,
+          "disappear_return_events": 0
+        }
+      },
+      "source_data_confidence": {
+        "score": 0.9,
+        "band": "HIGH",
+        "confidence": 0.95,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD#historical-0#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "id_kind": "URL_SLUG",
+          "degraded_snapshots": 0,
+          "successful_observations": 2
+        }
+      },
+      "application_priority": {
+        "score": 0.525556,
+        "band": "MEDIUM",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD#historical-0#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD#historical-0#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD#historical-0#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD#historical-0#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD#historical-0#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "weakest_link_confidence": 0.85
+        }
+      },
+      "scoring_profile_version": "1.2.0",
+      "scored_as_of": "2026-09-24T12:00:00Z",
+      "excluded": false,
+      "exclusion_reason": null
+    },
+    {
+      "source_id": "himalayas:OLD_1",
+      "job_id": "himalayas:OLD_1#historical-1",
+      "brett_fit": {
+        "score": 0.57,
+        "band": "MEDIUM",
+        "confidence": 1.0,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_1#historical-1#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_1#historical-1#description_text",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.2.0",
+        "detail": {
+          "title_signals": "software-engineering",
+          "skill_signals": "apis-backend,aws-serverless,llms,python",
+          "geography": "remote-compatible",
+          "blocked_role": 0,
+          "blocked_geography": 0,
+          "recall_path": "title-signal",
+          "normalized_title": "senior software engineer",
+          "title_signal_score": 0.22,
+          "skill_signal_score": 0.3,
+          "role_context_skill_score": 0.3,
+          "company_blurb_skill_score": 0.0,
+          "work_based_credit": 0.0,
+          "seniority_adjustment": 0.0,
+          "specialist_bar_adjustment": 0.0,
+          "states_specialist_bar": 0,
+          "is_stretch_level": 0,
+          "ruleset_version": "1.2.0"
+        }
+      },
+      "freshness": {
+        "score": 1.0,
+        "band": "HIGH",
+        "confidence": 0.9,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_1#historical-1#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "days_since_last_material_change": 0,
+          "days_since_first_seen": 0
+        }
+      },
+      "hiring_activity_evidence": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_1#historical-1#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "material_change_events": 0,
+          "has_provider_updated_at": 0
+        }
+      },
+      "repost_churn_pattern": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_1#historical-1#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "repost_links": 0,
+          "disappear_return_events": 0
+        }
+      },
+      "source_data_confidence": {
+        "score": 0.9,
+        "band": "HIGH",
+        "confidence": 0.95,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_1#historical-1#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "id_kind": "URL_SLUG",
+          "degraded_snapshots": 0,
+          "successful_observations": 2
+        }
+      },
+      "application_priority": {
+        "score": 0.525556,
+        "band": "MEDIUM",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_1#historical-1#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_1#historical-1#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_1#historical-1#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_1#historical-1#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_1#historical-1#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "weakest_link_confidence": 0.85
+        }
+      },
+      "scoring_profile_version": "1.2.0",
+      "scored_as_of": "2026-09-24T12:00:00Z",
+      "excluded": false,
+      "exclusion_reason": null
+    },
+    {
+      "source_id": "himalayas:OLD_2",
+      "job_id": "himalayas:OLD_2#historical-2",
+      "brett_fit": {
+        "score": 0.57,
+        "band": "MEDIUM",
+        "confidence": 1.0,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_2#historical-2#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_2#historical-2#description_text",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.2.0",
+        "detail": {
+          "title_signals": "software-engineering",
+          "skill_signals": "apis-backend,aws-serverless,llms,python",
+          "geography": "remote-compatible",
+          "blocked_role": 0,
+          "blocked_geography": 0,
+          "recall_path": "title-signal",
+          "normalized_title": "senior software engineer",
+          "title_signal_score": 0.22,
+          "skill_signal_score": 0.3,
+          "role_context_skill_score": 0.3,
+          "company_blurb_skill_score": 0.0,
+          "work_based_credit": 0.0,
+          "seniority_adjustment": 0.0,
+          "specialist_bar_adjustment": 0.0,
+          "states_specialist_bar": 0,
+          "is_stretch_level": 0,
+          "ruleset_version": "1.2.0"
+        }
+      },
+      "freshness": {
+        "score": 1.0,
+        "band": "HIGH",
+        "confidence": 0.9,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_2#historical-2#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "days_since_last_material_change": 0,
+          "days_since_first_seen": 0
+        }
+      },
+      "hiring_activity_evidence": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_2#historical-2#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "material_change_events": 0,
+          "has_provider_updated_at": 0
+        }
+      },
+      "repost_churn_pattern": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_2#historical-2#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "repost_links": 0,
+          "disappear_return_events": 0
+        }
+      },
+      "source_data_confidence": {
+        "score": 0.9,
+        "band": "HIGH",
+        "confidence": 0.95,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_2#historical-2#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "id_kind": "URL_SLUG",
+          "degraded_snapshots": 0,
+          "successful_observations": 2
+        }
+      },
+      "application_priority": {
+        "score": 0.525556,
+        "band": "MEDIUM",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_2#historical-2#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_2#historical-2#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_2#historical-2#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_2#historical-2#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_2#historical-2#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "weakest_link_confidence": 0.85
+        }
+      },
+      "scoring_profile_version": "1.2.0",
+      "scored_as_of": "2026-09-24T12:00:00Z",
+      "excluded": false,
+      "exclusion_reason": null
+    },
+    {
+      "source_id": "himalayas:OLD_3",
+      "job_id": "himalayas:OLD_3#historical-3",
+      "brett_fit": {
+        "score": 0.57,
+        "band": "MEDIUM",
+        "confidence": 1.0,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_3#historical-3#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_3#historical-3#description_text",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.2.0",
+        "detail": {
+          "title_signals": "software-engineering",
+          "skill_signals": "apis-backend,aws-serverless,llms,python",
+          "geography": "remote-compatible",
+          "blocked_role": 0,
+          "blocked_geography": 0,
+          "recall_path": "title-signal",
+          "normalized_title": "senior software engineer",
+          "title_signal_score": 0.22,
+          "skill_signal_score": 0.3,
+          "role_context_skill_score": 0.3,
+          "company_blurb_skill_score": 0.0,
+          "work_based_credit": 0.0,
+          "seniority_adjustment": 0.0,
+          "specialist_bar_adjustment": 0.0,
+          "states_specialist_bar": 0,
+          "is_stretch_level": 0,
+          "ruleset_version": "1.2.0"
+        }
+      },
+      "freshness": {
+        "score": 1.0,
+        "band": "HIGH",
+        "confidence": 0.9,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_3#historical-3#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "days_since_last_material_change": 0,
+          "days_since_first_seen": 0
+        }
+      },
+      "hiring_activity_evidence": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_3#historical-3#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "material_change_events": 0,
+          "has_provider_updated_at": 0
+        }
+      },
+      "repost_churn_pattern": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_3#historical-3#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "repost_links": 0,
+          "disappear_return_events": 0
+        }
+      },
+      "source_data_confidence": {
+        "score": 0.9,
+        "band": "HIGH",
+        "confidence": 0.95,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_3#historical-3#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "id_kind": "URL_SLUG",
+          "degraded_snapshots": 0,
+          "successful_observations": 2
+        }
+      },
+      "application_priority": {
+        "score": 0.525556,
+        "band": "MEDIUM",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_3#historical-3#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_3#historical-3#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_3#historical-3#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_3#historical-3#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_3#historical-3#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "weakest_link_confidence": 0.85
+        }
+      },
+      "scoring_profile_version": "1.2.0",
+      "scored_as_of": "2026-09-24T12:00:00Z",
+      "excluded": false,
+      "exclusion_reason": null
+    },
+    {
+      "source_id": "himalayas:OLD_4",
+      "job_id": "himalayas:OLD_4#historical-4",
+      "brett_fit": {
+        "score": 0.57,
+        "band": "MEDIUM",
+        "confidence": 1.0,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_4#historical-4#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_4#historical-4#description_text",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.2.0",
+        "detail": {
+          "title_signals": "software-engineering",
+          "skill_signals": "apis-backend,aws-serverless,llms,python",
+          "geography": "remote-compatible",
+          "blocked_role": 0,
+          "blocked_geography": 0,
+          "recall_path": "title-signal",
+          "normalized_title": "senior software engineer",
+          "title_signal_score": 0.22,
+          "skill_signal_score": 0.3,
+          "role_context_skill_score": 0.3,
+          "company_blurb_skill_score": 0.0,
+          "work_based_credit": 0.0,
+          "seniority_adjustment": 0.0,
+          "specialist_bar_adjustment": 0.0,
+          "states_specialist_bar": 0,
+          "is_stretch_level": 0,
+          "ruleset_version": "1.2.0"
+        }
+      },
+      "freshness": {
+        "score": 1.0,
+        "band": "HIGH",
+        "confidence": 0.9,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_4#historical-4#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "days_since_last_material_change": 0,
+          "days_since_first_seen": 0
+        }
+      },
+      "hiring_activity_evidence": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_4#historical-4#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "material_change_events": 0,
+          "has_provider_updated_at": 0
+        }
+      },
+      "repost_churn_pattern": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_4#historical-4#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "repost_links": 0,
+          "disappear_return_events": 0
+        }
+      },
+      "source_data_confidence": {
+        "score": 0.9,
+        "band": "HIGH",
+        "confidence": 0.95,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_4#historical-4#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "id_kind": "URL_SLUG",
+          "degraded_snapshots": 0,
+          "successful_observations": 2
+        }
+      },
+      "application_priority": {
+        "score": 0.525556,
+        "band": "MEDIUM",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_4#historical-4#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_4#historical-4#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_4#historical-4#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_4#historical-4#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:OLD_4#historical-4#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "weakest_link_confidence": 0.85
+        }
+      },
+      "scoring_profile_version": "1.2.0",
+      "scored_as_of": "2026-09-24T12:00:00Z",
+      "excluded": false,
+      "exclusion_reason": null
+    },
+    {
+      "source_id": "himalayas:all",
+      "job_id": "himalayas:all#burst-one",
+      "brett_fit": {
+        "score": 0.57,
+        "band": "MEDIUM",
+        "confidence": 1.0,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#burst-one#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#burst-one#description_text",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.2.0",
+        "detail": {
+          "title_signals": "software-engineering",
+          "skill_signals": "apis-backend,aws-serverless,llms,python",
+          "geography": "remote-compatible",
+          "blocked_role": 0,
+          "blocked_geography": 0,
+          "recall_path": "title-signal",
+          "normalized_title": "senior software engineer",
+          "title_signal_score": 0.22,
+          "skill_signal_score": 0.3,
+          "role_context_skill_score": 0.3,
+          "company_blurb_skill_score": 0.0,
+          "work_based_credit": 0.0,
+          "seniority_adjustment": 0.0,
+          "specialist_bar_adjustment": 0.0,
+          "states_specialist_bar": 0,
+          "is_stretch_level": 0,
+          "ruleset_version": "1.2.0"
+        }
+      },
+      "freshness": {
+        "score": 1.0,
+        "band": "HIGH",
+        "confidence": 0.9,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#burst-one#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "days_since_last_material_change": 0,
+          "days_since_first_seen": 0
+        }
+      },
+      "hiring_activity_evidence": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#burst-one#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "material_change_events": 0,
+          "has_provider_updated_at": 0
+        }
+      },
+      "repost_churn_pattern": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#burst-one#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "repost_links": 0,
+          "disappear_return_events": 0
+        }
+      },
+      "source_data_confidence": {
+        "score": 0.9,
+        "band": "HIGH",
+        "confidence": 0.95,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#burst-one#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "id_kind": "URL_SLUG",
+          "degraded_snapshots": 0,
+          "successful_observations": 2
+        }
+      },
+      "application_priority": {
+        "score": 0.525556,
+        "band": "MEDIUM",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#burst-one#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#burst-one#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#burst-one#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#burst-one#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#burst-one#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "weakest_link_confidence": 0.85
+        }
+      },
+      "scoring_profile_version": "1.2.0",
+      "scored_as_of": "2026-09-24T12:00:00Z",
+      "excluded": false,
+      "exclusion_reason": null
+    },
+    {
+      "source_id": "himalayas:all",
+      "job_id": "himalayas:all#newer-one",
+      "brett_fit": {
+        "score": 0.57,
+        "band": "MEDIUM",
+        "confidence": 1.0,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#newer-one#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#newer-one#description_text",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.2.0",
+        "detail": {
+          "title_signals": "software-engineering",
+          "skill_signals": "apis-backend,aws-serverless,llms,python",
+          "geography": "remote-compatible",
+          "blocked_role": 0,
+          "blocked_geography": 0,
+          "recall_path": "title-signal",
+          "normalized_title": "senior software engineer",
+          "title_signal_score": 0.22,
+          "skill_signal_score": 0.3,
+          "role_context_skill_score": 0.3,
+          "company_blurb_skill_score": 0.0,
+          "work_based_credit": 0.0,
+          "seniority_adjustment": 0.0,
+          "specialist_bar_adjustment": 0.0,
+          "states_specialist_bar": 0,
+          "is_stretch_level": 0,
+          "ruleset_version": "1.2.0"
+        }
+      },
+      "freshness": {
+        "score": 1.0,
+        "band": "HIGH",
+        "confidence": 0.9,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#newer-one#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "days_since_last_material_change": 0,
+          "days_since_first_seen": 0
+        }
+      },
+      "hiring_activity_evidence": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#newer-one#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "material_change_events": 0,
+          "has_provider_updated_at": 0
+        }
+      },
+      "repost_churn_pattern": {
+        "score": 0.0,
+        "band": "LOW",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#newer-one#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "repost_links": 0,
+          "disappear_return_events": 0
+        }
+      },
+      "source_data_confidence": {
+        "score": 0.9,
+        "band": "HIGH",
+        "confidence": 0.95,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#newer-one#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "id_kind": "URL_SLUG",
+          "degraded_snapshots": 0,
+          "successful_observations": 2
+        }
+      },
+      "application_priority": {
+        "score": 0.525556,
+        "band": "MEDIUM",
+        "confidence": 0.85,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#newer-one#title",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#newer-one#first_seen_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#newer-one#provider_updated_at",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#newer-one#no-churn",
+            "as_of": "2026-09-24T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "himalayas:all#newer-one#id_kind",
+            "as_of": "2026-09-24T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "weakest_link_confidence": 0.85
+        }
+      },
+      "scoring_profile_version": "1.2.0",
+      "scored_as_of": "2026-09-24T12:00:00Z",
+      "excluded": false,
+      "exclusion_reason": null
+    }
+  ],
+  "narration_enabled": false
+}

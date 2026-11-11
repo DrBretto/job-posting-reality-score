@@ -1,0 +1,442 @@
+{
+  "run_id": "2026-09-25",
+  "dt": "2026-09-25",
+  "report_generated_at": "2026-09-25T18:17:24.740231+00:00",
+  "timing": {
+    "run_started_at": "2026-09-25T18:17:24.556535+00:00",
+    "previous_run_at": null,
+    "previous_run_id": null,
+    "basis": "manifest.opened_at",
+    "cold_start_run": true,
+    "previously_reported_count": 0,
+    "previously_reported_source": null,
+    "previously_reported_truncated": false,
+    "boundary": "cold-start"
+  },
+  "run_health": "INCOMPLETE",
+  "health_axes": {
+    "collection": "INCOMPLETE",
+    "collection_missing_sources": [
+      "greenhouse:axiomaticai",
+      "greenhouse:cargomatic",
+      "greenhouse:future",
+      "greenhouse:grafanalabs",
+      "greenhouse:iconcareers",
+      "greenhouse:implicit",
+      "greenhouse:mozilla",
+      "greenhouse:nimblegravity",
+      "greenhouse:snorkelai",
+      "greenhouse:solutions",
+      "greenhouse:stackblitz",
+      "greenhouse:tailscale",
+      "greenhouse:warp",
+      "greenhouse:yurtsai"
+    ],
+    "discovery_coverage": "PARTIAL",
+    "discovery_coverage_detail": "1/1 discovery sources returned results; 5/14 query families covered; never run yet: automation-integration, data-extraction, sector-construction, sector-healthcare, sector-hospitality, sector-logistics, sector-manufacturing, sector-professional-services, sector-retail; 1 already-captured posting(s) are awaiting publication into himalayas and cannot appear below yet",
+    "freshness": "CHANGED",
+    "interpretation": "CLEAN",
+    "interpretation_detail": "no source-level condition is suppressing removals"
+  },
+  "header": "these sources lack a successful download: greenhouse:axiomaticai, greenhouse:cargomatic, greenhouse:future, greenhouse:grafanalabs, greenhouse:iconcareers, greenhouse:implicit, greenhouse:mozilla, greenhouse:nimblegravity, greenhouse:snorkelai, greenhouse:solutions, greenhouse:stackblitz, greenhouse:tailscale, greenhouse:warp, greenhouse:yurtsai",
+  "expected_sources": [
+    "greenhouse:axiomaticai",
+    "greenhouse:cargomatic",
+    "greenhouse:future",
+    "greenhouse:grafanalabs",
+    "greenhouse:iconcareers",
+    "greenhouse:implicit",
+    "greenhouse:machinifyinc",
+    "greenhouse:mozilla",
+    "greenhouse:nimblegravity",
+    "greenhouse:snorkelai",
+    "greenhouse:solutions",
+    "greenhouse:stackblitz",
+    "greenhouse:tailscale",
+    "greenhouse:warp",
+    "greenhouse:yurtsai"
+  ],
+  "succeeded_sources": [
+    "greenhouse:machinifyinc"
+  ],
+  "incomplete_sources": [
+    "greenhouse:axiomaticai",
+    "greenhouse:cargomatic",
+    "greenhouse:future",
+    "greenhouse:grafanalabs",
+    "greenhouse:iconcareers",
+    "greenhouse:implicit",
+    "greenhouse:mozilla",
+    "greenhouse:nimblegravity",
+    "greenhouse:snorkelai",
+    "greenhouse:solutions",
+    "greenhouse:stackblitz",
+    "greenhouse:tailscale",
+    "greenhouse:warp",
+    "greenhouse:yurtsai"
+  ],
+  "completeness_ratio": 0.0667,
+  "current_job_count": 1,
+  "matching_job_count": 1,
+  "new_strong_count": 1,
+  "fresh_arrival_count": 0,
+  "older_strong_count": 0,
+  "fresh_window_hours": 24,
+  "needs_check_count": 0,
+  "previously_engaged_count": 0,
+  "policy_excluded_count": 0,
+  "below_fit_threshold_count": 0,
+  "complete_candidate_list": [
+    {
+      "source_id": "greenhouse:machinifyinc",
+      "job_id": "greenhouse:machinifyinc#900001",
+      "employer": "machinify",
+      "source_kind": "ATS_BOARD",
+      "discovery_query": null,
+      "discovery_query_family": null,
+      "title": "Senior Backend Engineer",
+      "location": "Remote - US",
+      "remote_mode": "REMOTE",
+      "employment_type": "UNSPECIFIED",
+      "compensation": "compensation not published",
+      "posting_url": "https://boards.greenhouse.io/machinifyinc/jobs/900001",
+      "apply_url": "https://boards.greenhouse.io/machinifyinc/jobs/900001",
+      "verification_state": "EMPLOYER_CONFIRMED",
+      "uncertainty": [],
+      "provider_published_at": null,
+      "provider_updated_at": "2026-09-20T00:00:00+00:00",
+      "first_seen_at": "2026-09-25T12:00:00+00:00",
+      "verified_at": "2026-09-25T12:00:00+00:00",
+      "fit_score": 0.44,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.24,
+      "priority_band": "LOW",
+      "priority_confidence": 0.2,
+      "recall_path": "title-signal",
+      "why_fit": "matches on backend, apis-backend, aws-serverless, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "backend, apis-backend, aws-serverless, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "greenhouse:machinifyinc#900001",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "no publication date; employer last edited it 5d ago (an edit is not a new posting)",
+      "is_fresh_arrival": false,
+      "first_observation_run_for_source": true,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "greenhouse:machinifyinc",
+          "provider": "greenhouse",
+          "job_id": "greenhouse:machinifyinc#900001",
+          "posting_url": "https://boards.greenhouse.io/machinifyinc/jobs/900001",
+          "observed_at": "2026-09-25T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    }
+  ],
+  "top_matches": [
+    {
+      "source_id": "greenhouse:machinifyinc",
+      "job_id": "greenhouse:machinifyinc#900001",
+      "employer": "machinify",
+      "source_kind": "ATS_BOARD",
+      "discovery_query": null,
+      "discovery_query_family": null,
+      "title": "Senior Backend Engineer",
+      "location": "Remote - US",
+      "remote_mode": "REMOTE",
+      "employment_type": "UNSPECIFIED",
+      "compensation": "compensation not published",
+      "posting_url": "https://boards.greenhouse.io/machinifyinc/jobs/900001",
+      "apply_url": "https://boards.greenhouse.io/machinifyinc/jobs/900001",
+      "verification_state": "EMPLOYER_CONFIRMED",
+      "uncertainty": [],
+      "provider_published_at": null,
+      "provider_updated_at": "2026-09-20T00:00:00+00:00",
+      "first_seen_at": "2026-09-25T12:00:00+00:00",
+      "verified_at": "2026-09-25T12:00:00+00:00",
+      "fit_score": 0.44,
+      "fit_band": "MEDIUM",
+      "priority_score": 0.24,
+      "priority_band": "LOW",
+      "priority_confidence": 0.2,
+      "recall_path": "title-signal",
+      "why_fit": "matches on backend, apis-backend, aws-serverless, python; remote compatible",
+      "gaps_and_checks": "no published compensation",
+      "signals": "backend, apis-backend, aws-serverless, python",
+      "screen_outcome": "ELIGIBLE",
+      "screen_detail": {
+        "job_id": "greenhouse:machinifyinc#900001",
+        "outcome": "ELIGIBLE",
+        "ruleset_version": "1.4.0",
+        "exclusions": [],
+        "pending_checks": [],
+        "suppressed_misfires": [],
+        "notes": []
+      },
+      "age_label": "no publication date; employer last edited it 5d ago (an edit is not a new posting)",
+      "is_fresh_arrival": false,
+      "first_observation_run_for_source": true,
+      "source_lag_hours": null,
+      "source_lookback_days": null,
+      "history_status": "NEW",
+      "history_note": null,
+      "provenance": [
+        {
+          "source_id": "greenhouse:machinifyinc",
+          "provider": "greenhouse",
+          "job_id": "greenhouse:machinifyinc#900001",
+          "posting_url": "https://boards.greenhouse.io/machinifyinc/jobs/900001",
+          "observed_at": "2026-09-25T12:00:00Z",
+          "discovery_query": null
+        }
+      ],
+      "possible_duplicate_of": []
+    }
+  ],
+  "policy_exclusions": [],
+  "coverage": {
+    "discovery_attempted": [
+      "himalayas"
+    ],
+    "discovery_succeeded": [
+      "himalayas"
+    ],
+    "query_families_total": 14,
+    "query_families_covered": 5,
+    "query_families_saturated": [],
+    "query_families_deferred": [],
+    "query_families_never_run": [
+      "automation-integration",
+      "data-extraction",
+      "sector-construction",
+      "sector-healthcare",
+      "sector-hospitality",
+      "sector-logistics",
+      "sector-manufacturing",
+      "sector-professional-services",
+      "sector-retail"
+    ],
+    "backlog_items": 0,
+    "backlog_reason": null,
+    "budgets": {
+      "himalayas": {
+        "max_requests_per_run": 5,
+        "requests_spent": 1,
+        "exhausted": false,
+        "rate_limited": false,
+        "failures": 0
+      }
+    },
+    "credential_gated": [],
+    "inaccessible": [
+      {
+        "target": "himalayas pending publication from run 2026-09-25",
+        "reason": "1 posting(s) observed in run 2026-09-25 are durably captured but have not yet been folded into this feed's live view, so they cannot appear below yet. They are owed and will be published by the next discovery round without the feed having to return them again",
+        "job_ids": [
+          "himalayas:all#internal-tools"
+        ]
+      },
+      {
+        "target": "himalayas:all",
+        "reason": "this feed is configured and expected, but no stored postings exist for it yet, so nothing from it can appear below. Absence here is a gap in coverage, not an observation that the feed holds nothing"
+      },
+      {
+        "target": "jobicy:all",
+        "reason": "this feed is configured and expected, but no stored postings exist for it yet, so nothing from it can appear below. Absence here is a gap in coverage, not an observation that the feed holds nothing"
+      },
+      {
+        "target": "remoteok:all",
+        "reason": "this feed is configured and expected, but no stored postings exist for it yet, so nothing from it can appear below. Absence here is a gap in coverage, not an observation that the feed holds nothing"
+      },
+      {
+        "target": "remotive:all",
+        "reason": "this feed is configured and expected, but no stored postings exist for it yet, so nothing from it can appear below. Absence here is a gap in coverage, not an observation that the feed holds nothing"
+      }
+    ],
+    "previously_unseen_employers": [],
+    "admission_summary": {
+      "admitted_this_pass": 0,
+      "by_state": {
+        "QUEUED_UNSUPPORTED": [
+          "Granite State Mutual Insurance"
+        ]
+      },
+      "monitored_after": 15,
+      "policy": {
+        "min_observations": 1,
+        "require_supported_board": true,
+        "require_public_scope": true,
+        "max_monitored_sources": 60,
+        "max_admissions_per_run": 10
+      }
+    },
+    "attributions": [
+      "Jobs via Himalayas (himalayas.app) \u2014 linked back to the Himalayas posting URL."
+    ],
+    "policy_projection_note": "projection 1.0.0 built 2026-09-24 \u2014 projection matches all policy sources",
+    "pending_publication": {
+      "himalayas": [
+        {
+          "run_id": "2026-09-25",
+          "observed_at": "2026-09-25T18:17:24.665178+00:00",
+          "feed_produced_usable_page": true,
+          "job_ids": [
+            "himalayas:all#internal-tools"
+          ]
+        }
+      ]
+    },
+    "pending_publication_job_count": 1
+  },
+  "dedup": {
+    "dedup_groups": 1,
+    "hard_merges": 0,
+    "soft_possible_duplicate_links": 0,
+    "links_blocked_as_distinct_requisitions": 0,
+    "blocked_examples": [],
+    "records_kept": 1,
+    "records_absorbed_into_a_survivor": 0
+  },
+  "events": [
+    {
+      "event_id": "2026-09-25:greenhouse:machinifyinc#900001:first-seen",
+      "event_type": "first-seen",
+      "source_id": "greenhouse:machinifyinc",
+      "job_id": "greenhouse:machinifyinc#900001",
+      "run_id": "2026-09-25",
+      "as_of": "2026-09-25T12:00:00Z",
+      "snapshot_id": "8e2378f4ffdf4762a7f2296a11bb8af4",
+      "prior_snapshot_id": null,
+      "changed_fields": [],
+      "content_hash": "3c23ee928b677886bfa2a176ec7d24095405d0e2e8895953f1f40a3d22ab7510",
+      "linked_job_id": null,
+      "repost_score": null,
+      "notes": null,
+      "schema_version": "1.1.0"
+    }
+  ],
+  "scorecards": [
+    {
+      "source_id": "greenhouse:machinifyinc",
+      "job_id": "greenhouse:machinifyinc#900001",
+      "brett_fit": {
+        "score": 0.44,
+        "band": "MEDIUM",
+        "confidence": 1.0,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "greenhouse:machinifyinc#900001#title",
+            "as_of": "2026-09-25T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "greenhouse:machinifyinc#900001#description_text",
+            "as_of": "2026-09-25T12:00:00Z"
+          }
+        ],
+        "version": "1.2.0",
+        "detail": {
+          "title_signals": "backend",
+          "skill_signals": "apis-backend,aws-serverless,python",
+          "geography": "remote-compatible",
+          "blocked_role": 0,
+          "blocked_geography": 0,
+          "recall_path": "title-signal",
+          "normalized_title": "senior backend engineer",
+          "title_signal_score": 0.18,
+          "skill_signal_score": 0.21,
+          "role_context_skill_score": 0.21,
+          "company_blurb_skill_score": 0.0,
+          "work_based_credit": 0.0,
+          "seniority_adjustment": 0.0,
+          "specialist_bar_adjustment": 0.0,
+          "states_specialist_bar": 0,
+          "is_stretch_level": 0,
+          "ruleset_version": "1.2.0"
+        }
+      },
+      "freshness": {
+        "score": null,
+        "band": "UNKNOWN",
+        "confidence": 0.2,
+        "evidence_refs": [],
+        "version": "1.0.0",
+        "detail": {}
+      },
+      "hiring_activity_evidence": {
+        "score": null,
+        "band": "UNKNOWN",
+        "confidence": 0.2,
+        "evidence_refs": [],
+        "version": "1.0.0",
+        "detail": {}
+      },
+      "repost_churn_pattern": {
+        "score": null,
+        "band": "UNKNOWN",
+        "confidence": 0.2,
+        "evidence_refs": [],
+        "version": "1.0.0",
+        "detail": {}
+      },
+      "source_data_confidence": {
+        "score": 0.8,
+        "band": "HIGH",
+        "confidence": 0.95,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "greenhouse:machinifyinc#900001#id_kind",
+            "as_of": "2026-09-25T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "id_kind": "NATIVE_ID",
+          "degraded_snapshots": 0,
+          "successful_observations": 1
+        }
+      },
+      "application_priority": {
+        "score": 0.24,
+        "band": "LOW",
+        "confidence": 0.2,
+        "evidence_refs": [
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "greenhouse:machinifyinc#900001#title",
+            "as_of": "2026-09-25T12:00:00Z"
+          },
+          {
+            "kind": "CANONICAL_FIELD",
+            "ref_id": "greenhouse:machinifyinc#900001#id_kind",
+            "as_of": "2026-09-25T12:00:00Z"
+          }
+        ],
+        "version": "1.0.0",
+        "detail": {
+          "weakest_link_confidence": 0.2
+        }
+      },
+      "scoring_profile_version": "1.2.0",
+      "scored_as_of": "2026-09-25T18:17:24.556535Z",
+      "excluded": false,
+      "exclusion_reason": null
+    }
+  ],
+  "narration_enabled": false
+}

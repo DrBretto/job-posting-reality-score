@@ -1,0 +1,21 @@
+=== discovery integration inspection ===
+report: /Users/drbretto/Desktop/Projects/job-posting-reality-score/project-factory/outputs/open-market-discovery/runs/20260925_durable_discovery_publication_release_repair_v1/evidence/live_check_fixtures/D_pending_daily_report.json  run 2026-09-25  dt 2026-09-25
+registry monitors 24 board/slug identit(ies)
+
+--- every stored discovery identity, reconciled to a disposition ---
+  (discovery has no stored postings for the feeds supplied)
+
+--- reconciliation totals ---
+  stored discovery identities: 0
+  discovery-origin rows in the report: 0
+  report below-fit-threshold count (both populations): 0
+
+--- 1 posting(s) are captured but not yet published ---
+  owed: himalayas:all#internal-tools (himalayas run 2026-09-25)
+  These are NOT a failed integration and NOT a thin day. They are owed, and the next
+  discovery round publishes them without the feed having to return them again.
+
+--- verdict ---
+PENDING_PUBLICATION — the only discovery observations on record are owed, not yet
+  published, so there is nothing for the report to have consumed. This is neither a
+  thin day nor a broken consumer; re-run this check after the next discovery round.

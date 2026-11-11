@@ -1,0 +1,55 @@
+# P07 owned changes, separated from pre-existing working-tree dirt
+
+Baseline HEAD: e549a73c98038eb4acaed59f515ac1bd3f163547 (unchanged; nothing committed, staged or branched)
+Baseline dirt: 25 modified + 21 untracked, recorded in p07_baseline_working_tree.txt
+
+NOTE: src/discovery/ and several tests/ files are untracked WHOLESALE as part of the
+pre-existing uncommitted overhaul, so git status cannot separate a P07 edit inside them.
+This list is therefore explicit rather than derived from git.
+
+## Files P07 created
+- src/discovery/live.py                              (discovery live view: model + pure merge)
+- tests/test_discovery_to_report_integration.py       (acceptance harness, 23 cases)
+
+## Files P07 edited
+- src/common/connectors.py          job_source_id() hook; build_snapshot maps jobs with it
+- src/common/s3layout.py            discovery_live_key()
+- src/discovery/connectors.py       DiscoveryConnector.FEED_SLICE + job_source_id override
+- src/discovery/handler.py          persist_live_views(); persist() takes now; handler passes it
+- src/report/handler.py             discovery merge in assemble_report_input; coverage statements;
+                                    RunTiming boundary-provenance fields; top_matches fallback
+- tests/test_resumable_discovery_and_release_binding.py  two report tests re-scoped onto real
+                                    producers; 'real internal wiring' claim withdrawn
+- docs/plans/2026-09-24-open-market-job-discovery.md     implementation plan + execution log
+
+## Not touched
+- infra/template.yaml, infra/statemachine/*  (no IAM or routing change was required)
+- config/candidate_policy.json, config/application_history.json, config/companies.yaml
+- src/candidate/*, src/scoring/*, src/differ/*, src/collector/*, src/enumerate/*
+
+## Tracked-file diffstat vs HEAD (includes pre-existing overhaul, not only P07)
+ src/common/connectors.py |  258 ++++++--
+ src/common/s3layout.py   |   48 ++
+ src/report/handler.py    | 1480 +++++++++++++++++++++++++++++++++++++++++-----
+ 3 files changed, 1619 insertions(+), 167 deletions(-)
+
+## Proof that infra/ was NOT touched by this run
+
+`git status` shows `infra/template.yaml` and `infra/DEPLOY.md` as modified. That modification is
+PRE-EXISTING, from the P01-P06 overhaul, and is recorded identically in the baseline capture taken
+before P07 made any edit (`p07_baseline_working_tree.txt`):
+
+    M infra/DEPLOY.md
+    M infra/template.yaml
+
+Independently confirmed by mtime. P07 started at 2026-09-25 10:10 local:
+
+    infra/DEPLOY.md                              Sep 25 08:27   (before the run)
+    infra/template.yaml                          Sep 24 10:50   (previous day)
+    infra/statemachine/jprs-daily-assemble.asl.json  Aug  1 09:58   (previous month)
+
+    src/discovery/live.py                        Sep 25 10:12   (during the run, for contrast)
+    src/report/handler.py                        Sep 25 10:14   (during the run, for contrast)
+
+So the handoff's claim that this repair needs no infrastructure, IAM, schedule or state-machine
+change is a claim about files this run demonstrably did not write.

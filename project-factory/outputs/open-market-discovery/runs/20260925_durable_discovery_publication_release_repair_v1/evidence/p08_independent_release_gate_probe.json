@@ -1,0 +1,58 @@
+{
+  "scope": "Local negative controls for validation helpers only; synthetic altered fixtures, not production/runtime failure evidence",
+  "baseline_archive_check": {
+    "expected_files": 36,
+    "archived_files": 72,
+    "missing_or_different": [],
+    "unexpected_files": [
+      "src/.___init__.py",
+      "src/._cli.py",
+      "src/candidate/.___init__.py",
+      "src/candidate/._history.py",
+      "src/candidate/._location.py",
+      "src/candidate/._policy.py",
+      "src/candidate/._screening.py",
+      "src/collector/.___init__.py",
+      "src/collector/._handler.py",
+      "src/common/.___init__.py",
+      "src/common/._connectors.py",
+      "src/common/._dedup.py",
+      "src/common/._fetch_guard.py",
+      "src/common/._models.py",
+      "src/common/._normalize.py",
+      "src/common/._rollback.py",
+      "src/common/._s3layout.py",
+      "src/differ/.___init__.py",
+      "src/differ/._handler.py",
+      "src/discovery/.___init__.py",
+      "src/discovery/._admission.py",
+      "src/discovery/._budget.py",
+      "src/discovery/._connectors.py",
+      "src/discovery/._handler.py",
+      "src/discovery/._manual_import.py",
+      "src/discovery/._queries.py",
+      "src/discovery/._resolve.py",
+      "src/enumerate/.___init__.py",
+      "src/enumerate/._handler.py",
+      "src/llm/.___init__.py",
+      "src/llm/._bedrock_client.py",
+      "src/llm/._narrator.py",
+      "src/report/.___init__.py",
+      "src/report/._handler.py",
+      "src/scoring/.___init__.py",
+      "src/scoring/._scoring.py"
+    ],
+    "current_template_config_match_p06": true
+  },
+  "changed_iam_template_control": {
+    "exit": 0,
+    "output": "old package: /private/var/folders/bl/mdn526y15_n3tx8f0l07fs7w0000gn/T/jprs-p08-gate-probe-nxlq8kjx/old\nnew package: /private/var/folders/bl/mdn526y15_n3tx8f0l07fs7w0000gn/T/jprs-p08-gate-probe-nxlq8kjx/new\n\n--- infrastructure SOURCE, by content hash ---\n83a6e4f46fb5fcae34eab750afdc78a42ef7eb21763615b66d5734fd1f712002  infra/template.yaml\nb8582bcb886291b07b887f8fa8592b66b694ee850686dd7d0468f97d8853ab87  infra/samconfig.toml\n\n--- packaged differences per function ---\nDiscoveryFunction: identical\n\n--- built template resource definitions ---\nthe built templates differ\n    NOTE: SAM rewrites CodeUri per build directory, so this alone is not evidence\n    of an infrastructure change. The source template hash above is.\n\n--- verdict ---\nfunctions whose artifact changes: 0 of 1\n  (none)\nCHANGE_SET_IS_CODE_ONLY \u2014 packaged application code only; no IAM, schedule, parameter,\nstate-machine or retention change is implied by these packages\n"
+  },
+  "stored_identity_absent_from_report_control": {
+    "omitted_id": "himalayas:all#internal-tools-unconsumed-control",
+    "same_employer_as_consumed_job": true,
+    "id_exists_in_report": false,
+    "exit": 0,
+    "output": "=== discovery integration inspection ===\nreport: /var/folders/bl/mdn526y15_n3tx8f0l07fs7w0000gn/T/jprs-p08-gate-probe-nxlq8kjx/one_consumed_job.json  run 2026-09-25  dt 2026-09-25\nregistry monitors 24 board/slug identit(ies)\n\n--- every stored discovery identity, reconciled to a disposition ---\n  retained             himalayas:all#internal-tools\n                         employer Granite State Mutual Insurance \u2014 fit HIGH\n  consumed-unlisted    himalayas:all#internal-tools-unconsumed-control\n                         employer Granite State Mutual Insurance \u2014 below the fit threshold; counted, not listed\n\n--- reconciliation totals ---\n  consumed-unlisted: 1\n  retained: 1\n  stored discovery identities: 2\n  discovery-origin rows in the report: 1\n  report below-fit-threshold count (both populations): 0\n\n--- verdict ---\nACCEPTANCE_MET \u2014 1 retained posting(s) from employer(s) absent from\n  the registry. This is the live positive condition.\n    Granite State Mutual Insurance \u2014 Senior Software Engineer, Internal Tools and Automation (himalayas:all#internal-tools)\n"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "round_one": {
+    "timing": {
+      "run_started_at": "2026-09-23T07:05:00+00:00",
+      "previous_run_at": null,
+      "previous_run_id": null,
+      "basis": "manifest.opened_at",
+      "cold_start_run": true,
+      "previously_reported_count": 0,
+      "boundary": "cold-start"
+    },
+    "fresh_count": 0,
+    "rows": {
+      "remotive:all#found-midway-through-yesterday": false,
+      "remotive:all#known-since-last-week": false
+    }
+  },
+  "round_two": {
+    "timing": {
+      "run_started_at": "2026-09-24T07:05:00+00:00",
+      "previous_run_at": "2026-09-24T18:46:05.020231+00:00",
+      "previous_run_id": "2026-09-23",
+      "basis": "manifest.opened_at",
+      "cold_start_run": false,
+      "previously_reported_count": 2,
+      "boundary": "reported-ids"
+    },
+    "fresh_count": 2,
+    "rows": {
+      "remotive:all#arrived-this-morning": true,
+      "remotive:all#found-midway-through-yesterday": false,
+      "remotive:all#undated-new-to-us": true,
+      "remotive:all#known-since-last-week": false
+    },
+    "age_labels": {
+      "remotive:all#arrived-this-morning": "published 15h ago (provider date); provider publishes on a 24h delay, so the employer's own date may be earlier",
+      "remotive:all#found-midway-through-yesterday": "age unknown \u2014 the source published no date; first seen by JPRS 24h ago, which is a floor on its age, not its age",
+      "remotive:all#undated-new-to-us": "age unknown \u2014 the source published no date; first seen by JPRS under an hour ago, which is a floor on its age, not its age",
+      "remotive:all#known-since-last-week": "age unknown \u2014 the source published no date; first seen by JPRS 7d ago, which is a floor on its age, not its age"
+    },
+    "retained_rows": 4
+  },
+  "round_two_retry": {
+    "previous_run_id": "2026-09-23",
+    "fresh_count": 2
+  },
+  "reviewer_manifest_shape": {
+    "basis": "report_invocation_time (RUN_OPEN manifest absent)",
+    "note": "the review probe writes created_at/run_started_at; production writes opened_at, so this path is the labelled fallback, not a silent guess",
+    "previous_run_id": "2026-09-24"
+  }
+}

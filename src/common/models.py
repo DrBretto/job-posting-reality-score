@@ -16,18 +16,97 @@ from enum import Enum
 from pydantic import BaseModel, ConfigDict, Field
 
 # Current schema version. Minor = additive; major = shape/hash-definition change (forces replay).
-SCHEMA_VERSION = "1.0.0"
-NORMALIZER_VERSION = "1.0.0"
-CONNECTOR_VERSION = "1.0.0"
+# 1.1.0 (open-market discovery): additive only. Employer moves from a property of the SOURCE to a
+# property of the JOB, plus discovery/verification/provenance fields. Same major => same S3 prefix,
+# so no replay is required and records written under 1.0.0 load with these fields at their defaults.
+SCHEMA_VERSION = "1.1.0"
+NORMALIZER_VERSION = "1.1.0"
+CONNECTOR_VERSION = "1.1.0"
 
 
 # --------------------------------------------------------------------------------------------------
 # Enums
 # --------------------------------------------------------------------------------------------------
 class Provider(str, Enum):
+    # --- employer-keyed ATS board monitoring (one source == one known employer) ---
     GREENHOUSE = "greenhouse"
     LEVER = "lever"
     ASHBY = "ashby"
+    # --- employer-independent discovery (one source == many employers, unknown in advance) ---
+    REMOTIVE = "remotive"
+    REMOTEOK = "remoteok"
+    JOBICY = "jobicy"
+    HIMALAYAS = "himalayas"
+    ADZUNA = "adzuna"
+    # --- operator-assisted / unsupported-page paths ---
+    MANUAL = "manual"
+    CAREERS_PAGE = "careers_page"
+
+
+class SourceKind(str, Enum):
+    """Which capability a source serves.
+
+    The whole point of the overhaul: an ATS_BOARD can only ever answer "what is open at THIS
+    employer", so it structurally cannot surface an employer nobody has named yet. A
+    DISCOVERY_FEED is keyed by a question about work, so it can.
+    """
+
+    ATS_BOARD = "ATS_BOARD"
+    DISCOVERY_FEED = "DISCOVERY_FEED"
+    MANUAL_IMPORT = "MANUAL_IMPORT"
+    CAREERS_PAGE = "CAREERS_PAGE"
+
+
+# Providers that are employer-independent discovery feeds.
+DISCOVERY_PROVIDERS = frozenset({
+    Provider.REMOTIVE, Provider.REMOTEOK, Provider.JOBICY, Provider.HIMALAYAS, Provider.ADZUNA,
+})
+# Providers that monitor exactly one known employer's board.
+ATS_PROVIDERS = frozenset({Provider.GREENHOUSE, Provider.LEVER, Provider.ASHBY})
+
+
+class VerificationState(str, Enum):
+    """How much we actually confirmed, kept visible rather than collapsed into "a job".
+
+    Aggregator snippets are leads. Saying otherwise is the failure the plan forbids.
+    """
+
+    UNVERIFIED_LEAD = "UNVERIFIED_LEAD"        # snippet/summary only; description not full
+    FEED_COMPLETE = "FEED_COMPLETE"            # provider returned a complete description
+    EMPLOYER_CONFIRMED = "EMPLOYER_CONFIRMED"  # confirmed against the employer/authorized posting
+
+
+class HistoryStatus(str, Enum):
+    """Application history states. These are NOT interchangeable.
+
+    A prepared package, a tailored resume file, or an application folder is PREPARED and nothing
+    stronger. JPRS reads history and never writes it, so it can never invent a SUBMITTED.
+    """
+
+    NEW = "NEW"
+    PREPARED = "PREPARED"      # materials exist; no submission evidence
+    SUBMITTED = "SUBMITTED"    # explicit submission evidence
+    REJECTED = "REJECTED"
+    SKIPPED = "SKIPPED"
+
+
+class ScreenOutcome(str, Enum):
+    """Screening verdict. UNKNOWN is a first-class third state, never a silent pass or reject."""
+
+    ELIGIBLE = "ELIGIBLE"
+    EXCLUDED = "EXCLUDED"
+    PENDING_CHECK = "PENDING_CHECK"
+
+
+class AdmissionState(str, Enum):
+    """Lifecycle of a discovered source. Observation is not permission to collect."""
+
+    OBSERVED = "OBSERVED"                    # seen in a discovery result; no collection rights
+    ELIGIBLE = "ELIGIBLE"                    # passes the admission policy
+    ADMITTED = "ADMITTED"                    # monitored
+    QUEUED_UNSUPPORTED = "QUEUED_UNSUPPORTED"  # real lead, no connector — verification queue
+    REJECTED = "REJECTED"                    # failed the admission policy
+    OPERATOR_DISABLED = "OPERATOR_DISABLED"  # sticky; survives rediscovery
 
 
 class SnapshotStatus(str, Enum):
@@ -91,6 +170,13 @@ class ChangeEventType(str, Enum):
     SOURCE_FETCH_FAILED = "source-fetch-failed"
     SOURCE_RESPONSE_PARTIAL = "source-response-partial"
     SOURCE_SUSPECT = "source-suspect"  # mass-drop / cumulative-bleed / silent-subset guard tripped
+    # A prior-present segment stayed absent across enough independent healthy SUCCESS snapshots to
+    # corroborate real closure. This is what releases the silent-subset latch: without it, a
+    # department that genuinely closed freezes its jobs ACTIVE forever and repeats the warning.
+    SOURCE_SEGMENT_CLOSED = "source-segment-closed"
+    # Discovery ran but could not cover its whole query plan this run (budget/pagination/limits).
+    # Coverage is incomplete AND resumable; this is never phrased as "nothing more to find".
+    SOURCE_DISCOVERY_PARTIAL = "source-discovery-partial"
 
 
 class Band(str, Enum):
@@ -158,6 +244,22 @@ class SourceSnapshot(BaseModel):
     schema_version: str = SCHEMA_VERSION
 
 
+class JobProvenance(BaseModel):
+    """One source's sighting of a posting.
+
+    Cross-source dedup keeps every sighting instead of discarding the losers, so "we also saw this
+    on X" survives and a wrong merge stays diagnosable.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+    source_id: str
+    provider: Provider
+    job_id: str
+    posting_url: str | None = None
+    observed_at: datetime | None = None
+    discovery_query: str | None = None
+
+
 class CanonicalJob(BaseModel):
     """Normalized, provider-agnostic posting — the diff/score surface."""
 
@@ -171,20 +273,53 @@ class CanonicalJob(BaseModel):
     requisition_id: str | None = None
     identity_low_confidence: bool = False
 
+    # --- employer (1.1.0) ------------------------------------------------------------------------
+    # Authoritative on the JOB, not on the source. An ATS board fills this from its single known
+    # employer; a discovery feed fills it from the record, which is the only reason an employer
+    # nobody has named yet can arrive at all.
+    employer_name: str = ""
+    employer_domain: str | None = None
+    employer_careers_url: str | None = None
+
     # content (canonical)
     title: str
     department: str | None = None
     team: str | None = None
     canonical_location: str = ""
     raw_location: str | None = None
+    # Location-eligibility variants, kept separate. Two postings differing only here are DIFFERENT
+    # opportunities and must not be collapsed by dedup.
+    secondary_locations: list[str] = Field(default_factory=list)
     remote_hybrid_language: RemoteMode = RemoteMode.UNSPECIFIED
     employment_type: EmploymentType = EmploymentType.UNSPECIFIED
     salary: SalaryStruct | None = None
     description_text: str = ""
+    # Native provider text preserved alongside the safely normalized text (plan §3). Normalization
+    # strips markup; screening sometimes needs what the employer actually wrote.
+    description_native: str = ""
+    industry: str | None = None
+    job_level: str | None = None
     posting_url: str = ""
     apply_url: str | None = None
+    apply_host: str | None = None
 
-    # provider-supplied timing (evidence only, never authority for "first seen")
+    # --- discovery lineage (1.1.0) ---------------------------------------------------------------
+    source_kind: SourceKind = SourceKind.ATS_BOARD
+    discovery_query: str | None = None          # the exact query text that surfaced this posting
+    discovery_query_family: str | None = None   # which query family it belonged to
+
+    # --- verification (1.1.0) -------------------------------------------------------------------
+    verification_state: VerificationState = VerificationState.FEED_COMPLETE
+    verified_at: datetime | None = None         # last time we confirmed against the employer
+    # Free-text, machine-greppable uncertainty markers. Present uncertainty beats absent certainty.
+    uncertainty: list[str] = Field(default_factory=list)
+
+    # provider-supplied timing (evidence only, never authority for "first seen").
+    # These four are NOT interchangeable and an old imported job is never called newly posted:
+    #   provider_published_at -> when the employer says it went live
+    #   provider_updated_at   -> when the employer last edited it
+    #   first_seen_at         -> when WE first observed it in a SUCCESS snapshot
+    #   last_seen_at          -> when WE last observed it
     provider_created_at: datetime | None = None
     provider_updated_at: datetime | None = None
     provider_published_at: datetime | None = None
@@ -192,6 +327,15 @@ class CanonicalJob(BaseModel):
     # our derived timing (authoritative)
     first_seen_at: datetime | None = None
     last_seen_at: datetime | None = None
+
+    # --- cross-source dedup (1.1.0) -------------------------------------------------------------
+    provenance: list[JobProvenance] = Field(default_factory=list)
+    dedup_group_id: str | None = None
+    # Hard merge: same canonical apply target. The absorbed row's sighting lives in `provenance`.
+    duplicate_of: str | None = None
+    # Soft match: same employer/title/location but not provably the same requisition. BOTH rows
+    # survive and are cross-linked for review — ambiguity is never resolved by deletion.
+    possible_duplicate_of: list[str] = Field(default_factory=list)
 
     # hashing
     content_hash: str = ""
@@ -201,6 +345,14 @@ class CanonicalJob(BaseModel):
     schema_version: str = SCHEMA_VERSION
     normalizer_version: str = NORMALIZER_VERSION
     ingested_snapshot_id: str | None = None
+
+    @property
+    def display_employer(self) -> str:
+        """Employer for human surfaces. Falls back to the source's board token, never to a
+        hardcoded label table."""
+        if self.employer_name:
+            return self.employer_name
+        return self.source_id.partition(":")[2] or self.source_id
 
 
 class ChangeEvent(BaseModel):

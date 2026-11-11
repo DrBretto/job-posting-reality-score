@@ -1,0 +1,21 @@
+=== rollback drill ===
+repo:     /Users/drbretto/Desktop/Projects/job-posting-reality-score
+baseline: /Users/drbretto/Desktop/Projects/job-posting-reality-score/project-factory/outputs/open-market-discovery/runs/20260925_durable_discovery_publication_release_repair_v1/evidence/p06_baseline_src.tar.gz
+scratch:  /tmp/claude-501/p08-rollback-drill-n9XFni
+
+--- 1. preserve the current overhaul (handoff step R-1) ---
+current overhaul preserved; aggregate digest 20ec46c45b2e3731417f6592f0b3ddda1940ba03d6100d0a8b92530ae0a3ed96
+
+--- 2. restore the verified P06 baseline over it (handoff step R-3) ---
+restored 36 python file(s)
+ok: the module P07 added is absent, as it is in P06
+
+--- 3. verify every restored file against P06's recorded SHA-256 ---
+matched=36 differing=0 missing=0
+
+--- 4. return to the overhaul, and prove it came back intact (handoff step R-6) ---
+aggregate digest after return: 20ec46c45b2e3731417f6592f0b3ddda1940ba03d6100d0a8b92530ae0a3ed96
+ok: the overhaul is byte-identical to its pre-drill state; the rollback is reversible
+
+DRILL_PASSED — the recorded rollback restores a hash-verified P06 source tree and reverses cleanly
+exit=0

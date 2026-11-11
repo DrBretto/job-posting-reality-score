@@ -1,0 +1,95 @@
+{
+  "packet_id": "JPRS-L2-P01-open-market-discovery-v01",
+  "execution_profile": "FULL_BUILD",
+  "project_slug": "job-posting-reality-score",
+  "phase_key": "open-market-discovery",
+  "run_id": "20260924_open_market_discovery_v1",
+  "stage": "D_review_complete",
+  "handoff_target": "Claude Code implementation executor, in the JPRS repository",
+  "status": "stage_complete",
+  "active_roles": [
+    "implementation executor",
+    "candidate-fit reviewer",
+    "code/reliability reviewer"
+  ],
+  "inputs_used": [
+    "docs/plans/2026-09-24-open-market-job-discovery.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".cursorrules",
+    "project-factory/ORCHESTRATOR_BOOTSTRAP.md",
+    "project-factory/claude_handoff/RUN_OUTPUT_CONTRACT.md",
+    "START_HERE.md",
+    "docs/PLAN.md",
+    "config/companies.yaml",
+    "src/common/{models,connectors,normalize,s3layout}.py",
+    "src/{enumerate,collector,differ,report}/handler.py",
+    "src/scoring/scoring.py",
+    "src/cli.py",
+    "infra/template.yaml",
+    "infra/DEPLOY.md",
+    "tests/*",
+    "../Infotropy Book/INBOX/Employment Search/APPLICATION_WORKFLOW.md",
+    "../Infotropy Book/INBOX/Employment Search/SEARCH_PREFERENCES.md",
+    "../Infotropy Book/INBOX/Employment Search/OPERATING_PLAN.md",
+    "../Infotropy Book/INBOX/Employment Search/CANDIDATE_FACTS.md",
+    "../Infotropy Book/career-factory/.../MASTER_RESUME.latest.md",
+    "live read-only probes: remotive, remoteok, jobicy, himalayas, arbeitnow, adzuna(401/400), greenhouse, ashby x4"
+  ],
+  "outputs_emitted": [
+    "DESIGN.md",
+    "VALIDATION.md",
+    "DEPLOYMENT_HANDOFF.md",
+    "OPERATOR_RETURN.md",
+    "checkpoint.md",
+    "gate_decision.md",
+    "run_manifest.json",
+    "evidence/source_probe_provenance.json",
+    "rehearsal/live/{daily_report.md,daily_report.json,discovery_coverage.json}",
+    "rehearsal/live_replay/{daily_report.md,daily_report.json,discovery_coverage.json}",
+    "rehearsal/monitored_only/{daily_report.md,daily_report.json}",
+    "rehearsal/combined/{daily_report.md,daily_report.json,discovery_coverage.json}",
+    "rehearsal/coverage_diff.json"
+  ],
+  "budget_caps": "no candidate/employer quota; provider rate+cost limits respected; $0 spend this run; checkpoint at stage boundaries",
+  "acceptance_condition": "11 acceptance rows each receive an explicit verdict; locally executable gates pass; deployment handoff ready",
+  "stop_condition": "stage_complete for local readiness; never production-complete before scheduled AWS verification",
+  "checkpoint_path": "checkpoint.md",
+  "next_stage": "operator deployment decision (not authorized by this packet)",
+  "top_risks": [
+    "All four keyless discovery feeds are remote-job boards; general non-tech breadth depends on the credential-gated Adzuna path. Reported as an unpassed gate, not papered over.",
+    "Employer moves from source-property to job-property, touching models, dedup, screening and report together; regression tests on the existing 15-board path guard against collateral damage.",
+    "Provider terms restrict redistribution; raw payloads must stay out of the repository and out of fixtures."
+  ],
+  "acceptance_result": {
+    "rows_total": 11,
+    "pass": 10,
+    "partial_pass": 1,
+    "fail": 0,
+    "partial_row": "3 \u2014 real sources: discovery and monitoring pass; source growth admits nothing because the keyless feeds do not publish employer board URLs",
+    "unpassed_gates": [
+      "Adzuna live discovery \u2014 free ADZUNA_APP_ID/ADZUNA_APP_KEY not provisioned",
+      "source-growth admission \u2014 careers-URL resolver off by default, live path unverified",
+      "fetch_raw for 3 of 4 feeds \u2014 local egress proxy truncates; post-deploy check 1 closes it"
+    ]
+  },
+  "headline_measurement": {
+    "employers_absent_from_registry_reaching_the_system": {
+      "before": 0,
+      "after": 161
+    },
+    "note": "0 before was structural, not a tuning problem. Raw postings 521 -> 747 is explicitly NOT the success criterion.",
+    "retained_credible_combined": 43,
+    "new_strong_combined": 14,
+    "distinct_requisitions_protected_from_merge": 2
+  },
+  "checks_run": {
+    "pytest": "168 passed",
+    "sam_validate_lint": "valid",
+    "sam_build": "succeeded (clean build dir)",
+    "policy_check": "projection matches all policy sources"
+  },
+  "spend_usd": 0,
+  "aws_mutations": "none",
+  "git_actions": "none \u2014 working tree uncommitted on codex/real-job-radar"
+}

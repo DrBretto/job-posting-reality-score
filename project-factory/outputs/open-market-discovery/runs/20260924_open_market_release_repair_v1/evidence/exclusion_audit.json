@@ -1,0 +1,649 @@
+{
+  "note": "Audit of every posting P01 excluded, re-screened by the P02 ruleset against the SAME captured bytes. A released exclusion is NOT an endorsement of the role; it means the stated reason for removing it does not hold. These rows return to the candidate list for the downstream research step.",
+  "ruleset_before": "1.0.0",
+  "ruleset_after": "1.1.0",
+  "postings_p01_excluded": 364,
+  "postings_re_screened": 364,
+  "dispositions_changed": 34,
+  "released_by_rule": {
+    "location-eligibility": 4,
+    "sales-ownership": 30
+  },
+  "still_excluded_by_rule": {
+    "location-eligibility": 250,
+    "clearance-government": 11,
+    "frontend-specialist": 8,
+    "sales-ownership": 109,
+    "recorded-video": 2
+  },
+  "changed_rows": [
+    {
+      "job_id": "greenhouse:cargomatic#5102060008",
+      "employer": "Cargomatic",
+      "title": "Operations Coordinator",
+      "p01_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_outcome": "PENDING_CHECK",
+      "p02_excluded_for": [],
+      "p02_pending_for": [
+        "location-eligibility",
+        "process-not-inspectable"
+      ],
+      "p02_reason": "location-eligibility: non-local location with no explicit remote statement; eligibility from New Hampshire needs confirmation before preparation; process-not-inspectable: the posting does not describe its interview or ap",
+      "released_rules": [
+        "location-eligibility"
+      ]
+    },
+    {
+      "job_id": "greenhouse:cargomatic#5426032008",
+      "employer": "Cargomatic",
+      "title": "Port Dispatcher/Driver Manager - Port/Drayage",
+      "p01_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_outcome": "PENDING_CHECK",
+      "p02_excluded_for": [],
+      "p02_pending_for": [
+        "process-not-inspectable"
+      ],
+      "p02_reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "released_rules": [
+        "location-eligibility"
+      ]
+    },
+    {
+      "job_id": "greenhouse:cargomatic#5425975008",
+      "employer": "Cargomatic",
+      "title": "Terminal Operations Manager (Drayage / Port Logistics)",
+      "p01_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_outcome": "PENDING_CHECK",
+      "p02_excluded_for": [],
+      "p02_pending_for": [
+        "location-eligibility",
+        "process-not-inspectable"
+      ],
+      "p02_reason": "location-eligibility: non-local location with no explicit remote statement; eligibility from New Hampshire needs confirmation before preparation; process-not-inspectable: the posting does not describe its interview or ap",
+      "released_rules": [
+        "location-eligibility"
+      ]
+    },
+    {
+      "job_id": "greenhouse:future#4735365005",
+      "employer": "Future",
+      "title": "Full-Stack Growth Engineer",
+      "p01_excluded_for": [
+        "sales-ownership"
+      ],
+      "p02_outcome": "ELIGIBLE",
+      "p02_excluded_for": [],
+      "p02_pending_for": [],
+      "p02_reason": "no policy exclusion matched",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:nimblegravity#4730927005",
+      "employer": "Nimble Gravity",
+      "title": "Senior Architect, Anthropic Enablement",
+      "p01_excluded_for": [
+        "sales-ownership"
+      ],
+      "p02_outcome": "PENDING_CHECK",
+      "p02_excluded_for": [],
+      "p02_pending_for": [
+        "process-not-inspectable"
+      ],
+      "p02_reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:yurtsai#5190525007",
+      "employer": "Legion Intelligence",
+      "title": "Solutions Engineer/Agentic AI Tools/Generative AI Protoyping/Proof of Concept (POC) - (Southeastern US Area)",
+      "p01_excluded_for": [
+        "clearance-government",
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "clearance-government",
+        "location-eligibility"
+      ],
+      "p02_pending_for": [
+        "process-not-inspectable",
+        "sales-ownership"
+      ],
+      "p02_reason": "clearance-government: requires a clearance, federal-suitability or drug-screening process (Top Secret); location-eligibility: onsite or hybrid presence required at a location that is not commutable from New Hampshire, an",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:tailscale#4735278005",
+      "employer": "Tailscale",
+      "title": "Commercial Legal Counsel",
+      "p01_excluded_for": [
+        "sales-ownership"
+      ],
+      "p02_outcome": "ELIGIBLE",
+      "p02_excluded_for": [],
+      "p02_pending_for": [],
+      "p02_reason": "no policy exclusion matched",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:tailscale#4734427005",
+      "employer": "Tailscale",
+      "title": "Commercial Legal Counsel",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [],
+      "p02_reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:tailscale#4718672005",
+      "employer": "Tailscale",
+      "title": "Product Marketing Manager",
+      "p01_excluded_for": [
+        "sales-ownership"
+      ],
+      "p02_outcome": "ELIGIBLE",
+      "p02_excluded_for": [],
+      "p02_pending_for": [],
+      "p02_reason": "no policy exclusion matched",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:tailscale#4718667005",
+      "employer": "Tailscale",
+      "title": "Product Marketing Manager",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [],
+      "p02_reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:tailscale#4723401005",
+      "employer": "Tailscale",
+      "title": "Sales Director, EMEA",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [],
+      "p02_reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:grafanalabs#6202561004",
+      "employer": "Grafana Labs",
+      "title": "Engineering Manager - Observability | Germany | Remote",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [
+        "process-not-inspectable"
+      ],
+      "p02_reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:grafanalabs#6202563004",
+      "employer": "Grafana Labs",
+      "title": "Engineering Manager - Observability | Ireland | Remote",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [
+        "process-not-inspectable"
+      ],
+      "p02_reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:grafanalabs#6202560004",
+      "employer": "Grafana Labs",
+      "title": "Engineering Manager - Observability | Spain | Remote",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [
+        "process-not-inspectable"
+      ],
+      "p02_reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:grafanalabs#6202558004",
+      "employer": "Grafana Labs",
+      "title": "Engineering Manager - Observability | Sweden | Remote",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [
+        "process-not-inspectable"
+      ],
+      "p02_reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:grafanalabs#6202562004",
+      "employer": "Grafana Labs",
+      "title": "Engineering Manager - Observability | UK | Remote",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [
+        "process-not-inspectable"
+      ],
+      "p02_reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:grafanalabs#6130099004",
+      "employer": "Grafana Labs",
+      "title": "Senior Solutions Engineer | France | Arabic Speaker | Remote",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [
+        "process-not-inspectable"
+      ],
+      "p02_reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:grafanalabs#6121640004",
+      "employer": "Grafana Labs",
+      "title": "Senior Solutions Engineer | Netherlands | Remote",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [
+        "process-not-inspectable"
+      ],
+      "p02_reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:grafanalabs#6191204004",
+      "employer": "Grafana Labs",
+      "title": "Senior Solutions Engineer | Preference for Mumbai, India",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [
+        "process-not-inspectable"
+      ],
+      "p02_reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:grafanalabs#6135042004",
+      "employer": "Grafana Labs",
+      "title": "Senior Solutions Engineer | Spain | Arabic Speaker | Remote",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [
+        "process-not-inspectable"
+      ],
+      "p02_reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:grafanalabs#6121672004",
+      "employer": "Grafana Labs",
+      "title": "Senior Solutions Engineer | Spain | Remote",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [
+        "process-not-inspectable"
+      ],
+      "p02_reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:grafanalabs#6121669004",
+      "employer": "Grafana Labs",
+      "title": "Senior Solutions Engineer | Sweden | Remote",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [
+        "process-not-inspectable"
+      ],
+      "p02_reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:grafanalabs#6104605004",
+      "employer": "Grafana Labs",
+      "title": "Senior Solutions Engineer | Tokyo, Japan | Remote",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [
+        "process-not-inspectable"
+      ],
+      "p02_reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:grafanalabs#6121627004",
+      "employer": "Grafana Labs",
+      "title": "Solutions Engineer | France | Remote",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [
+        "process-not-inspectable"
+      ],
+      "p02_reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:snorkelai#6190745004",
+      "employer": "Snorkel Ai",
+      "title": "Director, GTM Systems & AI Transformation",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [],
+      "p02_reason": "location-eligibility: onsite or hybrid presence required at a location that is not commutable from New Hampshire, and no remote option is stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:snorkelai#6122805004",
+      "employer": "Snorkel Ai",
+      "title": "Director of Technical Recruiting",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "sales-ownership"
+      ],
+      "p02_pending_for": [
+        "location-eligibility"
+      ],
+      "p02_reason": "sales-ownership: role owns sales outcomes (pipeline generation)",
+      "released_rules": [
+        "location-eligibility"
+      ]
+    },
+    {
+      "job_id": "greenhouse:snorkelai#6150444004",
+      "employer": "Snorkel Ai",
+      "title": "Senior Technical Compliance Analyst",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [
+        "clearance-government"
+      ],
+      "p02_reason": "location-eligibility: onsite or hybrid presence required at a location that is not commutable from New Hampshire, and no remote option is stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "greenhouse:solutions#4714672006",
+      "employer": "Cadence Solutions",
+      "title": "Vice President, Marketing",
+      "p01_excluded_for": [
+        "sales-ownership"
+      ],
+      "p02_outcome": "PENDING_CHECK",
+      "p02_excluded_for": [],
+      "p02_pending_for": [
+        "location-eligibility"
+      ],
+      "p02_reason": "location-eligibility: non-local location with no explicit remote statement; eligibility from New Hampshire needs confirmation before preparation",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "remotive:all#1919266",
+      "employer": "A.Team",
+      "title": "Senior Independent AI Engineer / Architect",
+      "p01_excluded_for": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "location-eligibility"
+      ],
+      "p02_pending_for": [],
+      "p02_reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "remoteok:all#1136949",
+      "employer": "Chaos",
+      "title": "Team Lead Education",
+      "p01_excluded_for": [
+        "sales-ownership"
+      ],
+      "p02_outcome": "PENDING_CHECK",
+      "p02_excluded_for": [],
+      "p02_pending_for": [
+        "location-eligibility",
+        "process-not-inspectable"
+      ],
+      "p02_reason": "location-eligibility: no location stated; work-from-New-Hampshire eligibility is unknown and must be confirmed rather than assumed in either direction; process-not-inspectable: the posting does not describe its interview",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "remoteok:all#1136097",
+      "employer": "Balco, Inc.",
+      "title": "Regional Sales Manager",
+      "p01_excluded_for": [
+        "clearance-government",
+        "sales-ownership"
+      ],
+      "p02_outcome": "EXCLUDED",
+      "p02_excluded_for": [
+        "clearance-government"
+      ],
+      "p02_pending_for": [],
+      "p02_reason": "clearance-government: requires a clearance, federal-suitability or drug-screening process (drug screen)",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "jobicy:all#153951",
+      "employer": "Defense Unicorns",
+      "title": "Director of Discovery & Framing",
+      "p01_excluded_for": [
+        "sales-ownership"
+      ],
+      "p02_outcome": "ELIGIBLE",
+      "p02_excluded_for": [],
+      "p02_pending_for": [],
+      "p02_reason": "no policy exclusion matched",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "himalayas:all#senior-director-sales-6575123559",
+      "employer": "RELX",
+      "title": "Senior Director Sales",
+      "p01_excluded_for": [
+        "sales-ownership"
+      ],
+      "p02_outcome": "ELIGIBLE",
+      "p02_excluded_for": [],
+      "p02_pending_for": [],
+      "p02_reason": "no policy exclusion matched",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "job_id": "himalayas:all#sales-support-italian",
+      "employer": "Integrated Language Solutions",
+      "title": "Sales Support - Italian",
+      "p01_excluded_for": [
+        "sales-ownership"
+      ],
+      "p02_outcome": "PENDING_CHECK",
+      "p02_excluded_for": [],
+      "p02_pending_for": [
+        "process-not-inspectable"
+      ],
+      "p02_reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "released_rules": [
+        "sales-ownership"
+      ]
+    }
+  ]
+}

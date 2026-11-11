@@ -1,0 +1,488 @@
+{
+  "totals_before": {
+    "postings_considered": 282,
+    "retained": 11,
+    "policy_excluded": 112,
+    "below_fit_threshold": 159,
+    "new_strong": 5,
+    "needs_a_check": 6
+  },
+  "totals_after": {
+    "postings_considered": 282,
+    "retained": 11,
+    "policy_excluded": 117,
+    "below_fit_threshold": 154,
+    "new_strong": 5,
+    "needs_a_check": 6
+  },
+  "ruleset_before": "1.4.0",
+  "ruleset_after": "1.5.0",
+  "changed_count": 11,
+  "by_direction": {
+    "newly_excluded": 5,
+    "reason_or_state_changed": 6
+  },
+  "changed": [
+    {
+      "job_id": "himalayas:all#client-support-specialist-greater-st-louis-mo-area",
+      "employer": "Fidelity Investments",
+      "title": "Client Support Specialist - Greater St. Louis, MO Area",
+      "before": {
+        "bucket": "policy_excluded",
+        "screen_outcome": "EXCLUDED",
+        "exclusion_rules": [
+          "sales-ownership"
+        ],
+        "pending_rules": [
+          "location-eligibility"
+        ],
+        "suppressed_rules": [],
+        "reason": "sales-ownership: role owns sales outcomes (outbound calls)"
+      },
+      "after": {
+        "bucket": "policy_excluded",
+        "screen_outcome": "EXCLUDED",
+        "exclusion_rules": [
+          "customer-service-queue",
+          "sales-ownership"
+        ],
+        "pending_rules": [
+          "location-eligibility"
+        ],
+        "suppressed_rules": [],
+        "reason": "sales-ownership: role owns sales outcomes (outbound calls); customer-service-queue: the role's own subject is external customer service or phone support (client support); stated duty: inbound calls"
+      },
+      "evidence_spans_after": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "requirements",
+          "matched": "e complex client requests Conduct pro-active outbound calls to communicate resolution to the client or s"
+        },
+        {
+          "rule_id": "customer-service-queue",
+          "section": "requirements",
+          "matched": "Value You Deliver Engage with customers, via inbound calls, responding to their inquires which may incl"
+        },
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "United States united states | eration of this role, your primary residence must be located within a 90 mile ra"
+        }
+      ],
+      "direction": "reason_or_state_changed"
+    },
+    {
+      "job_id": "himalayas:all#sales-support-italian",
+      "employer": "Integrated Language Solutions",
+      "title": "Sales Support - Italian",
+      "before": {
+        "bucket": "below_fit_threshold",
+        "screen_outcome": "PENDING_CHECK",
+        "exclusion_rules": [],
+        "pending_rules": [
+          "process-not-inspectable"
+        ],
+        "suppressed_rules": [],
+        "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements"
+      },
+      "after": {
+        "bucket": "policy_excluded",
+        "screen_outcome": "EXCLUDED",
+        "exclusion_rules": [
+          "customer-service-queue"
+        ],
+        "pending_rules": [
+          "process-not-inspectable"
+        ],
+        "suppressed_rules": [],
+        "reason": "customer-service-queue: the role's stated duties include working an external customer-contact queue (inbound sales and support inquiries); 2 such duties stated"
+      },
+      "evidence_spans_after": [
+        {
+          "rule_id": "customer-service-queue",
+          "section": "body",
+          "matched": "e incumbent will be responsible for fielding inbound sales and support inquiries for their designated country and website mar"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ],
+      "direction": "newly_excluded"
+    },
+    {
+      "job_id": "jobicy:all#151507",
+      "employer": "Oowlish Technology",
+      "title": "Senior AI Solutions Engineer (Python & AWS Bedrock)",
+      "before": {
+        "bucket": "policy_excluded",
+        "screen_outcome": "EXCLUDED",
+        "exclusion_rules": [
+          "location-eligibility"
+        ],
+        "pending_rules": [],
+        "suppressed_rules": [],
+        "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated"
+      },
+      "after": {
+        "bucket": "policy_excluded",
+        "screen_outcome": "EXCLUDED",
+        "exclusion_rules": [
+          "location-eligibility"
+        ],
+        "pending_rules": [],
+        "suppressed_rules": [
+          "customer-service-queue"
+        ],
+        "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated"
+      },
+      "evidence_spans_after": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Latam Argentina Brazil Mexico, Argentina, Brazil, Mexico"
+        }
+      ],
+      "direction": "reason_or_state_changed"
+    },
+    {
+      "job_id": "jobicy:all#153997",
+      "employer": "CoinGecko",
+      "title": "Operations Associate",
+      "before": {
+        "bucket": "below_fit_threshold",
+        "screen_outcome": "PENDING_CHECK",
+        "exclusion_rules": [],
+        "pending_rules": [
+          "process-not-inspectable"
+        ],
+        "suppressed_rules": [],
+        "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements"
+      },
+      "after": {
+        "bucket": "policy_excluded",
+        "screen_outcome": "EXCLUDED",
+        "exclusion_rules": [
+          "customer-service-queue"
+        ],
+        "pending_rules": [
+          "process-not-inspectable"
+        ],
+        "suppressed_rules": [],
+        "reason": "customer-service-queue: the role's stated duties include working an external customer-contact queue (customer inquiries)"
+      },
+      "evidence_spans_after": [
+        {
+          "rule_id": "customer-service-queue",
+          "section": "responsibilities",
+          "matched": "ccurate, timely, and personalised support to customer inquiries across channels, strictly adhering to SLAs a"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ],
+      "direction": "newly_excluded"
+    },
+    {
+      "job_id": "jobicy:all#154005",
+      "employer": "Samsara",
+      "title": "Enterprise Customer Success Manager",
+      "before": {
+        "bucket": "policy_excluded",
+        "screen_outcome": "EXCLUDED",
+        "exclusion_rules": [
+          "location-eligibility",
+          "sales-ownership"
+        ],
+        "pending_rules": [],
+        "suppressed_rules": [],
+        "reason": "sales-ownership: title is a sales role (Customer Success Manager); location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated"
+      },
+      "after": {
+        "bucket": "policy_excluded",
+        "screen_outcome": "EXCLUDED",
+        "exclusion_rules": [
+          "customer-service-queue",
+          "location-eligibility",
+          "sales-ownership"
+        ],
+        "pending_rules": [],
+        "suppressed_rules": [],
+        "reason": "sales-ownership: title is a sales role (Customer Success Manager); customer-service-queue: the role's stated duties include working an external customer-contact queue (phone call); location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated"
+      },
+      "evidence_spans_after": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Customer Success Manager"
+        },
+        {
+          "rule_id": "customer-service-queue",
+          "section": "responsibilities",
+          "matched": "Every phone call you answer and every email you send can affe"
+        },
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Germany"
+        }
+      ],
+      "direction": "reason_or_state_changed"
+    },
+    {
+      "job_id": "remoteok:all#1135788",
+      "employer": "Liberty Mutual Insurance",
+      "title": "Licensed Customer Service Representative",
+      "before": {
+        "bucket": "policy_excluded",
+        "screen_outcome": "EXCLUDED",
+        "exclusion_rules": [
+          "location-residency"
+        ],
+        "pending_rules": [
+          "process-not-inspectable"
+        ],
+        "suppressed_rules": [
+          "sales-ownership"
+        ],
+        "reason": "location-residency: the posting limits employment to residents of NY, CA, AK, HI, NM, IL, which does not include New Hampshire; a remote label does not make this role available from New Hampshire"
+      },
+      "after": {
+        "bucket": "policy_excluded",
+        "screen_outcome": "EXCLUDED",
+        "exclusion_rules": [
+          "customer-service-queue",
+          "location-residency"
+        ],
+        "pending_rules": [
+          "process-not-inspectable"
+        ],
+        "suppressed_rules": [
+          "sales-ownership"
+        ],
+        "reason": "customer-service-queue: the role's own subject is external customer service or phone support (customer service); no duty text contradicts the title; location-residency: the posting limits employment to residents of NY, CA, AK, HI, NM, IL, which does not include New Hampshire; a remote label does not make this role available from New Hampshire"
+      },
+      "evidence_spans_after": [
+        {
+          "rule_id": "customer-service-queue",
+          "section": "title",
+          "matched": "Licensed Customer Service Representative"
+        },
+        {
+          "rule_id": "location-residency",
+          "section": "location",
+          "matched": "NY, CA, AK, HI, NM or IL"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ],
+      "direction": "reason_or_state_changed"
+    },
+    {
+      "job_id": "remoteok:all#1136066",
+      "employer": "Resource Guru",
+      "title": "Customer Support Specialist",
+      "before": {
+        "bucket": "below_fit_threshold",
+        "screen_outcome": "ELIGIBLE",
+        "exclusion_rules": [],
+        "pending_rules": [],
+        "suppressed_rules": [
+          "recorded-video"
+        ],
+        "reason": "no policy exclusion matched"
+      },
+      "after": {
+        "bucket": "policy_excluded",
+        "screen_outcome": "EXCLUDED",
+        "exclusion_rules": [
+          "customer-service-queue"
+        ],
+        "pending_rules": [],
+        "suppressed_rules": [
+          "recorded-video"
+        ],
+        "reason": "customer-service-queue: the role's own subject is external customer service or phone support (customer support); no duty text contradicts the title"
+      },
+      "evidence_spans_after": [
+        {
+          "rule_id": "customer-service-queue",
+          "section": "title",
+          "matched": "Customer Support Specialist"
+        }
+      ],
+      "direction": "newly_excluded"
+    },
+    {
+      "job_id": "remoteok:all#1136566",
+      "employer": "Adaptive Teams",
+      "title": "Customer Service Representative",
+      "before": {
+        "bucket": "policy_excluded",
+        "screen_outcome": "EXCLUDED",
+        "exclusion_rules": [
+          "recorded-video",
+          "sales-ownership"
+        ],
+        "pending_rules": [],
+        "suppressed_rules": [],
+        "reason": "sales-ownership: role owns sales outcomes (outbound calls); recorded-video: application requires a recorded candidate video (video introduction)"
+      },
+      "after": {
+        "bucket": "policy_excluded",
+        "screen_outcome": "EXCLUDED",
+        "exclusion_rules": [
+          "customer-service-queue",
+          "recorded-video",
+          "sales-ownership"
+        ],
+        "pending_rules": [],
+        "suppressed_rules": [],
+        "reason": "sales-ownership: role owns sales outcomes (outbound calls); recorded-video: application requires a recorded candidate video (video introduction); customer-service-queue: the role's own subject is external customer service or phone support (customer service); no duty text contradicts the title"
+      },
+      "evidence_spans_after": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "body",
+          "matched": "ast-paced auction activity\u00e2\u0080\u0094making critical outbound calls, delivering clear info, and keeping everythi"
+        },
+        {
+          "rule_id": "recorded-video",
+          "section": "requirements",
+          "matched": "ase ensure that both your CV/resume and your video introduction are submitted in English ."
+        },
+        {
+          "rule_id": "customer-service-queue",
+          "section": "title",
+          "matched": "Customer Service Representative"
+        }
+      ],
+      "direction": "reason_or_state_changed"
+    },
+    {
+      "job_id": "remoteok:all#1137302",
+      "employer": "Warehance",
+      "title": "Customer Support & Success Specialist",
+      "before": {
+        "bucket": "below_fit_threshold",
+        "screen_outcome": "ELIGIBLE",
+        "exclusion_rules": [],
+        "pending_rules": [],
+        "suppressed_rules": [],
+        "reason": "no policy exclusion matched"
+      },
+      "after": {
+        "bucket": "policy_excluded",
+        "screen_outcome": "EXCLUDED",
+        "exclusion_rules": [
+          "customer-service-queue"
+        ],
+        "pending_rules": [],
+        "suppressed_rules": [],
+        "reason": "customer-service-queue: the role's own subject is external customer service or phone support (customer support); no duty text contradicts the title"
+      },
+      "evidence_spans_after": [
+        {
+          "rule_id": "customer-service-queue",
+          "section": "title",
+          "matched": "Customer Support & Success Specialist"
+        }
+      ],
+      "direction": "newly_excluded"
+    },
+    {
+      "job_id": "remotive:all#2091045",
+      "employer": "Unio Digital",
+      "title": "Tier III Service Desk Engineer",
+      "before": {
+        "bucket": "below_fit_threshold",
+        "screen_outcome": "PENDING_CHECK",
+        "exclusion_rules": [],
+        "pending_rules": [
+          "process-not-inspectable"
+        ],
+        "suppressed_rules": [],
+        "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements"
+      },
+      "after": {
+        "bucket": "policy_excluded",
+        "screen_outcome": "EXCLUDED",
+        "exclusion_rules": [
+          "customer-service-queue"
+        ],
+        "pending_rules": [
+          "process-not-inspectable"
+        ],
+        "suppressed_rules": [],
+        "reason": "customer-service-queue: the role's stated duties include working an external customer-contact queue (helpdesk); 2 such duties stated"
+      },
+      "evidence_spans_after": [
+        {
+          "rule_id": "customer-service-queue",
+          "section": "requirements",
+          "matched": "Duties \u00b7 Lead and support our helpdesk environment for managed service clients \u00b7 Co"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ],
+      "direction": "newly_excluded"
+    },
+    {
+      "job_id": "remotive:all#2091139",
+      "employer": "hey contact heroes GmbH",
+      "title": "\ud83c\udde9\ud83c\uddea Kundenservice Mobilfunk Inbound - innerhalb der EU (ausgenommen: Deutschland)",
+      "before": {
+        "bucket": "policy_excluded",
+        "screen_outcome": "EXCLUDED",
+        "exclusion_rules": [
+          "location-eligibility"
+        ],
+        "pending_rules": [
+          "process-not-inspectable"
+        ],
+        "suppressed_rules": [],
+        "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated"
+      },
+      "after": {
+        "bucket": "policy_excluded",
+        "screen_outcome": "EXCLUDED",
+        "exclusion_rules": [
+          "customer-service-queue",
+          "location-eligibility"
+        ],
+        "pending_rules": [
+          "process-not-inspectable"
+        ],
+        "suppressed_rules": [],
+        "reason": "customer-service-queue: the role's own subject is external customer service or phone support (kundenservice); no duty text contradicts the title; location-eligibility: location is outside the US with no US-remote eligibility stated"
+      },
+      "evidence_spans_after": [
+        {
+          "rule_id": "customer-service-queue",
+          "section": "title",
+          "matched": "\ud83c\udde9\ud83c\uddea Kundenservice Mobilfunk Inbound - innerhalb der EU (ausgenommen: Deutschland)"
+        },
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Europe europe"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ],
+      "direction": "reason_or_state_changed"
+    }
+  ]
+}

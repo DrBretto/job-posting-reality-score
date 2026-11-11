@@ -1,0 +1,321 @@
+{
+  "scope": "P09 working tree; real enumerate/collect/discovery/differ/report code with external AWS and HTTP mocked; one refused PutObject per row; the feed returns the posting once and nothing on any later attempt; no test-authored intermediate records",
+  "fixture": "synthetic qualifying insurance-company role, not a real opening",
+  "serial_execution": "every row is a single scheduled writer doing read-modify-write on its own objects; no concurrent writer is exercised and no exactly-once claim under concurrency is made",
+  "boundaries": [
+    {
+      "boundary": "acceptance_record",
+      "expected_durably_accepted": false,
+      "expected_recovery_source": "not accepted \u2014 round incomplete, the feed must return the posting again",
+      "injected_failure": "P09-injected storage failure writing discovery/owed/provider=himalayas/owed_publication.json",
+      "durably_accepted_at_failure": false,
+      "owed_at_failure": false,
+      "published_before_recovery": false,
+      "same_run_retry_discovery_candidates": [],
+      "following_run_discovery_candidates": [],
+      "observed_run_ids": [],
+      "observation_count": null,
+      "still_owed": false
+    },
+    {
+      "boundary": "acceptance_record_stored_then_timeout",
+      "expected_durably_accepted": true,
+      "expected_recovery_source": "the feed's owed-publication record",
+      "injected_failure": "P09-injected timeout AFTER storing discovery/owed/provider=himalayas/owed_publication.json",
+      "durably_accepted_at_failure": true,
+      "owed_at_failure": true,
+      "published_before_recovery": false,
+      "same_run_retry_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "following_run_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "observed_run_ids": [
+        "2026-09-25"
+      ],
+      "observation_count": 1,
+      "still_owed": false
+    },
+    {
+      "boundary": "raw_snapshot",
+      "expected_durably_accepted": true,
+      "expected_recovery_source": "the feed's owed-publication record",
+      "injected_failure": "P09-injected storage failure writing raw/provider=himalayas/board=all/dt=2026-09-25/snapshot=dcdb854d5197471cb83a2d8beace46b0.json.gz",
+      "durably_accepted_at_failure": true,
+      "owed_at_failure": true,
+      "published_before_recovery": false,
+      "same_run_retry_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "following_run_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "observed_run_ids": [
+        "2026-09-25"
+      ],
+      "observation_count": 1,
+      "still_owed": false
+    },
+    {
+      "boundary": "normalized",
+      "expected_durably_accepted": true,
+      "expected_recovery_source": "the feed's owed-publication record",
+      "injected_failure": "P09-injected storage failure writing normalized/schema_v=1/provider=himalayas/board=all/dt=2026-09-25/jobs.json",
+      "durably_accepted_at_failure": true,
+      "owed_at_failure": true,
+      "published_before_recovery": false,
+      "same_run_retry_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "following_run_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "observed_run_ids": [
+        "2026-09-25"
+      ],
+      "observation_count": 1,
+      "still_owed": false
+    },
+    {
+      "boundary": "source_status",
+      "expected_durably_accepted": true,
+      "expected_recovery_source": "the feed's owed-publication record",
+      "injected_failure": "P09-injected storage failure writing status/provider=himalayas/board=all/_source_status.json",
+      "durably_accepted_at_failure": true,
+      "owed_at_failure": true,
+      "published_before_recovery": false,
+      "same_run_retry_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "following_run_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "observed_run_ids": [
+        "2026-09-25"
+      ],
+      "observation_count": 1,
+      "still_owed": false
+    },
+    {
+      "boundary": "success_sentinel",
+      "expected_durably_accepted": true,
+      "expected_recovery_source": "the feed's owed-publication record",
+      "injected_failure": "P09-injected storage failure writing status/run=2026-09-25/provider=himalayas/board=all/SUCCESS.json",
+      "durably_accepted_at_failure": true,
+      "owed_at_failure": true,
+      "published_before_recovery": false,
+      "same_run_retry_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "following_run_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "observed_run_ids": [
+        "2026-09-25"
+      ],
+      "observation_count": 1,
+      "still_owed": false
+    },
+    {
+      "boundary": "aggregate_receipt",
+      "expected_durably_accepted": true,
+      "expected_recovery_source": "the feed's owed-publication record",
+      "injected_failure": "P09-injected storage failure writing discovery/_pending_publication.json",
+      "durably_accepted_at_failure": true,
+      "owed_at_failure": true,
+      "published_before_recovery": false,
+      "same_run_retry_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "following_run_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "observed_run_ids": [
+        "2026-09-25"
+      ],
+      "observation_count": 1,
+      "still_owed": false
+    },
+    {
+      "boundary": "coverage_receipt",
+      "expected_durably_accepted": true,
+      "expected_recovery_source": "the feed's owed-publication record",
+      "injected_failure": "P09-injected storage failure writing discovery/run=2026-09-25/coverage.json",
+      "durably_accepted_at_failure": true,
+      "owed_at_failure": true,
+      "published_before_recovery": false,
+      "same_run_retry_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "following_run_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "observed_run_ids": [
+        "2026-09-25"
+      ],
+      "observation_count": 1,
+      "still_owed": false
+    },
+    {
+      "boundary": "traversal_state",
+      "expected_durably_accepted": true,
+      "expected_recovery_source": "the feed's owed-publication record",
+      "injected_failure": "P09-injected storage failure writing discovery/_discovery_state.json",
+      "durably_accepted_at_failure": true,
+      "owed_at_failure": true,
+      "published_before_recovery": false,
+      "same_run_retry_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "following_run_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "observed_run_ids": [
+        "2026-09-25"
+      ],
+      "observation_count": 1,
+      "still_owed": false
+    },
+    {
+      "boundary": "source_growth",
+      "expected_durably_accepted": true,
+      "expected_recovery_source": "the feed's owed-publication record",
+      "injected_failure": "P09-injected storage failure writing discovery/_source_growth.json",
+      "durably_accepted_at_failure": true,
+      "owed_at_failure": true,
+      "published_before_recovery": false,
+      "same_run_retry_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "following_run_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "observed_run_ids": [
+        "2026-09-25"
+      ],
+      "observation_count": 1,
+      "still_owed": false
+    },
+    {
+      "boundary": "proposed_registry",
+      "expected_durably_accepted": true,
+      "expected_recovery_source": "the feed's owed-publication record",
+      "injected_failure": "P09-injected storage failure writing discovery/run=2026-09-25/proposed_registry.json",
+      "durably_accepted_at_failure": true,
+      "owed_at_failure": true,
+      "published_before_recovery": false,
+      "same_run_retry_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "following_run_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "observed_run_ids": [
+        "2026-09-25"
+      ],
+      "observation_count": 1,
+      "still_owed": false
+    },
+    {
+      "boundary": "live_view_commit",
+      "expected_durably_accepted": true,
+      "expected_recovery_source": "the feed's owed-publication record",
+      "injected_failure": "P09-injected storage failure writing discovery/live/provider=himalayas/live_jobs.json",
+      "durably_accepted_at_failure": true,
+      "owed_at_failure": true,
+      "published_before_recovery": false,
+      "same_run_retry_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "following_run_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "observed_run_ids": [
+        "2026-09-25"
+      ],
+      "observation_count": 1,
+      "still_owed": false
+    },
+    {
+      "boundary": "live_view_stored_then_timeout",
+      "expected_durably_accepted": true,
+      "expected_recovery_source": "already published; the owed batch replayed idempotently",
+      "injected_failure": "P09-injected timeout AFTER storing discovery/live/provider=himalayas/live_jobs.json",
+      "durably_accepted_at_failure": true,
+      "owed_at_failure": true,
+      "published_before_recovery": true,
+      "same_run_retry_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "following_run_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "observed_run_ids": [
+        "2026-09-25"
+      ],
+      "observation_count": 1,
+      "still_owed": false
+    },
+    {
+      "boundary": "settle_owed_record",
+      "expected_durably_accepted": true,
+      "expected_recovery_source": "already published; the owed batch replayed idempotently",
+      "injected_failure": "P09-injected storage failure writing discovery/owed/provider=himalayas/owed_publication.json",
+      "durably_accepted_at_failure": true,
+      "owed_at_failure": true,
+      "published_before_recovery": true,
+      "same_run_retry_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "following_run_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "observed_run_ids": [
+        "2026-09-25"
+      ],
+      "observation_count": 1,
+      "still_owed": false
+    },
+    {
+      "boundary": "aggregate_receipt_refresh",
+      "expected_durably_accepted": true,
+      "expected_recovery_source": "already published; the owed batch replayed idempotently",
+      "injected_failure": "P09-injected storage failure writing discovery/_pending_publication.json",
+      "durably_accepted_at_failure": true,
+      "owed_at_failure": false,
+      "published_before_recovery": true,
+      "same_run_retry_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "following_run_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "observed_run_ids": [
+        "2026-09-25"
+      ],
+      "observation_count": 1,
+      "still_owed": false
+    },
+    {
+      "boundary": "residual_coverage_receipt",
+      "expected_durably_accepted": true,
+      "expected_recovery_source": "already published; the owed batch replayed idempotently",
+      "injected_failure": "P09-injected storage failure writing discovery/run=2026-09-25/coverage.json",
+      "durably_accepted_at_failure": true,
+      "owed_at_failure": false,
+      "published_before_recovery": true,
+      "same_run_retry_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "following_run_discovery_candidates": [
+        "himalayas:all#internal-tools"
+      ],
+      "observed_run_ids": [
+        "2026-09-25"
+      ],
+      "observation_count": 1,
+      "still_owed": false
+    }
+  ]
+}

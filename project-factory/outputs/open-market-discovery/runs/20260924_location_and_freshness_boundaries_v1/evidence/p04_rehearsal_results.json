@@ -1,0 +1,73 @@
+{
+  "round_one": {
+    "run_id": "rehearsal-r1",
+    "himalayas_cursors_requested": [
+      "page1(None)",
+      "page2"
+    ],
+    "himalayas_requests": 2,
+    "postings_considered": 245,
+    "retained_rows": 10,
+    "fresh_arrivals": 2,
+    "older_strong": 7,
+    "timing": {
+      "run_started_at": "2026-09-24T18:46:05.182800+00:00",
+      "previous_run_at": null,
+      "previous_run_id": null,
+      "basis": "local_cli_invocation",
+      "cold_start_run": true,
+      "previously_reported_count": 0,
+      "boundary": "cold-start"
+    },
+    "saved_backfill_cursor": "page3",
+    "saved_head_cursor_or_none": null,
+    "head_frontier_at": null,
+    "screening": {
+      "new_strong": 5,
+      "needs_a_check": 5,
+      "policy_excluded": 100,
+      "below_fit_threshold": 135
+    },
+    "report_dir": "rehearsal/round1"
+  },
+  "round_two": {
+    "run_id": "rehearsal-r2",
+    "himalayas_cursors_requested": [
+      "page1(None)",
+      "page2",
+      "page3"
+    ],
+    "himalayas_requests": 3,
+    "postings_considered": 264,
+    "retained_rows": 11,
+    "fresh_arrivals": 3,
+    "older_strong": 7,
+    "timing": {
+      "run_started_at": "2026-09-24T18:46:07.577721+00:00",
+      "previous_run_at": "2026-09-24T18:46:07.255799+00:00",
+      "previous_run_id": "rehearsal-r1",
+      "basis": "local_cli_invocation",
+      "cold_start_run": false,
+      "previously_reported_count": 10,
+      "boundary": "reported-ids"
+    },
+    "saved_backfill_cursor": "page4",
+    "saved_head_cursor_or_none": null,
+    "head_frontier_at": "2026-09-24T16:35:44+00:00",
+    "screening": {
+      "new_strong": 5,
+      "needs_a_check": 6,
+      "policy_excluded": 108,
+      "below_fit_threshold": 145
+    },
+    "report_dir": "rehearsal/round2"
+  },
+  "assertions": {
+    "round_two_reached_page_two": true,
+    "round_two_also_advanced_the_backfill": true,
+    "nothing_was_left_unfetched_in_the_head": true,
+    "round_two_respected_its_budget": true,
+    "round_two_used_round_one_as_its_boundary": true,
+    "postings_reached_the_persisted_report": true
+  }
+}

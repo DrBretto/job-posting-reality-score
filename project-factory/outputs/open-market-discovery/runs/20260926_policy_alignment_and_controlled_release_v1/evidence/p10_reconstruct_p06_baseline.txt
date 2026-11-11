@@ -1,0 +1,34 @@
+--- 1. verify the archived baseline before anything is written ---
+=== P06 rollback baseline verification ===
+archive: /Users/drbretto/Desktop/Projects/job-posting-reality-score/project-factory/outputs/open-market-discovery/runs/20260925_durable_discovery_publication_release_repair_v1/evidence/p06_baseline_src.tar.gz
+Validation runs against the archive's own bytes. Nothing is written before it passes.
+
+recorded P06 source files:      36
+archive members checked:        36
+identified metadata ignored:    36
+    ignored (metadata): src/.___init__.py
+    ignored (metadata): src/candidate/.___init__.py
+    ignored (metadata): src/candidate/._history.py
+    ignored (metadata): src/candidate/._location.py
+    ignored (metadata): src/candidate/._policy.py
+    … and 31 more identified metadata members
+
+--- current working-tree template/config vs P06 recorded ---
+SAME    config/discovery_sources.yaml
+SAME    infra/samconfig.toml
+SAME    infra/template.yaml
+
+BASELINE_VERIFIED — all 36 recorded P06 source files are present and
+  identical in the archive, and it carries no unexpected executable source.
+
+--- 2. assemble a P06 source tree in scratch ---
+P06 source placed at /tmp/claude-501/jprs-p06-baseline-H6sodK/tree/src
+NOTE: everything OUTSIDE src/ is the current tree, so the reconstructed package differs from
+      the real P06 artifact in repository payload (tests, docs). Those differences are
+      classified as payload, not infrastructure, by the change-set check.
+
+--- 3. build it locally (no AWS call) ---
+BASELINE_BUILD_READY — /tmp/claude-501/jprs-p06-baseline-H6sodK/build
+Compare a candidate against it with:
+  /Users/drbretto/Desktop/Projects/job-posting-reality-score/.venv/bin/python /Users/drbretto/Desktop/Projects/job-posting-reality-score/scripts/check_release_change_set.py \
+      --baseline /tmp/claude-501/jprs-p06-baseline-H6sodK/build --candidate /Users/drbretto/Desktop/Projects/job-posting-reality-score/.aws-sam/build --repo /Users/drbretto/Desktop/Projects/job-posting-reality-score

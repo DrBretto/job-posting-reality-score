@@ -1,0 +1,16 @@
+=== P02/P03 transport + polarity + rollback regressions (must still pass) ===
+........................................................................ [ 85%]
+............                                                             [100%]
+84 passed in 1.45s
+
+=== downgrade / rollback specifically ===
+......................                                                   [100%]
+22 passed, 273 deselected in 1.09s
+
+=== new P04 regressions ===
+...........................................                              [100%]
+43 passed in 1.07s
+
+=== full suite ===
+.......                                                                  [100%]
+295 passed in 3.19s

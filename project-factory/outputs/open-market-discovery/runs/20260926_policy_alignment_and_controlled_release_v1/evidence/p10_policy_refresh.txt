@@ -1,0 +1,6 @@
+wrote config/candidate_policy.json from 5 policy sources
+  workflow         231c68062630b518  ../Infotropy Book/INBOX/Employment Search/APPLICATION_WORKFLOW.md
+  preferences      7b5f8bc5dd84cc49  ../Infotropy Book/INBOX/Employment Search/SEARCH_PREFERENCES.md
+  operating_plan   5adc2cd20ac8d51b  ../Infotropy Book/INBOX/Employment Search/OPERATING_PLAN.md
+  candidate_facts  a97e40f9d3b3f317  ../Infotropy Book/INBOX/Employment Search/CANDIDATE_FACTS.md
+  master_resume    1b95bbe82b56be5a  ../Infotropy Book/career-factory/outputs/candidates/brett-westerlund/master-resume/MASTER_RESUME.latest.md

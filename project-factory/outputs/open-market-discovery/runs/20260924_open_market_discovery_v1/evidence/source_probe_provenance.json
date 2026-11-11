@@ -1,0 +1,287 @@
+{
+  "note": "Distilled provenance for the 2026-09-24 bounded read-only source probes. Raw provider payloads are deliberately NOT committed: several providers (Remotive, Remote OK, Jobicy) restrict redistribution of their job data, and the packet forbids giant raw dumps. Shapes, counts and hashes are recorded here; re-probe to reproduce.",
+  "probed_by": "JPRS-L2-P01 Stage A source research",
+  "probes": [
+    {
+      "probe": "arbeitnow",
+      "bytes": 2190253,
+      "sha256": "396fb799eb8c943c5546880e85af30023982a3329533eef58e56b0cc71b8624b",
+      "probed_at_utc": "2026-09-24T13:57:40.941360+00:00",
+      "top_level_keys": [
+        "data",
+        "links",
+        "meta"
+      ],
+      "array_field": "data",
+      "record_count": 250,
+      "record_fields": [
+        "slug",
+        "company_name",
+        "title",
+        "description",
+        "remote",
+        "url",
+        "tags",
+        "job_types",
+        "location",
+        "created_at"
+      ]
+    },
+    {
+      "probe": "ashby_Ramp",
+      "bytes": 2808748,
+      "sha256": "26730e9406e11bbd5f3426fd19181e7001872288762918aae04dce4e01b0747b",
+      "probed_at_utc": "2026-09-24T13:59:34.679651+00:00",
+      "top_level_keys": [
+        "jobs",
+        "apiVersion"
+      ],
+      "array_field": "jobs",
+      "record_count": 155,
+      "record_fields": [
+        "id",
+        "title",
+        "department",
+        "team",
+        "employmentType",
+        "location",
+        "shouldDisplayCompensationOnJobPostings",
+        "secondaryLocations",
+        "publishedAt",
+        "isListed",
+        "isRemote",
+        "workplaceType",
+        "address",
+        "jobUrl",
+        "applyUrl",
+        "descriptionHtml",
+        "descriptionPlain",
+        "compensation"
+      ]
+    },
+    {
+      "probe": "ashby_ashby",
+      "bytes": 2260950,
+      "sha256": "17e63ac0b449dd906bf953c603e1f3cb4e905892317ff77d7ee8aafd88e3de46",
+      "probed_at_utc": "2026-09-24T13:59:35.217142+00:00",
+      "top_level_keys": [
+        "jobs",
+        "apiVersion"
+      ],
+      "array_field": "jobs",
+      "record_count": 70,
+      "record_fields": [
+        "id",
+        "title",
+        "department",
+        "team",
+        "employmentType",
+        "location",
+        "shouldDisplayCompensationOnJobPostings",
+        "secondaryLocations",
+        "publishedAt",
+        "isListed",
+        "isRemote",
+        "workplaceType",
+        "address",
+        "jobUrl",
+        "applyUrl",
+        "descriptionHtml",
+        "descriptionPlain",
+        "compensation"
+      ]
+    },
+    {
+      "probe": "ashby_linear",
+      "bytes": 413350,
+      "sha256": "f24233ff34310445a0a886da7de7a044bf6e0e8ea2aaf0a406770170762aa59b",
+      "probed_at_utc": "2026-09-24T13:59:35.338287+00:00",
+      "top_level_keys": [
+        "jobs",
+        "apiVersion"
+      ],
+      "array_field": "jobs",
+      "record_count": 30,
+      "record_fields": [
+        "id",
+        "title",
+        "department",
+        "team",
+        "employmentType",
+        "location",
+        "shouldDisplayCompensationOnJobPostings",
+        "secondaryLocations",
+        "publishedAt",
+        "isListed",
+        "isRemote",
+        "workplaceType",
+        "address",
+        "jobUrl",
+        "applyUrl",
+        "descriptionHtml",
+        "descriptionPlain",
+        "compensation"
+      ]
+    },
+    {
+      "probe": "ashby_openai",
+      "bytes": 14439790,
+      "sha256": "afec1ffcabfdc3ba514ae426ccb7acab07c5443fbd277b25646bb7c856f6072e",
+      "probed_at_utc": "2026-09-24T13:59:35.015651+00:00",
+      "top_level_keys": [
+        "jobs",
+        "apiVersion"
+      ],
+      "array_field": "jobs",
+      "record_count": 828,
+      "record_fields": [
+        "id",
+        "title",
+        "department",
+        "team",
+        "employmentType",
+        "location",
+        "shouldDisplayCompensationOnJobPostings",
+        "secondaryLocations",
+        "publishedAt",
+        "isListed",
+        "isRemote",
+        "workplaceType",
+        "address",
+        "jobUrl",
+        "applyUrl",
+        "descriptionHtml",
+        "descriptionPlain",
+        "compensation"
+      ]
+    },
+    {
+      "probe": "himalayas",
+      "bytes": 22493,
+      "sha256": "c2cd3f2047e87e8ae5e98b66f6c13c32c4a5bb8204898017be48412dc477e3cd",
+      "probed_at_utc": "2026-09-24T13:57:42.403895+00:00",
+      "top_level_keys": [
+        "comments",
+        "updatedAt",
+        "offset",
+        "limit",
+        "totalCount",
+        "nextCursor",
+        "jobs"
+      ],
+      "array_field": "jobs",
+      "record_count": 5,
+      "record_fields": [
+        "title",
+        "excerpt",
+        "companyName",
+        "companySlug",
+        "companyLogo",
+        "employmentType",
+        "minSalary",
+        "maxSalary",
+        "salaryPeriod",
+        "seniority",
+        "currency",
+        "locationRestrictions",
+        "timezoneRestrictions",
+        "categories",
+        "parentCategories",
+        "description",
+        "pubDate",
+        "expiryDate",
+        "applicationLink",
+        "guid"
+      ]
+    },
+    {
+      "probe": "jobicy",
+      "bytes": 36071,
+      "sha256": "a77fb107c4d80e883a017a5567ca978f528ba1aebf73e32205142421ccc7ecb1",
+      "probed_at_utc": "2026-09-24T13:57:41.508437+00:00",
+      "top_level_keys": [
+        "apiVersion",
+        "documentationUrl",
+        "friendlyNotice",
+        "jobCount",
+        "lastUpdate",
+        "appliedFilters",
+        "jobs",
+        "statusCode",
+        "success"
+      ],
+      "array_field": "jobs",
+      "record_count": 5,
+      "record_fields": [
+        "id",
+        "url",
+        "jobSlug",
+        "jobTitle",
+        "companyName",
+        "companyLogo",
+        "jobIndustry",
+        "jobType",
+        "jobGeo",
+        "jobLevel",
+        "jobExcerpt",
+        "jobDescription",
+        "pubDate"
+      ]
+    },
+    {
+      "probe": "remoteok",
+      "bytes": 619310,
+      "sha256": "e3fc61973ef538677f26b64ec1e8bde7d4290548659d0ac485a67166fa66706d",
+      "probed_at_utc": "2026-09-24T13:57:42.281530+00:00",
+      "array_field": "<top-level list>",
+      "record_count": 100,
+      "record_fields": [
+        "slug",
+        "id",
+        "epoch",
+        "date",
+        "company",
+        "company_logo",
+        "position",
+        "tags",
+        "description",
+        "location",
+        "apply_url",
+        "salary_min",
+        "salary_max",
+        "logo",
+        "url"
+      ]
+    },
+    {
+      "probe": "remotive",
+      "bytes": 209696,
+      "sha256": "61279764c6a7b5113981887d53c26a1aa8e24f0f43cd32f4fae77ee14b26f51b",
+      "probed_at_utc": "2026-09-24T13:57:40.806353+00:00",
+      "top_level_keys": [
+        "00-warning",
+        "0-legal-notice",
+        "job-count",
+        "total-job-count",
+        "jobs"
+      ],
+      "array_field": "jobs",
+      "record_count": 19,
+      "record_fields": [
+        "id",
+        "url",
+        "title",
+        "company_name",
+        "company_logo",
+        "category",
+        "tags",
+        "job_type",
+        "publication_date",
+        "candidate_required_location",
+        "salary",
+        "description",
+        "company_logo_url"
+      ]
+    }
+  ]
+}

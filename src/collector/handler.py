@@ -48,7 +48,12 @@ def collect_one(s3, bucket: str, msg: dict) -> dict:  # pragma: no cover - netwo
 
     fr = connector.fetch_raw(board)
     prior = _prior_job_count(s3, bucket, provider, board)
-    snapshot, jobs = connector.build_snapshot(board, fr, prior_job_count=prior)
+    snapshot, jobs = connector.build_snapshot(
+        board, fr, prior_job_count=prior,
+        # The registry's operator-curated name, so the employer on each job is authoritative rather
+        # than reverse-engineered from a board token by a lookup table.
+        employer_name=msg.get("employer_name") or msg.get("company_slug"),
+    )
     dt = snapshot.fetched_at.strftime("%Y-%m-%d")
 
     # 1. raw + receipt FIRST (court-of-record), even on failure

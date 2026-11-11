@@ -1,0 +1,11 @@
+{
+  "backfill_position": "OLD_1",
+  "owed_recent_ranges": [
+    "NEW_TWO"
+  ],
+  "compatibility_mirror": "NEW_TWO",
+  "observed_frontier": "2026-09-24T11:00:00+00:00",
+  "requests_spent": 3,
+  "failures": 1,
+  "backlog_reason": "himalayas feed has 1 untraversed recent page range(s) plus its historical position saved; all resumable"
+}

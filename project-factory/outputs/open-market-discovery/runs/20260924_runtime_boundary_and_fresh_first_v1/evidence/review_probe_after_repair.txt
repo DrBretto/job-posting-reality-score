@@ -1,0 +1,10 @@
+REVIEW PROBE, RE-RUN AFTER THE P03 REPAIR
+date: 2026-09-24  (same script, unmodified, from the P02 run root)
+
+{"probe": "actual_http_boundary", "request_count": 1, "app_id": ["FAKE_ID"], "app_key": ["FAKE_KEY"], "network": "mocked at urlopen"}
+{"probe": "screening", "text": "Interview process: A recorded video introduction is optional. You may instead have a live video call with the team.", "outcome": "ELIGIBLE", "excluded": [], "suppressed": ["recorded-video"]}
+{"probe": "screening", "text": "Interview process: We do not require a recorded video introduction. You must complete a one-way video interview in the final round.", "outcome": "EXCLUDED", "excluded": ["recorded-video"], "suppressed": []}
+{"probe": "screening", "text": "Requirements: No security clearance is required. You must pass a drug screening before starting.", "outcome": "EXCLUDED", "excluded": ["clearance-government"], "suppressed": []}
+{"probe": "screening", "text": "Responsibilities: You will build tools for the sales team and carry a sales quota.", "outcome": "EXCLUDED", "excluded": ["sales-ownership"], "suppressed": []}
+{"probe": "rollback_reader", "accepts_current_record": false, "rejected_fields": ["employer_name", "employer_domain", "employer_careers_url", "secondary_locations", "description_native", "industry", "job_level", "apply_host", "source_kind", "discovery_query", "discovery_query_family", "verification_state", "verified_at", "uncertainty", "provenance", "dedup_group_id", "duplicate_of", "possible_duplicate_of"]}
+{"probe": "fresh_head", "day2_requests": ["OLDER_PAGE_2"], "head_rechecked": false}

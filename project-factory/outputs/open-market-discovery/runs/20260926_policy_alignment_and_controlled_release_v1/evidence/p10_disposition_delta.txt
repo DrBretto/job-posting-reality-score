@@ -1,0 +1,80 @@
+{
+  "totals_before": {
+    "postings_considered": 282,
+    "retained": 11,
+    "policy_excluded": 112,
+    "below_fit_threshold": 159,
+    "new_strong": 5,
+    "needs_a_check": 6
+  },
+  "totals_after": {
+    "postings_considered": 282,
+    "retained": 11,
+    "policy_excluded": 117,
+    "below_fit_threshold": 154,
+    "new_strong": 5,
+    "needs_a_check": 6
+  },
+  "ruleset_before": "1.4.0",
+  "ruleset_after": "1.5.0",
+  "changed_count": 11,
+  "by_direction": {
+    "newly_excluded": 5,
+    "reason_or_state_changed": 6
+  }
+}
+
+[reason_or_state_changed] Client Support Specialist - Greater St. Louis, MO Area @ Fidelity Investments
+   before: policy_excluded/EXCLUDED excl=['sales-ownership'] pend=['location-eligibility']
+   after:  policy_excluded/EXCLUDED excl=['customer-service-queue', 'sales-ownership'] pend=['location-eligibility']
+   why:    sales-ownership: role owns sales outcomes (outbound calls); customer-service-queue: the role's own subject is external customer service or phone support (client support); stated duty: inbound calls
+
+[newly_excluded] Sales Support - Italian @ Integrated Language Solutions
+   before: below_fit_threshold/PENDING_CHECK excl=[] pend=['process-not-inspectable']
+   after:  policy_excluded/EXCLUDED excl=['customer-service-queue'] pend=['process-not-inspectable']
+   why:    customer-service-queue: the role's stated duties include working an external customer-contact queue (inbound sales and support inquiries); 2 such duties stated
+
+[reason_or_state_changed] Senior AI Solutions Engineer (Python & AWS Bedrock) @ Oowlish Technology
+   before: policy_excluded/EXCLUDED excl=['location-eligibility'] pend=[]
+   after:  policy_excluded/EXCLUDED excl=['location-eligibility'] pend=[]
+   why:    location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated
+
+[newly_excluded] Operations Associate @ CoinGecko
+   before: below_fit_threshold/PENDING_CHECK excl=[] pend=['process-not-inspectable']
+   after:  policy_excluded/EXCLUDED excl=['customer-service-queue'] pend=['process-not-inspectable']
+   why:    customer-service-queue: the role's stated duties include working an external customer-contact queue (customer inquiries)
+
+[reason_or_state_changed] Enterprise Customer Success Manager @ Samsara
+   before: policy_excluded/EXCLUDED excl=['location-eligibility', 'sales-ownership'] pend=[]
+   after:  policy_excluded/EXCLUDED excl=['customer-service-queue', 'location-eligibility', 'sales-ownership'] pend=[]
+   why:    sales-ownership: title is a sales role (Customer Success Manager); customer-service-queue: the role's stated duties include working an external customer-contact queue (phone call); location-eligibility: the stated worksite is outside the US and no US-remote el
+
+[reason_or_state_changed] Licensed Customer Service Representative @ Liberty Mutual Insurance
+   before: policy_excluded/EXCLUDED excl=['location-residency'] pend=['process-not-inspectable']
+   after:  policy_excluded/EXCLUDED excl=['customer-service-queue', 'location-residency'] pend=['process-not-inspectable']
+   why:    customer-service-queue: the role's own subject is external customer service or phone support (customer service); no duty text contradicts the title; location-residency: the posting limits employment to residents of NY, CA, AK, HI, NM, IL, which does not includ
+
+[newly_excluded] Customer Support Specialist @ Resource Guru
+   before: below_fit_threshold/ELIGIBLE excl=[] pend=[]
+   after:  policy_excluded/EXCLUDED excl=['customer-service-queue'] pend=[]
+   why:    customer-service-queue: the role's own subject is external customer service or phone support (customer support); no duty text contradicts the title
+
+[reason_or_state_changed] Customer Service Representative @ Adaptive Teams
+   before: policy_excluded/EXCLUDED excl=['recorded-video', 'sales-ownership'] pend=[]
+   after:  policy_excluded/EXCLUDED excl=['customer-service-queue', 'recorded-video', 'sales-ownership'] pend=[]
+   why:    sales-ownership: role owns sales outcomes (outbound calls); recorded-video: application requires a recorded candidate video (video introduction); customer-service-queue: the role's own subject is external customer service or phone support (customer service); n
+
+[newly_excluded] Customer Support & Success Specialist @ Warehance
+   before: below_fit_threshold/ELIGIBLE excl=[] pend=[]
+   after:  policy_excluded/EXCLUDED excl=['customer-service-queue'] pend=[]
+   why:    customer-service-queue: the role's own subject is external customer service or phone support (customer support); no duty text contradicts the title
+
+[newly_excluded] Tier III Service Desk Engineer @ Unio Digital
+   before: below_fit_threshold/PENDING_CHECK excl=[] pend=['process-not-inspectable']
+   after:  policy_excluded/EXCLUDED excl=['customer-service-queue'] pend=['process-not-inspectable']
+   why:    customer-service-queue: the role's stated duties include working an external customer-contact queue (helpdesk); 2 such duties stated
+
+[reason_or_state_changed] 🇩🇪 Kundenservice Mobilfunk Inbound - innerhalb der EU (ausgenommen: Deutschland) @ hey contact heroes GmbH
+   before: policy_excluded/EXCLUDED excl=['location-eligibility'] pend=['process-not-inspectable']
+   after:  policy_excluded/EXCLUDED excl=['customer-service-queue', 'location-eligibility'] pend=['process-not-inspectable']
+   why:    customer-service-queue: the role's own subject is external customer service or phone support (kundenservice); no duty text contradicts the title; location-eligibility: location is outside the US with no US-remote eligibility stated

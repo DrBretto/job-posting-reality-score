@@ -1,0 +1,29 @@
+candidate build: /private/tmp/claude-501/jprs-build-p06-9H8jKS
+functions present: CollectorFunction, DifferFunction, DiscoveryFunction, EnumerateFunction, NarratorFunction, ReportFunction
+recorded P06 source files: 36
+
+CollectorFunction: MATCHES P06 (matched=36 differing=0 missing=0)
+DifferFunction: MATCHES P06 (matched=36 differing=0 missing=0)
+DiscoveryFunction: MATCHES P06 (matched=36 differing=0 missing=0)
+EnumerateFunction: MATCHES P06 (matched=36 differing=0 missing=0)
+NarratorFunction: MATCHES P06 (matched=36 differing=0 missing=0)
+ReportFunction: MATCHES P06 (matched=36 differing=0 missing=0)
+
+--- template inside the candidate build ---
+95883358ed6955c2dc3db101af188984e29b4c25785bda79486a2bf34ce5801f  /private/tmp/claude-501/jprs-build-p06-9H8jKS/template.yaml
+    SAM rewrites CodeUri when it builds, so this hash is deliberately NOT compared
+    against the recorded source-template hash; the source template is checked below.
+
+--- current working-tree template/config vs P06 recorded ---
+SAME    config/discovery_sources.yaml
+        recorded 93139170cd25f3ca3b271137c90eacc06261be631cdbbb5ac87c1f4f65a4ca58
+        current  93139170cd25f3ca3b271137c90eacc06261be631cdbbb5ac87c1f4f65a4ca58
+SAME    infra/samconfig.toml
+        recorded b8582bcb886291b07b887f8fa8592b66b694ee850686dd7d0468f97d8853ab87
+        current  b8582bcb886291b07b887f8fa8592b66b694ee850686dd7d0468f97d8853ab87
+SAME    infra/template.yaml
+        recorded 83a6e4f46fb5fcae34eab750afdc78a42ef7eb21763615b66d5734fd1f712002
+        current  83a6e4f46fb5fcae34eab750afdc78a42ef7eb21763615b66d5734fd1f712002
+
+BASELINE_VERIFIED — every packaged function matches P06 (6 functions)
+exit=0

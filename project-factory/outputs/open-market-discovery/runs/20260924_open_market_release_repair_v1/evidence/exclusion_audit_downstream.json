@@ -1,0 +1,314 @@
+{
+  "released_rows_total": 34,
+  "reach_candidate_list_after_scoring": [
+    {
+      "employer": "Future",
+      "title": "Full-Stack Growth Engineer",
+      "fit": 0.32,
+      "screen": "ELIGIBLE",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Nimble Gravity",
+      "title": "Senior Architect, Anthropic Enablement",
+      "fit": 0.364,
+      "screen": "PENDING_CHECK",
+      "released": [
+        "sales-ownership"
+      ]
+    }
+  ],
+  "still_rejected_by_fit_scoring": [
+    {
+      "employer": "Cargomatic",
+      "title": "Operations Coordinator",
+      "fit": 0.0,
+      "screen": "PENDING_CHECK",
+      "released": [
+        "location-eligibility"
+      ]
+    },
+    {
+      "employer": "Cargomatic",
+      "title": "Port Dispatcher/Driver Manager - Port/Drayage",
+      "fit": 0.0,
+      "screen": "PENDING_CHECK",
+      "released": [
+        "location-eligibility"
+      ]
+    },
+    {
+      "employer": "Cargomatic",
+      "title": "Terminal Operations Manager (Drayage / Port Logistics)",
+      "fit": 0.0,
+      "screen": "PENDING_CHECK",
+      "released": [
+        "location-eligibility"
+      ]
+    },
+    {
+      "employer": "Legion Intelligence",
+      "title": "Solutions Engineer/Agentic AI Tools/Generative AI Protoyping/Proof of Concept (POC) - (Southeastern US Area)",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Tailscale",
+      "title": "Commercial Legal Counsel",
+      "fit": 0.0,
+      "screen": "ELIGIBLE",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Tailscale",
+      "title": "Commercial Legal Counsel",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Tailscale",
+      "title": "Product Marketing Manager",
+      "fit": 0.0,
+      "screen": "ELIGIBLE",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Tailscale",
+      "title": "Product Marketing Manager",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Tailscale",
+      "title": "Sales Director, EMEA",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Grafana Labs",
+      "title": "Engineering Manager - Observability | Germany | Remote",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Grafana Labs",
+      "title": "Engineering Manager - Observability | Ireland | Remote",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Grafana Labs",
+      "title": "Engineering Manager - Observability | Spain | Remote",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Grafana Labs",
+      "title": "Engineering Manager - Observability | Sweden | Remote",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Grafana Labs",
+      "title": "Engineering Manager - Observability | UK | Remote",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Grafana Labs",
+      "title": "Senior Solutions Engineer | France | Arabic Speaker | Remote",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Grafana Labs",
+      "title": "Senior Solutions Engineer | Netherlands | Remote",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Grafana Labs",
+      "title": "Senior Solutions Engineer | Preference for Mumbai, India",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Grafana Labs",
+      "title": "Senior Solutions Engineer | Spain | Arabic Speaker | Remote",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Grafana Labs",
+      "title": "Senior Solutions Engineer | Spain | Remote",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Grafana Labs",
+      "title": "Senior Solutions Engineer | Sweden | Remote",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Grafana Labs",
+      "title": "Senior Solutions Engineer | Tokyo, Japan | Remote",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Grafana Labs",
+      "title": "Solutions Engineer | France | Remote",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Snorkel Ai",
+      "title": "Director, GTM Systems & AI Transformation",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Snorkel Ai",
+      "title": "Director of Technical Recruiting",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "location-eligibility"
+      ]
+    },
+    {
+      "employer": "Snorkel Ai",
+      "title": "Senior Technical Compliance Analyst",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Cadence Solutions",
+      "title": "Vice President, Marketing",
+      "fit": 0.0,
+      "screen": "PENDING_CHECK",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "A.Team",
+      "title": "Senior Independent AI Engineer / Architect",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Chaos",
+      "title": "Team Lead Education",
+      "fit": 0.05,
+      "screen": "PENDING_CHECK",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Balco, Inc.",
+      "title": "Regional Sales Manager",
+      "fit": 0.0,
+      "screen": "EXCLUDED",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Defense Unicorns",
+      "title": "Director of Discovery & Framing",
+      "fit": 0.0,
+      "screen": "ELIGIBLE",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "RELX",
+      "title": "Senior Director Sales",
+      "fit": 0.0,
+      "screen": "ELIGIBLE",
+      "released": [
+        "sales-ownership"
+      ]
+    },
+    {
+      "employer": "Integrated Language Solutions",
+      "title": "Sales Support - Italian",
+      "fit": 0.0,
+      "screen": "PENDING_CHECK",
+      "released": [
+        "sales-ownership"
+      ]
+    }
+  ],
+  "note": "A released exclusion returns the posting to the ordinary fit gate. Most released rows are still rejected there, which is why the released count is not a count of new opportunities. None of these are approved applications; they are candidates for the downstream research step."
+}

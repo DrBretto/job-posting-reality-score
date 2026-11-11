@@ -1,0 +1,99 @@
+{
+  "packet_id": "JPRS-L2-P02-discovery-release-repair-v01",
+  "execution_profile": "FULL_BUILD",
+  "project_slug": "jprs",
+  "phase_key": "open-market-release-repair",
+  "run_id": "20260924_open_market_release_repair_v1",
+  "stage": "repair_complete",
+  "handoff_target": "Claude Code",
+  "status": "stage_complete",
+  "active_roles": ["implementation executor", "self-review (independent review NOT obtained)"],
+  "source_of_defects": "project-factory/outputs/open-market-discovery/runs/20260924_open_market_discovery_v1/ORCHESTRATOR_REVIEW.md",
+  "inputs_used": [
+    "AGENTS.md", "CLAUDE.md", ".cursorrules", "project-factory/ORCHESTRATOR_BOOTSTRAP.md",
+    "project-factory/claude_handoff/RUN_OUTPUT_CONTRACT.md",
+    "docs/plans/2026-09-24-open-market-job-discovery.md",
+    "the P01 packet and its ORCHESTRATOR_REVIEW.md / VALIDATION.md / DEPLOYMENT_HANDOFF.md",
+    "P01 rehearsal reports (monitored_only, live_replay, combined)",
+    "five central candidate/workflow sources (read-only), including the changed Company Research section",
+    "config/discovery_sources.yaml", "infra/template.yaml", "infra/samconfig.toml", "infra/DEPLOY.md",
+    "https://himalayas.app/api (rechecked)",
+    "https://developer.adzuna.com/overview (rechecked)",
+    "https://docs.aws.amazon.com/cli/latest/reference/scheduler/update-schedule.html",
+    "AWS Price List API: AmazonCloudWatch/current/us-east-1"
+  ],
+  "outputs_emitted": [
+    "VALIDATION.md", "DEPLOYMENT_HANDOFF.md", "OPERATOR_RETURN.md",
+    "checkpoint.md", "gate_decision.md", "run_manifest.json",
+    "evidence/defect_reproduction_before_repair.txt",
+    "evidence/tests_before_repair.txt",
+    "evidence/rollback_validation.txt",
+    "evidence/himalayas_live_pagination.txt",
+    "evidence/exclusion_audit.json",
+    "evidence/exclusion_audit_downstream.json",
+    "evidence/after_repair_verification.txt",
+    "rehearsal/combined_repaired/{daily_report.md,daily_report.json,discovery_coverage.json}"
+  ],
+  "acceptance_result": {
+    "R1_adzuna_runtime": "PASS locally; live gate remains unpassed (no credential exists)",
+    "R2_pagination": "PASS; live-verified 5-page cursor walk",
+    "R3_screening_polarity": "PASS; 364-posting audit accompanies the suite",
+    "R4_deployment_rollback": "PASS; CLI-validated, non-destructive, cost sourced",
+    "existing_tests_and_build": "PASS; one contract change explicitly justified",
+    "whole_object_review": "PASS with the gates below open"
+  },
+  "defects_reproduced_before_repair": {
+    "R1a": "default provider path never reached or named Adzuna even with credentials present",
+    "R1b": "connector read os.environ, so SSM-resolved credentials produced app_id=&app_key=",
+    "R1c": "zero requests carried `where`; the NH-targeted search was never wired",
+    "R2": "1 request, 20 jobs, 0 backlog, 0 saturated, coverage read complete despite a live nextCursor",
+    "R3": "4/4 look-alike inputs EXCLUDED, including a real captured Future posting",
+    "R4": "disable command rejected by the CLI; full rollback would have destroyed the uncommitted work; cost claim assumed unverified free-tier eligibility"
+  },
+  "checks_run": {
+    "pytest": "209 passed (168 before P02, 41 added)",
+    "release_repair_suite": "41 passed",
+    "tests_failing_before_repair": "23 of 41",
+    "sam_validate_lint": "valid",
+    "sam_build": "succeeded (clean build dir)",
+    "policy_check": "projection matches all policy sources",
+    "aws_cli_rollback_validation": "validation only via --generate-cli-skeleton; no AWS operation"
+  },
+  "headline_measurements": {
+    "himalayas_postings_before_after": {"before": 20, "after": 96},
+    "himalayas_employers_before_after": {"before": 19, "after": 74},
+    "postings_considered_before_after": {"before": 747, "after": 821},
+    "discovery_employers_absent_from_registry": {"before": 162, "after": 221},
+    "p01_exclusions_audited": 364,
+    "exclusion_dispositions_changed": 34,
+    "released_rows_that_actually_reach_the_candidate_list": 2,
+    "below_fit_threshold_now_stated": 403,
+    "note": "34 released exclusions is NOT 34 new opportunities; 32 are still rejected by ordinary fit scoring. Raw counts are not the result."
+  },
+  "unpassed_gates": [
+    "Adzuna live authenticated search — no credential provisioned; the credential alone does not close it",
+    "production fetch transport for 3 of 4 feeds — local egress proxy truncates them",
+    "careers-URL resolution live path — off by default, DNS-dependent guard unrunnable in this sandbox",
+    "discovery -> monitoring — proposes registry rows only, by design",
+    "independent review of the repaired screening rules — not obtained, disclosed"
+  ],
+  "bounded_claims_corrected_from_p01": [
+    "the Ashby UUID observation is a single point-in-time reading, not proof the identifier was unchanged since 2021",
+    "repeated successful downloads do not prove every partial-feed failure mode is excluded",
+    "the P01 coverage comparison isolates source footprint, not all effects of old versus new scoring",
+    "the '$0 additional in practice' cost claim is withdrawn; cost is now bounded from primary pricing with stated assumptions"
+  ],
+  "budget_caps": "no candidate or employer quota; provider rate limits respected; $0 spend",
+  "acceptance_condition": "R1-R4 closed locally with regression tests and captured evidence; remaining activation requirements explicit",
+  "stop_condition": "tested local repair readiness; no deployment under this packet",
+  "checkpoint_path": "checkpoint.md",
+  "next_stage": "operator decision: deploy, or independent review of the repaired screening first",
+  "spend_usd": 0,
+  "aws_mutations": "none",
+  "git_actions": "none — working tree uncommitted on codex/real-job-radar, preserved",
+  "top_risks": [
+    "Adzuna general-industry coverage is still unproven; the repair makes the path work but it has never run authenticated",
+    "the repaired screening rules were self-reviewed by the context that wrote them, and a screening misfire silently discards an opportunity",
+    "fetch_raw remains unverified outside this sandbox for three of four feeds"
+  ]
+}

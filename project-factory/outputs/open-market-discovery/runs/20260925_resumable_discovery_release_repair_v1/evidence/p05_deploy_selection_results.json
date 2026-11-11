@@ -1,0 +1,87 @@
+{
+  "scope": "installed SAM CLI resolution functions only; no deploy, no AWS call, no credential, nothing written inside the repository",
+  "sam_cli": "1.137.1",
+  "cwd": "/Users/drbretto/Desktop/Projects/job-posting-reality-score",
+  "root_template_yaml_exists": false,
+  "root_template_yml_exists": false,
+  "default_build_template_exists": false,
+  "infra_default_build_template_exists": true,
+  "p04_forward_command": {
+    "documented": "sam build --template-file infra/template.yaml --build-dir /tmp/jprs-build  then  sam deploy --config-file infra/samconfig.toml",
+    "selection": {
+      "given": "(omitted \u2014 SAM default search)",
+      "resolved_template": "/Users/drbretto/Desktop/Projects/job-posting-reality-score/template.yml",
+      "template_exists": false,
+      "samconfig_dir": "/Users/drbretto/Desktop/Projects/job-posting-reality-score"
+    },
+    "verdict": "selects a template that does not exist",
+    "selects_the_verified_build": false
+  },
+  "p04_forward_command_with_a_stale_default_build": {
+    "selection": {
+      "given": "(omitted \u2014 SAM default search)",
+      "resolved_template": "/private/tmp/claude-501/jprs-stale-default-build-hgshdvuw/.aws-sam/build/template.yaml",
+      "template_exists": true,
+      "samconfig_dir": "/private/tmp/claude-501/jprs-stale-default-build-hgshdvuw"
+    },
+    "verdict": "silently selects the stale default build"
+  },
+  "p04_forward_command_run_from_infra": {
+    "selection": {
+      "given": "(omitted \u2014 SAM default search)",
+      "resolved_template": "/Users/drbretto/Desktop/Projects/job-posting-reality-score/infra/.aws-sam/build/template.yaml",
+      "template_exists": true,
+      "samconfig_dir": "/Users/drbretto/Desktop/Projects/job-posting-reality-score/infra"
+    },
+    "verdict": "selects the stale 2026-08-01 build already present in this tree"
+  },
+  "p05_corrected_command": {
+    "documented": "sam build --template-file infra/template.yaml --build-dir \"$BUILD\"  then  sam deploy --template-file \"$BUILD/template.yaml\" --config-file \"$PWD/infra/samconfig.toml\" --config-env default",
+    "selection": {
+      "given": "/tmp/claude-501/jprs-selection-probe-fhbcyn_j/template.yaml",
+      "resolved_template": "/tmp/claude-501/jprs-selection-probe-fhbcyn_j/template.yaml",
+      "template_exists": true,
+      "samconfig_dir": "/tmp/claude-501/jprs-selection-probe-fhbcyn_j"
+    },
+    "selects_the_verified_build": true,
+    "config_if_given_relatively": {
+      "given": "infra/samconfig.toml",
+      "samconfig_dir": "/tmp/claude-501/jprs-selection-probe-fhbcyn_j",
+      "resolved_config": "/tmp/claude-501/jprs-selection-probe-fhbcyn_j/infra/samconfig.toml",
+      "config_exists": false,
+      "is_absolute": false
+    },
+    "config_if_given_absolutely": {
+      "given": "/Users/drbretto/Desktop/Projects/job-posting-reality-score/infra/samconfig.toml",
+      "samconfig_dir": "/tmp/claude-501/jprs-selection-probe-fhbcyn_j",
+      "resolved_config": "/Users/drbretto/Desktop/Projects/job-posting-reality-score/infra/samconfig.toml",
+      "config_exists": true,
+      "is_absolute": true
+    },
+    "why_the_config_must_be_absolute": "SAM sets samconfig_dir to the given template's directory, so a relative config path resolves inside the temporary build directory and the repository's samconfig is missed"
+  },
+  "p05_rollback_command": {
+    "selection": {
+      "given": "/tmp/claude-501/jprs-rollback-build-kjar0ee9/template.yaml",
+      "resolved_template": "/tmp/claude-501/jprs-rollback-build-kjar0ee9/template.yaml",
+      "template_exists": true,
+      "samconfig_dir": "/tmp/claude-501/jprs-rollback-build-kjar0ee9"
+    },
+    "selects_the_rollback_build": true,
+    "config_must_be_absolute_too": {
+      "given": "infra/samconfig.toml",
+      "samconfig_dir": "/tmp/claude-501/jprs-rollback-build-kjar0ee9",
+      "resolved_config": "/tmp/claude-501/jprs-rollback-build-kjar0ee9/infra/samconfig.toml",
+      "config_exists": false,
+      "is_absolute": false
+    }
+  },
+  "default_config_file_name": "samconfig.toml",
+  "assertions": {
+    "p04_command_does_not_select_the_verified_build": true,
+    "p04_command_can_select_a_stale_default_build": true,
+    "p05_command_selects_the_verified_build": true,
+    "p05_absolute_config_resolves_to_the_repository_config": true,
+    "relative_config_would_have_been_missed": true
+  }
+}

@@ -1,0 +1,20 @@
+=== policy-check ===
+changed since the projection was built: operating_plan, workflow
+exit=1
+
+=== why this is NOT a P09 regression ===
+The two divergent keys are operator-owned documents OUTSIDE this repository:
+  -rw-r--r--@ 1 drbretto  staff  19364 Sep 26 07:28 ../Infotropy Book/INBOX/Employment Search/APPLICATION_WORKFLOW.md
+  -rw-r--r--@ 1 drbretto  staff   5757 Sep 26 07:28 ../Infotropy Book/INBOX/Employment Search/OPERATING_PLAN.md
+
+Both were edited on 2026-09-26, after P08 ran (2026-09-25, when this check passed) and
+long after the committed projection was built:
+  Sep 24 12:21:50 2026  config/candidate_policy.json
+
+P09 changed no policy source, no screening rule and no projection. Refreshing the
+projection is a candidate-policy edit, which this packet explicitly excludes, so the
+divergence is REPORTED and left for the operator rather than resolved here.
+
+=== the P09 source files touched, for comparison ===
+  src/common/s3layout.py  src/discovery/live.py  src/discovery/handler.py
+  src/report/handler.py (adds consumed_job_ids / below_fit_threshold_job_ids only)

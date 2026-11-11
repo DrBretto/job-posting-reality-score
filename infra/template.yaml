@@ -41,6 +41,35 @@ Parameters:
     Type: String
     Default: America/New_York
     Description: IANA timezone applied to both schedules.
+  DiscoveryCron:
+    Type: String
+    Default: cron(5 7 * * ? *)
+    Description: >-
+      EventBridge Scheduler expression for the daily open-market discovery pass (in TimeZone).
+      Runs a few minutes AFTER CollectCron so the RUN_OPEN manifest already exists, and well before
+      AssembleCron. The existing collect and assemble schedules are unchanged.
+  DiscoveryProviders:
+    Type: String
+    Default: ''
+    Description: >-
+      Optional comma-separated discovery provider subset (remotive,remoteok,jobicy,himalayas,adzuna).
+      Empty means every keyless provider; credential-gated providers stay gated until their secret
+      exists and are named in the coverage receipt rather than silently skipped.
+  SecretsSsmPrefix:
+    Type: String
+    Default: /jprs/secrets
+    Description: >-
+      SSM path holding credential-gated API keys (e.g. /jprs/secrets/ADZUNA_APP_ID). Read with
+      decryption at invoke time. Deliberately NOT template parameters: a secret passed through
+      CloudFormation is retained in change sets and console history.
+  ResolveCareersUrls:
+    Type: String
+    Default: 'false'
+    AllowedValues: ['true', 'false']
+    Description: >-
+      Whether discovery may follow an aggregator apply link to find the employer's own careers page.
+      Required for source growth, because the keyless feeds do not publish employer board URLs.
+      Every hop is re-validated against the SSRF address rules. OFF until the operator approves it.
   EnableNarrator:
     Type: String
     Default: 'false'
@@ -246,6 +275,11 @@ Resources:
     Properties:
       LogGroupName: /aws/lambda/jprs-differ
       RetentionInDays: 30
+  DiscoveryLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /aws/lambda/jprs-discovery
+      RetentionInDays: 30
   ReportLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
@@ -371,13 +405,95 @@ Resources:
                 StringEquals:
                   cloudwatch:namespace: JPRS
 
+  DiscoveryFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: DiscoveryLogGroup
+    Properties:
+      FunctionName: jprs-discovery
+      Handler: src.discovery.handler.handler
+      Timeout: 120
+      MemorySize: 512
+      Description: >-
+        Open-market discovery. Queries employer-INDEPENDENT sources, so a posting from an employer
+        nobody has named can arrive. Writes discovery/ plus the same raw/normalized/status forward
+        tiers the collector uses. Never writes current/ or events/ (differ-owned).
+      Environment:
+        Variables:
+          JPRS_DISCOVERY_PROVIDERS: !Ref DiscoveryProviders
+          JPRS_SECRETS_SSM_PREFIX: !Ref SecretsSsmPrefix
+          JPRS_RESOLVE_CAREERS_URLS: !Ref ResolveCareersUrls
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Sid: DiscoveryOwnsDiscoveryPrefix
+              Effect: Allow
+              Action: s3:PutObject
+              Resource: !Sub arn:aws:s3:::${BucketName}/discovery/*
+            - Sid: DiscoveryWriteForwardTiers
+              Effect: Allow
+              Action: s3:PutObject
+              Resource:
+                - !Sub arn:aws:s3:::${BucketName}/raw/*
+                - !Sub arn:aws:s3:::${BucketName}/normalized/*
+                - !Sub arn:aws:s3:::${BucketName}/status/*
+            - Sid: DiscoveryReadOwnStateAndManifest
+              Effect: Allow
+              Action: s3:GetObject
+              Resource:
+                - !Sub arn:aws:s3:::${BucketName}/discovery/*
+                - !Sub arn:aws:s3:::${BucketName}/runs/*
+                - !Sub arn:aws:s3:::${BucketName}/status/*
+            - Sid: DiscoveryReadGatedCredentials
+              Effect: Allow
+              Action: [ssm:GetParameter, ssm:GetParameters, ssm:GetParametersByPath]
+              Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/jprs/secrets*
+            - Sid: DiscoveryMetrics
+              Effect: Allow
+              Action: cloudwatch:PutMetricData
+              Resource: '*'
+              Condition:
+                StringEquals:
+                  cloudwatch:namespace: JPRS
+            # Without a list grant S3 answers GetObject for a MISSING key with 403, not 404, so a
+            # never-written owed-publication object was indistinguishable from a denied one and the
+            # first round could not start. Scoped to discovery/ exactly as the report's grant is.
+            - Sid: DiscoveryListOwnPrefix
+              Effect: Allow
+              Action: s3:ListBucket
+              Resource: !Sub arn:aws:s3:::${BucketName}
+              Condition:
+                StringLike:
+                  s3:prefix:
+                    - discovery/*
+
   ReportFunction:
     Type: AWS::Serverless::Function
     DependsOn: ReportLogGroup
     Properties:
       FunctionName: jprs-report
       Handler: src.report.handler.handler
-      Timeout: 90
+      # 90 -> 300 (deployed 2026-09-30). Measured, not guessed: against live production data the
+      # assembly takes 21.3s on a developer laptop, of which 4.2s is S3 across 55 calls and 17.1s is
+      # single-threaded computation, so this is a capacity problem and not a hang or a wait. 90 had
+      # been exceeded on every scheduled round since 2026-09-27.
+      #
+      # THE NUMBER BELOW IS THE MEASURED PRODUCTION RESULT, NOT THE PRE-DEPLOY ESTIMATE. The first
+      # live run after this change took 188.52s of a 298.97s budget on 1,344 postings, leaving 36.9%
+      # headroom and peaking at 209 MB of 512. The pre-deploy estimate was ~150s, derived from a
+      # 6.7x laptop-to-Lambda factor; the real factor is about 8.9x, so that estimate was low by
+      # roughly a quarter and is recorded here rather than quietly replaced.
+      #
+      # 300 is headroom, not requirement, and it does not last: the dominant stage (`deduplicate`,
+      # via `normalize_employer` on both operands of a nested loop over the kept set) is QUADRATIC
+      # in corpus size, measured constant at 3.1e-6 * n^2 seconds across a 6.7x range of n. At the
+      # corrected 8.9x factor this budget is exhausted near ~1,990 postings, NOT the ~2,400 first
+      # projected. The corpus went from 813 to 1,344 in three days. The durable repair is that loop,
+      # not this number, and there is less room before it is needed than the first estimate implied.
+      #
+      # MemorySize stays 512 deliberately. Peak use is ~191 MB of 512, so memory is not the
+      # constraint; more of it would buy proportional vCPU, which is a different change with its own
+      # cost shape and is not made here.
+      Timeout: 300
       MemorySize: 512
       Description: Step Functions task. Reads manifest + sentinels (completeness judge) + events, writes reports/, sends the SES digest.
       Environment:
@@ -396,6 +512,8 @@ Resources:
                 - !Sub arn:aws:s3:::${BucketName}/status/*
                 - !Sub arn:aws:s3:::${BucketName}/runs/*
                 - !Sub arn:aws:s3:::${BucketName}/reports/*
+                # the discovery coverage receipt the report renders verbatim
+                - !Sub arn:aws:s3:::${BucketName}/discovery/*
             - Sid: ReportListStatusAndDeliveryMarkers
               Effect: Allow
               Action: s3:ListBucket
@@ -405,6 +523,7 @@ Resources:
                   s3:prefix:
                     - status/*
                     - reports/*
+                    - discovery/*
             - Sid: ReportWriteReportsOnly
               Effect: Allow
               Action: s3:PutObject
@@ -568,6 +687,45 @@ Resources:
         RoleArn: !GetAtt CollectSchedulerRole.Arn
         Input: '{"trigger":"collect"}'
 
+  DiscoverySchedulerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: jprs-scheduler-discovery-role
+      PermissionsBoundary: !Ref PermissionsBoundaryPolicy
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: scheduler.amazonaws.com
+            Action: sts:AssumeRole
+            Condition:
+              StringEquals:
+                aws:SourceAccount: !Ref AWS::AccountId
+      Policies:
+        - PolicyName: invoke-discovery
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: lambda:InvokeFunction
+                Resource: !GetAtt DiscoveryFunction.Arn
+
+  DiscoverySchedule:
+    Type: AWS::Scheduler::Schedule
+    Properties:
+      Name: jprs-discovery-daily
+      Description: Fires the daily open-market discovery pass, between collect and assemble.
+      State: ENABLED
+      FlexibleTimeWindow:
+        Mode: 'OFF'
+      ScheduleExpression: !Ref DiscoveryCron
+      ScheduleExpressionTimezone: !Ref TimeZone
+      Target:
+        Arn: !GetAtt DiscoveryFunction.Arn
+        RoleArn: !GetAtt DiscoverySchedulerRole.Arn
+        Input: '{"trigger":"discovery"}'
+
   AssembleSchedule:
     Type: AWS::Scheduler::Schedule
     Properties:
@@ -706,6 +864,27 @@ Resources:
       TreatMissingData: notBreaching
       AlarmActions: [!Ref OpsAlertTopic]
 
+  A8DiscoveryErrors:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: jprs-A8-discovery-errors
+      AlarmDescription: >-
+        A8 - the discovery pass failed. Discovery is the only path that can surface an employer not
+        already in the registry, so its silent failure would quietly reduce the system to a fixed
+        watchlist while every other signal still looked healthy.
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref DiscoveryFunction
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref OpsAlertTopic]
+
   A7AssemblyExecutionsFailed:
     Type: AWS::CloudWatch::Alarm
     Properties:
@@ -740,6 +919,9 @@ Outputs:
   DailyAssembleStateMachineArn:
     Description: Standard assembler state machine ARN.
     Value: !Ref DailyAssembleStateMachine
+  DiscoveryFunctionName:
+    Description: Open-market discovery function.
+    Value: !Ref DiscoveryFunction
   OpsAlertTopicArn:
-    Description: SNS topic that fans out alarms A1-A7.
+    Description: SNS topic that fans out alarms A1-A8.
     Value: !Ref OpsAlertTopic

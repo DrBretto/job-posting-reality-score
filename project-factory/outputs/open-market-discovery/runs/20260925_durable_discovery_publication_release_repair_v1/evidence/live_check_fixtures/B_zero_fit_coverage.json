@@ -1,0 +1,73 @@
+{
+  "run_id": "2026-09-25",
+  "discovery_attempted": [
+    "himalayas"
+  ],
+  "discovery_succeeded": [
+    "himalayas"
+  ],
+  "credential_gated": [],
+  "inaccessible": [],
+  "attributions": [
+    "Jobs via Himalayas (himalayas.app) \u2014 linked back to the Himalayas posting URL."
+  ],
+  "records_rejected_as_not_an_opening": 0,
+  "employers_observed": 1,
+  "admission_summary": {
+    "admitted_this_pass": 0,
+    "by_state": {
+      "QUEUED_UNSUPPORTED": [
+        "Northgate Revenue Group"
+      ]
+    },
+    "monitored_after": 15,
+    "policy": {
+      "min_observations": 1,
+      "require_supported_board": true,
+      "require_public_scope": true,
+      "max_monitored_sources": 60,
+      "max_admissions_per_run": 10
+    }
+  },
+  "careers_url_resolution": {
+    "enabled": false,
+    "disabled_reason": "careers-URL resolution is off; set JPRS_RESOLVE_CAREERS_URLS=true to enable it. While it is off, employers discovered through an aggregator stay unsupported leads because the feeds do not publish the employer's own board URL.",
+    "requests_spent": 0,
+    "resolved": 0,
+    "refused": [],
+    "candidates_needing_resolution": 1
+  },
+  "query_families_total": 14,
+  "query_families_covered": 0,
+  "query_families_saturated": [],
+  "query_families_deferred": [],
+  "query_families_never_run": [
+    "ai-implementation",
+    "automation-integration",
+    "backend-cloud",
+    "data-extraction",
+    "internal-tools",
+    "ordinary-software",
+    "sector-construction",
+    "sector-healthcare",
+    "sector-hospitality",
+    "sector-insurance",
+    "sector-logistics",
+    "sector-manufacturing",
+    "sector-professional-services",
+    "sector-retail"
+  ],
+  "backlog_items": 0,
+  "backlog_reason": null,
+  "budgets": {
+    "himalayas": {
+      "max_requests_per_run": 5,
+      "requests_spent": 1,
+      "exhausted": false,
+      "rate_limited": false,
+      "failures": 0
+    }
+  },
+  "pending_publication": {},
+  "pending_publication_dropped": []
+}

@@ -1,0 +1,23 @@
+=== P09 release preflight drill — stubbed sam and interpreter, nothing deployed ===
+repository: /Users/drbretto/Desktop/Projects/job-posting-reality-score
+
+Each row breaks ONE step. A correct sequence exits non-zero and never reaches the step that
+prints the deploy command.
+
+all_checks_pass                    exit=0   reached_deploy_step=yes  OK
+    last line: CloudFormation as previous values. Do not retype them and do not print them.
+test_suite_fails                   exit=1   reached_deploy_step=no   OK
+    last line: stub python: tests check FAILED
+policy_projection_fails            exit=1   reached_deploy_step=no   OK
+    last line: stub python: policy check FAILED
+template_validate_fails            exit=1   reached_deploy_step=no   OK
+    last line: stub sam: validate failed
+build_fails                        exit=1   reached_deploy_step=no   OK
+    last line: stub sam: build failed
+report_artifact_missing_live_module exit=1   reached_deploy_step=no   OK
+    last line: === 5. the shipped artifacts contain the module the report imports at INVOKE time ===
+change_set_gate_fails              exit=1   reached_deploy_step=no   OK
+    last line: stub python: changeset check FAILED
+
+cases passed: 7   cases failed: 0
+the stub `sam deploy` exits 99 if it is ever called; it was never called.

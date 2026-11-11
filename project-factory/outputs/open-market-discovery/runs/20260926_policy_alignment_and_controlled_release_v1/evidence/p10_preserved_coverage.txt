@@ -1,0 +1,11 @@
+Preserved P09/P08 coverage, collected counts (pytest --collect-only -q):
+  test_publication_commit_boundary: 18 tests
+  test_durable_discovery_publication: 13 tests
+  test_release_gates_reject: 23 tests
+  test_discovery_to_report_integration: 23 tests
+  test_screening: 24 tests
+  test_recall_and_coverage: 24 tests
+  test_location_and_freshness_boundaries: 44 tests
+  test_adjacent_roles_and_customer_service: 40 tests
+
+Full suite: 433 passed (see p10_test_results.txt).

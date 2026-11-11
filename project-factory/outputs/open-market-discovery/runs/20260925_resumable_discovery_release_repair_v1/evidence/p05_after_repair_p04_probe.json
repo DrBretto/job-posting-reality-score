@@ -1,0 +1,42 @@
+{
+  "scope": "synthetic feed payloads through real run_discovery; no network or AWS",
+  "failed_second_page": {
+    "first_requests": [
+      null,
+      "NEW_TWO",
+      "OLD"
+    ],
+    "head_cursor_after_failure": {
+      "himalayas": "NEW_TWO"
+    },
+    "frontier_after_failure": {
+      "himalayas": "2026-09-24T11:00:00+00:00"
+    },
+    "second_requests": [
+      null,
+      "NEW_TWO",
+      "OLD_1"
+    ],
+    "missing_fresh_job": false,
+    "attempts_exceed_budget": false
+  },
+  "new_burst_during_resume": {
+    "first_requests": [
+      null,
+      "B2",
+      "OLD"
+    ],
+    "saved_before_second": "B3",
+    "second_requests": [
+      null,
+      "NEWER_TWO",
+      "OLD_1"
+    ],
+    "third_requests": [
+      null,
+      "B2",
+      "OLD_2"
+    ],
+    "missing_fresh_job": false
+  }
+}

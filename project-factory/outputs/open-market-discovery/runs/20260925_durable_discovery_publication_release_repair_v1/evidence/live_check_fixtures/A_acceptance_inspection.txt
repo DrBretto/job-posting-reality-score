@@ -1,0 +1,18 @@
+=== discovery integration inspection ===
+report: /Users/drbretto/Desktop/Projects/job-posting-reality-score/project-factory/outputs/open-market-discovery/runs/20260925_durable_discovery_publication_release_repair_v1/evidence/live_check_fixtures/A_acceptance_daily_report.json  run 2026-09-25  dt 2026-09-25
+registry monitors 24 board/slug identit(ies)
+
+--- every stored discovery identity, reconciled to a disposition ---
+  retained             himalayas:all#internal-tools
+                         employer Granite State Mutual Insurance — fit HIGH
+
+--- reconciliation totals ---
+  retained: 1
+  stored discovery identities: 1
+  discovery-origin rows in the report: 1
+  report below-fit-threshold count (both populations): 0
+
+--- verdict ---
+ACCEPTANCE_MET — 1 retained posting(s) from employer(s) absent from
+  the registry. This is the live positive condition.
+    Granite State Mutual Insurance — Senior Software Engineer, Internal Tools and Automation (himalayas:all#internal-tools)

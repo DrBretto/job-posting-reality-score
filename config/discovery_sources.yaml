@@ -1,0 +1,70 @@
+# JPRS discovery source registry (open-market, employer-independent).
+#
+# A discovery source is keyed by a QUESTION ABOUT WORK, not by a company. That is the whole
+# difference from config/companies.yaml, which is keyed by employer and therefore structurally
+# cannot surface an employer nobody has named yet.
+#
+# Access facts below were verified by bounded read-only probes on 2026-09-24; see
+# project-factory/outputs/open-market-discovery/runs/20260924_open_market_discovery_v1/DESIGN.md
+# for the full source/access/cost matrix and the two sources that were researched and declined
+# (Arbeitnow: overwhelmingly non-US; Brave Search: requires a payment instrument at signup).
+#
+# `max_requests_per_run` respects each provider's stated or advised ceiling. Remotive's own legal
+# notice advises at most four requests per day, so one bulk pull per daily run sits well inside it.
+discovery_sources:
+  - provider: remotive
+    kind: bulk_feed
+    enabled: true
+    max_requests_per_run: 1
+    auth: none
+    attribution_required: true
+    notes: >-
+      Attribution and link-back to the Remotive posting URL are required; republishing to
+      third-party job sites is not permitted, and the feed is delayed 24 hours by the provider.
+
+  - provider: remoteok
+    kind: bulk_feed
+    enabled: true
+    max_requests_per_run: 1
+    auth: none
+    attribution_required: true
+    notes: >-
+      Attribution with a follow link-back is required. The first record in the payload is the
+      provider's legal notice rather than a posting; the connector drops it by shape, not by index.
+
+  - provider: jobicy
+    kind: bulk_feed
+    enabled: true
+    max_requests_per_run: 1
+    auth: none
+    attribution_required: true
+    notes: >-
+      Credit plus a direct link to the source is required and apply buttons must point at the
+      original posting URL. Carries an explicit industry field, which feeds sector coverage.
+
+  - provider: himalayas
+    kind: bulk_feed
+    enabled: true
+    max_requests_per_run: 2
+    auth: none
+    attribution_required: true
+    notes: >-
+      Richest structure of the keyless feeds: published salary bounds, seniority and location
+      restrictions. Supports cursor paging, so two pages per run is the polite ceiling.
+
+  # The breadth engine. Implemented and fixture-tested; its LIVE path is an explicitly unpassed
+  # gate until the operator provisions a free developer credential. This is the only configured
+  # source that spans ordinary industries and supports a New Hampshire / US location filter, so
+  # its absence is a real coverage limit and the report says so rather than glossing it.
+  - provider: adzuna
+    kind: query_feed
+    enabled: true
+    max_requests_per_run: 20
+    auth: app_id_and_key
+    credential_env:
+      - ADZUNA_APP_ID
+      - ADZUNA_APP_KEY
+    attribution_required: true
+    notes: >-
+      app_id and app_key are obligatory on every request; a probe without them returns 400.
+      Free developer tier. Recheck retention and redistribution terms before storing raw output.

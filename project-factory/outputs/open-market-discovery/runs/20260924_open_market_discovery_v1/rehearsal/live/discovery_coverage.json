@@ -1,0 +1,117 @@
+{
+  "run_id": "2026-09-24",
+  "discovery_attempted": [
+    "himalayas",
+    "jobicy",
+    "remoteok",
+    "remotive"
+  ],
+  "discovery_succeeded": [
+    "remotive"
+  ],
+  "credential_gated": [],
+  "inaccessible": [
+    {
+      "target": "himalayas",
+      "reason": "download labelled PARTIAL (parse_error)"
+    },
+    {
+      "target": "jobicy",
+      "reason": "download labelled PARTIAL (parse_error)"
+    },
+    {
+      "target": "remoteok",
+      "reason": "download labelled PARTIAL (parse_error)"
+    }
+  ],
+  "attributions": [
+    "Jobs via Himalayas (himalayas.app) \u2014 linked back to the Himalayas posting URL.",
+    "Jobs via Jobicy (jobicy.com) \u2014 apply links point at the original Jobicy posting URL.",
+    "Jobs via Remote OK (remoteok.com) \u2014 linked back to the Remote OK posting URL.",
+    "Jobs via Remotive (remotive.com) \u2014 linked back to the Remotive posting URL."
+  ],
+  "records_rejected_as_not_an_opening": 2,
+  "employers_observed": 12,
+  "admission_summary": {
+    "admitted_this_pass": 0,
+    "by_state": {
+      "QUEUED_UNSUPPORTED": [
+        "A.Team",
+        "Coalition Technologies",
+        "Credit Wellness, LLC",
+        "IAPWE",
+        "KoboToolbox",
+        "Lemon.io",
+        "Mitre Media",
+        "Sanctuary Computer Inc",
+        "TELUS Digital",
+        "Unio Digital",
+        "hey contact heroes GmbH",
+        "iMerit Technology"
+      ]
+    },
+    "monitored_after": 15,
+    "policy": {
+      "min_observations": 1,
+      "require_supported_board": true,
+      "require_public_scope": true,
+      "max_monitored_sources": 60,
+      "max_admissions_per_run": 10
+    }
+  },
+  "careers_url_resolution": {
+    "enabled": false,
+    "disabled_reason": "careers-URL resolution is off; set JPRS_RESOLVE_CAREERS_URLS=true to enable it. While it is off, employers discovered through an aggregator stay unsupported leads because the feeds do not publish the employer's own board URL.",
+    "requests_spent": 0,
+    "resolved": 0,
+    "refused": [],
+    "candidates_needing_resolution": 12
+  },
+  "query_families_total": 14,
+  "query_families_covered": 5,
+  "query_families_saturated": [],
+  "query_families_deferred": [],
+  "query_families_never_run": [
+    "data-extraction",
+    "internal-tools",
+    "sector-construction",
+    "sector-healthcare",
+    "sector-hospitality",
+    "sector-logistics",
+    "sector-manufacturing",
+    "sector-professional-services",
+    "sector-retail"
+  ],
+  "backlog_items": 0,
+  "backlog_reason": null,
+  "budgets": {
+    "himalayas": {
+      "max_requests_per_run": 2,
+      "requests_spent": 1,
+      "exhausted": false,
+      "rate_limited": false,
+      "failures": 0
+    },
+    "jobicy": {
+      "max_requests_per_run": 1,
+      "requests_spent": 1,
+      "exhausted": true,
+      "rate_limited": false,
+      "failures": 0
+    },
+    "remoteok": {
+      "max_requests_per_run": 1,
+      "requests_spent": 1,
+      "exhausted": true,
+      "rate_limited": false,
+      "failures": 0
+    },
+    "remotive": {
+      "max_requests_per_run": 1,
+      "requests_spent": 1,
+      "exhausted": true,
+      "rate_limited": false,
+      "failures": 0
+    }
+  }
+}

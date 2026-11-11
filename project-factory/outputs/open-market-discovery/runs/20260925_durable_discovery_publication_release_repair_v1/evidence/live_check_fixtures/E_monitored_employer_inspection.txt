@@ -1,0 +1,19 @@
+=== discovery integration inspection ===
+report: /Users/drbretto/Desktop/Projects/job-posting-reality-score/project-factory/outputs/open-market-discovery/runs/20260925_durable_discovery_publication_release_repair_v1/evidence/live_check_fixtures/E_monitored_employer_daily_report.json  run 2026-09-25  dt 2026-09-25
+registry monitors 24 board/slug identit(ies)
+
+--- every stored discovery identity, reconciled to a disposition ---
+  retained             himalayas:all#internal-tools-2
+                         employer Machinify — fit HIGH
+
+--- reconciliation totals ---
+  retained: 1
+  stored discovery identities: 1
+  discovery-origin rows in the report: 1
+  report below-fit-threshold count (both populations): 0
+
+--- verdict ---
+INTEGRATION_OK — 1 discovery posting(s) reached the shortlist,
+  but every one names an employer already in the registry, so the OPEN-MARKET
+  condition specifically is not evidenced. Monitoring could have surfaced these.
+    already monitored: Machinify — Senior Software Engineer, Internal Tools and Automation

@@ -1,0 +1,5 @@
+FAILED tests/test_release_repair.py::test_r3_optional_versus_required_language_is_distinguished
+FAILED tests/test_release_repair.py::test_r3_ambiguous_scope_is_retained_for_review_not_discarded
+FAILED tests/test_release_repair.py::test_r3_html_encoded_source_text_is_screened_as_received
+FAILED tests/test_release_repair.py::test_r3_norm_text_decodes_html_entities
+=================== 23 failed, 13 passed, 5 skipped in 1.30s ===================

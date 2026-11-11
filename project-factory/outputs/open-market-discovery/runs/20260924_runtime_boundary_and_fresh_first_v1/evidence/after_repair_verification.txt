@@ -1,0 +1,32 @@
+AFTER-REPAIR VERIFICATION — JPRS-L2-P03
+date: 2026-09-24
+
+$ .venv/bin/pytest -q -p no:cacheprovider
+...............................                                          [100%]
+247 passed in 2.58s
+
+$ .venv/bin/pytest -q tests/test_runtime_boundary_and_fresh_first.py
+......................................                                   [100%]
+38 passed in 0.88s
+
+$ sam validate --lint --template-file infra/template.yaml
+/Users/drbretto/Desktop/Projects/job-posting-reality-score/infra/template.yaml is a valid SAM Template
+
+$ sam build --build-dir $TMPDIR/p03build
+Build Succeeded
+
+$ .venv/bin/python -m src.cli policy-check
+changed since the projection was built: candidate_facts, workflow
+
+$ cost arithmetic, corrected per the review
+  memory 512MB = 0.5 GB
+  review's stated window: 10-30s -> 5.0-15.0 GB-s per invocation
+     x30 runs/month = 150.0-450.0 GB-s = $0.0025-$0.0075
+  recomputed for 5-page pagination + up to 20 Adzuna queries: 15-60s -> 7.5-30.0 GB-s per invocation
+     x30 runs/month = 225.0-900.0 GB-s = $0.0038-$0.0150
+  Lambda requests: 30/mo x $0.20/1M = $0.000006
+  Scheduler: 30/mo x $1.00/1M = $0.000030
+  CloudWatch alarm A8 (sourced, CW:AlarmMonitorUsage): $0.10/month
+  S3 PUTs: ~30/run x 30 = 900/mo x $0.005/1000 = $0.0045  [rate not sourced from the primary API this run]
+  S3 storage: ~2MB raw/run x 30 = 60MB/mo growth x $0.023/GB = $0.0014/mo initially
+  TOTAL new: ~$0.11-0.13/month, alarm-dominated.

@@ -1,0 +1,192 @@
+=== local release change-set check ===
+baseline build:  /private/tmp/claude-501/p06base/build
+candidate build: /private/tmp/claude-501/jprs-candidate-build
+This is a comparison of two locally built packages. It is NOT an AWS change set and no
+AWS call is made here; inspecting the real change set is a separate, later step.
+
+
+[PASS         ] infrastructure source vs recorded baseline
+                  SAME     config/discovery_sources.yaml
+                  SAME     infra/samconfig.toml
+                  SAME     infra/template.yaml
+[PASS         ] function set
+                  6 function(s) in both builds
+[PASS         ] built template resource definitions
+                  normalized away: CodeUri, ContentUri, DefinitionUri and absolute build-directory paths (SAM rewrites these per build)
+                  resource definitions are identical once build paths are normalized
+[PASS         ] packaged contents
+                  CollectorFunction: 236 file(s) differ — application code=7, repository payload=229
+                      [application code] added: src/.DS_Store
+                      [application code] modified: src/common/connectors.py
+                      [application code] modified: src/common/s3layout.py
+                      [application code] modified: src/discovery/connectors.py
+                      [application code] modified: src/discovery/handler.py
+                      [application code] added: src/discovery/live.py
+                      [application code] modified: src/report/handler.py
+                      [repository payload] added: project-factory/outputs/INDEX.md
+                      [repository payload] added: project-factory/outputs/REGISTRY.tsv
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/DEPLOYMENT_HANDOFF.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/OPERATOR_RETURN.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/ORCHESTRATOR_REVIEW.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/VALIDATION.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/checkpoint.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_after_repair_probe.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_after_repair_verification.txt
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_before_repair_probe.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_independent_continuation_probe.py
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_independent_continuation_results.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_rehearsal_driver.py
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_rehearsal_results.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_report_boundary_probe.py
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_report_boundary_results.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/gate_decision.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/himalayas_cursors.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/himalayas_page1.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/himalayas_page2.json
+                  DifferFunction: 236 file(s) differ — application code=7, repository payload=229
+                      [application code] added: src/.DS_Store
+                      [application code] modified: src/common/connectors.py
+                      [application code] modified: src/common/s3layout.py
+                      [application code] modified: src/discovery/connectors.py
+                      [application code] modified: src/discovery/handler.py
+                      [application code] added: src/discovery/live.py
+                      [application code] modified: src/report/handler.py
+                      [repository payload] added: project-factory/outputs/INDEX.md
+                      [repository payload] added: project-factory/outputs/REGISTRY.tsv
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/DEPLOYMENT_HANDOFF.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/OPERATOR_RETURN.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/ORCHESTRATOR_REVIEW.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/VALIDATION.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/checkpoint.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_after_repair_probe.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_after_repair_verification.txt
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_before_repair_probe.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_independent_continuation_probe.py
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_independent_continuation_results.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_rehearsal_driver.py
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_rehearsal_results.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_report_boundary_probe.py
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_report_boundary_results.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/gate_decision.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/himalayas_cursors.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/himalayas_page1.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/himalayas_page2.json
+                  DiscoveryFunction: 236 file(s) differ — application code=7, repository payload=229
+                      [application code] added: src/.DS_Store
+                      [application code] modified: src/common/connectors.py
+                      [application code] modified: src/common/s3layout.py
+                      [application code] modified: src/discovery/connectors.py
+                      [application code] modified: src/discovery/handler.py
+                      [application code] added: src/discovery/live.py
+                      [application code] modified: src/report/handler.py
+                      [repository payload] added: project-factory/outputs/INDEX.md
+                      [repository payload] added: project-factory/outputs/REGISTRY.tsv
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/DEPLOYMENT_HANDOFF.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/OPERATOR_RETURN.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/ORCHESTRATOR_REVIEW.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/VALIDATION.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/checkpoint.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_after_repair_probe.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_after_repair_verification.txt
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_before_repair_probe.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_independent_continuation_probe.py
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_independent_continuation_results.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_rehearsal_driver.py
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_rehearsal_results.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_report_boundary_probe.py
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_report_boundary_results.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/gate_decision.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/himalayas_cursors.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/himalayas_page1.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/himalayas_page2.json
+                  EnumerateFunction: 236 file(s) differ — application code=7, repository payload=229
+                      [application code] added: src/.DS_Store
+                      [application code] modified: src/common/connectors.py
+                      [application code] modified: src/common/s3layout.py
+                      [application code] modified: src/discovery/connectors.py
+                      [application code] modified: src/discovery/handler.py
+                      [application code] added: src/discovery/live.py
+                      [application code] modified: src/report/handler.py
+                      [repository payload] added: project-factory/outputs/INDEX.md
+                      [repository payload] added: project-factory/outputs/REGISTRY.tsv
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/DEPLOYMENT_HANDOFF.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/OPERATOR_RETURN.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/ORCHESTRATOR_REVIEW.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/VALIDATION.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/checkpoint.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_after_repair_probe.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_after_repair_verification.txt
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_before_repair_probe.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_independent_continuation_probe.py
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_independent_continuation_results.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_rehearsal_driver.py
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_rehearsal_results.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_report_boundary_probe.py
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_report_boundary_results.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/gate_decision.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/himalayas_cursors.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/himalayas_page1.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/himalayas_page2.json
+                  NarratorFunction: 236 file(s) differ — application code=7, repository payload=229
+                      [application code] added: src/.DS_Store
+                      [application code] modified: src/common/connectors.py
+                      [application code] modified: src/common/s3layout.py
+                      [application code] modified: src/discovery/connectors.py
+                      [application code] modified: src/discovery/handler.py
+                      [application code] added: src/discovery/live.py
+                      [application code] modified: src/report/handler.py
+                      [repository payload] added: project-factory/outputs/INDEX.md
+                      [repository payload] added: project-factory/outputs/REGISTRY.tsv
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/DEPLOYMENT_HANDOFF.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/OPERATOR_RETURN.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/ORCHESTRATOR_REVIEW.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/VALIDATION.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/checkpoint.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_after_repair_probe.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_after_repair_verification.txt
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_before_repair_probe.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_independent_continuation_probe.py
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_independent_continuation_results.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_rehearsal_driver.py
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_rehearsal_results.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_report_boundary_probe.py
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_report_boundary_results.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/gate_decision.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/himalayas_cursors.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/himalayas_page1.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/himalayas_page2.json
+                  ReportFunction: 236 file(s) differ — application code=7, repository payload=229
+                      [application code] added: src/.DS_Store
+                      [application code] modified: src/common/connectors.py
+                      [application code] modified: src/common/s3layout.py
+                      [application code] modified: src/discovery/connectors.py
+                      [application code] modified: src/discovery/handler.py
+                      [application code] added: src/discovery/live.py
+                      [application code] modified: src/report/handler.py
+                      [repository payload] added: project-factory/outputs/INDEX.md
+                      [repository payload] added: project-factory/outputs/REGISTRY.tsv
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/DEPLOYMENT_HANDOFF.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/OPERATOR_RETURN.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/ORCHESTRATOR_REVIEW.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/VALIDATION.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/checkpoint.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_after_repair_probe.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_after_repair_verification.txt
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_before_repair_probe.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_independent_continuation_probe.py
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_independent_continuation_results.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_rehearsal_driver.py
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_rehearsal_results.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_report_boundary_probe.py
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/evidence/p04_report_boundary_results.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/gate_decision.md
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/himalayas_cursors.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/himalayas_page1.json
+                      [repository payload] added: project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures/himalayas_page2.json
+                  functions whose artifact changes: 6 of 6 — CollectorFunction, DifferFunction, DiscoveryFunction, EnumerateFunction, NarratorFunction, ReportFunction
+
+--- verdict ---
+CHANGE_SET_IS_CODE_ONLY — every check was performed and found only packaged
+  application code differing. No IAM, schedule, parameter, state-machine or
+  retention difference is present in these packages or in the recorded baseline.
+  The real AWS change set is still a separate inspection before deployment.

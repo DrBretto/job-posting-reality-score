@@ -1,0 +1,19 @@
+=== sam validate --lint (isolated HOME, no AWS call) ===
+/Users/drbretto/Desktop/Projects/job-posting-reality-score/infra/template.yaml is a valid SAM Template
+
+=== sam build into a fresh build dir ===
+Build Succeeded
+Built Template   : ../../../../../private/tmp/claude-501/jprs-build-final/template.yaml
+
+built functions:
+CollectorFunction
+DifferFunction
+DiscoveryFunction
+EnumerateFunction
+NarratorFunction
+ReportFunction
+template.yaml
+
+DiscoveryFunction occurrences in built template: 8
+DiscoveryFunction occurrences in the STALE infra/.aws-sam build: 0
+0

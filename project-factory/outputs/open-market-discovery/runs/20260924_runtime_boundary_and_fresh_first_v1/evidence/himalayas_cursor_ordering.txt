@@ -1,0 +1,14 @@
+HIMALAYAS CURSOR ORDERING — the measured source contract behind the fresh-first fix
+date: 2026-09-24  public read-only
+
+himalayas__HEAD.json                                 first pubDate 2026-09-24T14:20:33+00:00  nextCursor -> 2026-09-24T09:59:55.985474Z|2272633
+himalayas__MjAyNi0wOS0yNFQwODo0MDo0MS40NzA4MzFafDIyNzE2Njg.json first pubDate 2026-09-24T08:40:32+00:00  nextCursor -> 2026-09-24T08:36:47.087595Z|2272078
+himalayas__MjAyNi0wOS0yNFQwODo0OTo0Mi41MzU5MTZafDIyNzI3NjA.json first pubDate 2026-09-24T08:49:32+00:00  nextCursor -> 2026-09-24T08:40:41.470831Z|2271668
+himalayas__MjAyNi0wOS0yNFQwODo1NToxOC40MDE0NTNafDIyNzE1ODc.json first pubDate 2026-09-24T08:55:12+00:00  nextCursor -> 2026-09-24T08:49:42.535916Z|2272760
+himalayas__MjAyNi0wOS0yNFQwOTo1OTo1NS45ODU0NzRafDIyNzI2MzM.json first pubDate 2026-09-24T09:59:40+00:00  nextCursor -> 2026-09-24T09:00:21.489677Z|2272325
+himalayas__MjAyNi0wOS0yNFQwOTowMDoyMS40ODk2NzdafDIyNzIzMjU.json first pubDate 2026-09-24T09:00:15+00:00  nextCursor -> 2026-09-24T08:55:18.401453Z|2271587
+
+The cursor decodes to <timestamp>|<id> and DECREASES monotonically: page 1 is the head and
+each saved cursor points strictly older. Resuming only from a saved cursor therefore walks away
+from new arrivals and never returns — the mechanism behind the review two-run probe. Hence the
+fix is a scheduling change (always check the head, then continue the backfill), not a ranking tweak.

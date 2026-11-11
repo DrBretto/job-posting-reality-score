@@ -105,7 +105,10 @@ def test_m3_cumulative_bleed_50_then_50():
     r3 = _run(r2.state, SnapshotStatus.SUCCESS, day3, run_id="d3")
     # cumulative guard trips -> SUSPECT, removals suppressed (no false disappeared for the bleed)
     assert r3.suspect is True
-    assert "cumulative" in (r3.suspect_reason or "")
+    # Assert the machine-readable kind, not the operator-facing sentence: the warning text is
+    # deliberately written for a human and is expected to be reworded.
+    assert r3.suspect_kind == "cumulative_bleed"
+    assert "shrunk" in (r3.suspect_reason or "")
     assert not any(e.event_type == ChangeEventType.DISAPPEARED for e in r3.events)
 
 
@@ -117,7 +120,11 @@ def test_m3_silent_subset_success():
     # day2: sales department entirely omitted (HTTP 200, under 60% single-step, no cumulative)
     r2 = _run(r1.state, SnapshotStatus.SUCCESS, eng, run_id="d2")
     assert r2.suspect is True
-    assert "silent-subset" in (r2.suspect_reason or "")
+    assert r2.suspect_kind == "silent_subset"
+    # The warning must state the condition actually observed. "Low download count" was the old
+    # misleading phrasing for what is really a missing segment.
+    assert "segment" in (r2.suspect_reason or "")
+    assert "NOT a low download count" in (r2.suspect_reason or "")
     assert not any(e.event_type == ChangeEventType.DISAPPEARED for e in r2.events)
 
 

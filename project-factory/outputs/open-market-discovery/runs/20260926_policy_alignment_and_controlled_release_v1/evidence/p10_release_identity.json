@@ -1,0 +1,52 @@
+{
+  "bound_at_utc": "2026-09-26T13:44:28Z",
+  "tested_source": {
+    "src_python_fingerprint": "356c0ad140beae546c297081c529a1e767bd39d852dd31902f5c5f0e8618c04b",
+    "screening_py_sha256": "ff9f3a9782282a6f8b8a3428d622587491f782559987a0a046a2fa916d8d84df",
+    "policy_py_sha256": "977c661722c821bf356dd5536e2834a50e3779c5f07bee0ebf4378e660cdae29",
+    "screening_ruleset_version": "1.5.0",
+    "note": "post-independent-review repairs included; this is the source the 433-test suite and the preflight ran against"
+  },
+  "projection": {
+    "path": "config/candidate_policy.json",
+    "sha256": "531332e6d26329e3a6fb79c8d398bdc57a0b5b6d22142fcbe1f9eda58cd2b057",
+    "projection_version": "1.1.0",
+    "mapped_rules": 9,
+    "packaged_into_artifacts_sha256": {
+      "CollectorFunction": "531332e6d26329e3a6fb79c8d398bdc57a0b5b6d22142fcbe1f9eda58cd2b057",
+      "DifferFunction": "531332e6d26329e3a6fb79c8d398bdc57a0b5b6d22142fcbe1f9eda58cd2b057",
+      "DiscoveryFunction": "531332e6d26329e3a6fb79c8d398bdc57a0b5b6d22142fcbe1f9eda58cd2b057",
+      "EnumerateFunction": "531332e6d26329e3a6fb79c8d398bdc57a0b5b6d22142fcbe1f9eda58cd2b057",
+      "NarratorFunction": "531332e6d26329e3a6fb79c8d398bdc57a0b5b6d22142fcbe1f9eda58cd2b057",
+      "ReportFunction": "531332e6d26329e3a6fb79c8d398bdc57a0b5b6d22142fcbe1f9eda58cd2b057"
+    }
+  },
+  "candidate_build": {
+    "build_dir": "/tmp/claude-501/jprs-build-XP7pRz",
+    "template_sha256": "95883358ed6955c2dc3db101af188984e29b4c25785bda79486a2bf34ce5801f",
+    "functions": [
+      "CollectorFunction",
+      "DifferFunction",
+      "DiscoveryFunction",
+      "EnumerateFunction",
+      "NarratorFunction",
+      "ReportFunction"
+    ]
+  },
+  "baseline_build": {
+    "build_dir": "/tmp/claude-501/jprs-p06-baseline-H6sodK/build",
+    "template_sha256": "3d7f9f6178eb201338669d5275bbecee7b4e817e0c86b8211a5a050645ea455a",
+    "source": "reconstructed from project-factory/outputs/open-market-discovery/runs/20260925_durable_discovery_publication_release_repair_v1/evidence/p06_baseline_src.tar.gz",
+    "verification": "BASELINE_VERIFIED, 36/36 recorded P06 source files"
+  },
+  "infra_inputs": {
+    "infra/template.yaml": "83a6e4f46fb5fcae34eab750afdc78a42ef7eb21763615b66d5734fd1f712002",
+    "infra/samconfig.toml": "b8582bcb886291b07b887f8fa8592b66b694ee850686dd7d0468f97d8853ab87",
+    "config/discovery_sources.yaml": "93139170cd25f3ca3b271137c90eacc06261be631cdbbb5ac87c1f4f65a4ca58"
+  },
+  "limits": [
+    "The projection refresh CANNOT be evidenced by the local package comparison: the reconstructed baseline carries the CURRENT tree outside src/, so config/candidate_policy.json is identical on both sides by construction. Its shipping is evidenced by the packaged hashes above instead.",
+    "A local package comparison is not an AWS change set.",
+    "Both build directories are scratch paths from this run and will not survive; the handoff reconstructs them."
+  ]
+}

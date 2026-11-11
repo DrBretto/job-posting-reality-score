@@ -1,1 +1,11 @@
 packet_id	product	layer	type	slug	version	status	created	path
+JPRS-L2-P01-open-market-discovery-v01	JPRS	L2	P01	open-market-discovery	v01	executed	2026-09-24	project-factory/claude_handoff/packets/jprs/JPRS-L2-P01-open-market-discovery-v01.md
+JPRS-L2-P02-discovery-release-repair-v01	JPRS	L2	P02	discovery-release-repair	v01	executed	2026-09-24	project-factory/claude_handoff/packets/jprs/JPRS-L2-P02-discovery-release-repair-v01.md
+JPRS-L2-P03-runtime-boundary-and-fresh-first-v01	JPRS	L2	P03	runtime-boundary-and-fresh-first	v01	executed	2026-09-24	project-factory/claude_handoff/packets/jprs/JPRS-L2-P03-runtime-boundary-and-fresh-first-v01.md
+JPRS-L2-P04-location-and-freshness-boundaries-v01	JPRS	L2	P04	location-and-freshness-boundaries	v01	executed	2026-09-24	project-factory/claude_handoff/packets/jprs/JPRS-L2-P04-location-and-freshness-boundaries-v01.md
+JPRS-L2-P05-resumable-discovery-release-repair-v01	JPRS	L2	P05	resumable-discovery-release-repair	v01	executed	2026-09-25	project-factory/claude_handoff/packets/jprs/JPRS-L2-P05-resumable-discovery-release-repair-v01.md
+JPRS-L2-P06-controlled-discovery-deployment-v01	JPRS	L2	P06	controlled-discovery-deployment	v01	executed	2026-09-25	project-factory/claude_handoff/packets/jprs/JPRS-L2-P06-controlled-discovery-deployment-v01.md
+JPRS-L2-P07-discovery-to-report-integration-v01	JPRS	L2	P07	discovery-to-report-integration	v01	executed	2026-09-25	project-factory/claude_handoff/packets/jprs/JPRS-L2-P07-discovery-to-report-integration-v01.md
+JPRS-L2-P08-durable-discovery-publication-and-release-repair-v01	JPRS	L2	P08	durable-discovery-publication-and-release-repair	v01	executed	2026-09-25	project-factory/claude_handoff/packets/jprs/JPRS-L2-P08-durable-discovery-publication-and-release-repair-v01.md
+JPRS-L2-P09-publication-commit-boundary-and-verification-v01	JPRS	L2	P09	publication-commit-boundary-and-verification	v01	executed	2026-09-26	project-factory/claude_handoff/packets/jprs/JPRS-L2-P09-publication-commit-boundary-and-verification-v01.md
+JPRS-L2-P10-policy-alignment-and-controlled-release-v01	JPRS	L2	P10	policy-alignment-and-controlled-release	v01	executed	2026-09-26	project-factory/claude_handoff/packets/jprs/JPRS-L2-P10-policy-alignment-and-controlled-release-v01.md

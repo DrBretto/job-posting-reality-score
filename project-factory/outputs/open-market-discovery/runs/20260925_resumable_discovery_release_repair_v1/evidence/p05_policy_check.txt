@@ -1,0 +1,3 @@
+=== policy projection check (src.cli policy-check) ===
+projection matches all policy sources
+exit=0

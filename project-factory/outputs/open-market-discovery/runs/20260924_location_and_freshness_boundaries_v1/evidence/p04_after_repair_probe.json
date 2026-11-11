@@ -1,0 +1,79 @@
+{
+  "location": [
+    {
+      "location": "Belmont, NH",
+      "mode": "ONSITE",
+      "condition": "On-site at our office five days per week.",
+      "verdict": "PENDING_CHECK",
+      "reason": "location-eligibility: plausibly local to Laconia, but the actual worksite address and attendance requirement decide whether it is within approximately a 30-minute drive; confirm before preparing"
+    },
+    {
+      "location": "Belmont NH",
+      "mode": "ONSITE",
+      "condition": "On-site at our office five days per week.",
+      "verdict": "PENDING_CHECK",
+      "reason": "location-eligibility: plausibly local to Laconia, but the actual worksite address and attendance requirement decide whether it is within approximately a 30-minute drive; confirm before preparing"
+    },
+    {
+      "location": "Alton, IL",
+      "mode": "ONSITE",
+      "condition": "On-site at our office five days per week.",
+      "verdict": "EXCLUDED",
+      "reason": "location-eligibility: the stated worksite is outside New Hampshire and attendance is required or no remote option is stated; no out-of-state worksite is within approximately a 30-minute drive of Laconia"
+    },
+    {
+      "location": "Remote / Boston, MA",
+      "mode": "HYBRID",
+      "condition": "Hybrid: must attend the Boston office three days per week.",
+      "verdict": "EXCLUDED",
+      "reason": "location-eligibility: onsite or hybrid attendance in a location the operator excluded for commuting (Portsmouth, or the Boston area); the same employer stays eligible if the role is genuinely remote"
+    },
+    {
+      "location": "Remote, US",
+      "mode": "REMOTE",
+      "condition": "This remote role may only employ residents of California or New York.",
+      "verdict": "EXCLUDED",
+      "reason": "location-residency: the posting limits employment to residents of CA, NY, which does not include New Hampshire; a remote label does not make this role available from New Hampshire"
+    }
+  ],
+  "head_gap": {
+    "requests": [
+      null,
+      "NEW_PAGE_TWO",
+      "OLDER_CURSOR",
+      "OLDER_AGAIN",
+      "EVEN_OLDER"
+    ],
+    "new_page_two_requested": true,
+    "employers_seen": [
+      "Employer even-older",
+      "Employer new-page-one",
+      "Employer new-page-two",
+      "Employer old-page",
+      "Employer older-again"
+    ],
+    "next_backfill_cursor": "STILL_OLDER"
+  },
+  "report_boundary": {
+    "production_timing_fields": {
+      "run_started_at": "2026-09-24 18:46:04.651443+00:00",
+      "previous_run_at": null
+    },
+    "persisted_fresh_count": 0,
+    "fresh_count_when_actual_timing_is_supplied": 2,
+    "retained": [
+      {
+        "job_id": "remotive:all#newly-observed-undated",
+        "fresh": false
+      },
+      {
+        "job_id": "remotive:all#twenty-hours-old",
+        "fresh": false
+      },
+      {
+        "job_id": "remotive:all#established",
+        "fresh": false
+      }
+    ]
+  }
+}

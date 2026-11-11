@@ -1,0 +1,126 @@
+{
+  "packet_id": "JPRS-L2-P08-durable-discovery-publication-and-release-repair-v01",
+  "execution_profile": "BOUNDED_REPAIR_AND_RELEASE_VERIFICATION",
+  "project_slug": "jprs",
+  "phase_key": "durable-discovery-publication-and-release-repair",
+  "run_id": "20260925_durable_discovery_publication_release_repair_v1",
+  "stage": "implementation_and_local_verification",
+  "handoff_target": "Claude Code",
+  "status": "stage_complete",
+  "started_at": "2026-09-25T17:45:00Z",
+  "completed_at": "2026-09-25T18:40:00Z",
+  "active_roles": [
+    "implementer",
+    "release_verifier"
+  ],
+  "baseline_identity": {
+    "head": "e549a73c98038eb4acaed59f515ac1bd3f163547",
+    "branch": "codex/real-job-radar",
+    "working_tree": "uncommitted P01-P08 overhaul preserved; 25 modified tracked files, 49 entries total including untracked. This run adds tests/test_durable_discovery_publication.py, scripts/inspect_discovery_integration.py and this run directory; src/discovery/live.py and the run root sit inside already-untracked parents",
+    "git_actions_taken": "none - no commit, branch, stage, push, reset, stash or checkout"
+  },
+  "inputs_used": [
+    "project-factory/claude_handoff/packets/jprs/JPRS-L2-P08-durable-discovery-publication-and-release-repair-v01.md",
+    "project-factory/claude_handoff/RUN_OUTPUT_CONTRACT.md",
+    "project-factory/ORCHESTRATOR_BOOTSTRAP.md",
+    "CLAUDE.md",
+    "docs/plans/2026-09-24-open-market-job-discovery.md",
+    "project-factory/outputs/open-market-discovery/runs/20260925_discovery_to_report_integration_v1/ORCHESTRATOR_REVIEW.md",
+    "project-factory/outputs/open-market-discovery/runs/20260925_discovery_to_report_integration_v1/gate_decision.md",
+    "project-factory/outputs/open-market-discovery/runs/20260925_discovery_to_report_integration_v1/DEPLOYMENT_HANDOFF.md",
+    "project-factory/outputs/open-market-discovery/runs/20260925_discovery_to_report_integration_v1/evidence/p07_independent_interrupted_publish_probe.py",
+    "project-factory/outputs/open-market-discovery/runs/20260925_discovery_to_report_integration_v1/evidence/p07_independent_interrupted_publish_probe.json",
+    "project-factory/outputs/open-market-discovery/runs/20260925_controlled_discovery_deployment_v1/evidence/p06_build_identity.txt",
+    "/private/tmp/claude-501/jprs-build-p06-9H8jKS (intact local P06 build, hash-verified)",
+    "config/companies.yaml, config/discovery_sources.yaml, config/candidate_policy.json",
+    "infra/template.yaml, infra/samconfig.toml",
+    "src/{discovery,report,common}/, tests/test_discovery_to_report_integration.py"
+  ],
+  "outputs_emitted": [
+    "run_manifest.json",
+    "checkpoint.md",
+    "gate_decision.md",
+    "VALIDATION.md",
+    "DEPLOYMENT_HANDOFF.md",
+    "OPERATOR_RETURN.md",
+    "evidence/p08_interrupted_publish_probe_unmodified.py",
+    "evidence/p08_before_repair_interrupted_publish.json",
+    "evidence/p08_after_repair_interrupted_publish.json",
+    "evidence/p08_test_results.txt",
+    "evidence/p08_policy_check.txt",
+    "evidence/p08_sam_validate.txt",
+    "evidence/p08_sam_build.txt",
+    "evidence/p08_owned_changes.txt",
+    "evidence/p08_package_scope.py",
+    "evidence/p08_package_scope.txt",
+    "evidence/p08_verify_rollback_baseline.py",
+    "evidence/p08_rollback_baseline_verification.txt",
+    "evidence/p06_baseline_src.tar.gz",
+    "evidence/p08_rollback_drill.sh",
+    "evidence/p08_rollback_drill.txt",
+    "evidence/p08_exercise_live_check.py",
+    "evidence/p08_live_check_exercise.txt",
+    "evidence/live_check_fixtures/ (5 real reports, their inputs and full inspection output)",
+    "evidence/p08_sample_report_interrupted_round.md",
+    "evidence/p08_sample_report_recovered_round.md"
+  ],
+  "code_outputs": {
+    "created": [
+      "tests/test_durable_discovery_publication.py",
+      "scripts/inspect_discovery_integration.py"
+    ],
+    "edited": [
+      "src/discovery/live.py",
+      "src/discovery/handler.py",
+      "src/common/s3layout.py",
+      "src/report/handler.py",
+      "docs/plans/2026-09-24-open-market-job-discovery.md"
+    ],
+    "infrastructure_changed": false,
+    "iam_changed": false,
+    "schedule_or_routing_changed": false,
+    "new_durable_objects": [
+      "discovery/_pending_publication.json"
+    ]
+  },
+  "budget_caps": {
+    "aws_mutations": 0,
+    "aws_invocations": 0,
+    "aws_read_only_calls": 0,
+    "network_calls_to_providers": 0,
+    "model_calls": 0,
+    "spend_usd": 0,
+    "emails_sent": 0,
+    "applications_submitted": 0
+  },
+  "acceptance_condition": "The interruption reproduction is repaired through actual producer/consumer code without test-authored wiring; focused retry/partial-write regressions and the existing suite pass; actual package scope and a recoverable baseline are demonstrated; and the live inspection distinguishes empty eligibility from missing ingestion.",
+  "acceptance_result": "met locally, on all four clauses",
+  "stop_condition": "Stop after local repair/verification and the corrected release handoff. No deployment, cloud write, invocation, git mutation or further committee.",
+  "stop_result": "stopped at the packet boundary; the permitted bounded read-only AWS retrieval was not needed and was not performed",
+  "checkpoint_path": "project-factory/outputs/open-market-discovery/runs/20260925_durable_discovery_publication_release_repair_v1/checkpoint.md",
+  "next_stage": "orchestrator inspection of the targeted repairs, then a fresh deployment-approval decision",
+  "verification_summary": {
+    "reviewer_probe_before_repair": "interrupted arm: 0 candidates on the same-run retry and 0 in the following report",
+    "reviewer_probe_after_repair": "interrupted arm identical to the control in every field, with the feed returning nothing on both later fetches",
+    "probe_provenance": "byte-identical copy of the reviewer's own script; diff reported no difference",
+    "suite_before": "339 passed",
+    "suite_after": "350 passed",
+    "new_regressions": 11,
+    "policy_projection": "matches all policy sources",
+    "sam_validate": "valid",
+    "sam_build": "succeeded; all six functions built",
+    "package_scope": "CHANGE_SET_IS_CODE_ONLY - 6 of 6 function artifacts change, 6 application-code paths, no IAM/schedule/parameter/state-machine/retention change; built templates byte-identical",
+    "rollback_baseline": "BASELINE_VERIFIED - 36 of 36 recorded P06 source files match in all six packaged functions; archived in-repo at evidence/p06_baseline_src.tar.gz",
+    "rollback_drill": "DRILL_PASSED - restores a hash-verified P06 tree and returns the overhaul byte-identically",
+    "live_acceptance_check": "LIVE_CHECK_DISCRIMINATES - 5 of 5 controls, including the zero-fit vs missing-consumer pair and the already-monitored-employer control"
+  },
+  "top_risks": [
+    "Live acceptance remains UNPROVEN. No registry-absent job has been observed in a real delivered report. scripts/inspect_discovery_integration.py is the check to run after an approved deployment; a zero is legitimate and must be recorded as such.",
+    "Mocked storage does not establish runtime IAM. The design deliberately needs no new grant (one known key, no ListBucket or DeleteObject), and the template's declared grants were checked, but no deployed policy evaluation was performed.",
+    "A rollback performed while a batch is owed loses those observations, because P06 never drains the ledger. The receipt names the job ids; DEPLOYMENT_HANDOFF.md 6.3 says to check it first.",
+    "The owed-batch bound (5 per provider) and the live-view retention bound (21 days) are stated and reported when reached, but neither is calibrated against measured failure frequency or feed churn.",
+    "Packaging still ships the whole repository in every function, which is why all six artifacts change and why the report function can import src.discovery.live at all. A future packaging fix must carry that dependency explicitly.",
+    "The unattended round on 2026-09-26 is still pending and unverified; this run deployed nothing, so it remains a P06 observation when it happens."
+  ],
+  "provenance_note": "Claims in VALIDATION.md, DEPLOYMENT_HANDOFF.md and OPERATOR_RETURN.md are labeled evidence / inference / speculation / operator_preference per PROVENANCE_AND_STATUS.md. Every provider payload used in this run is SYNTHETIC, written to control one variable; the insurance-company and benefits-administrator roles are test controls and are never recommended vacancies. No fixture outcome is presented as a live offer."
+}

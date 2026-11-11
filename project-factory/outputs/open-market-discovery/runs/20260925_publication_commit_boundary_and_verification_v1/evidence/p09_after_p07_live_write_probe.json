@@ -1,0 +1,48 @@
+{
+  "control": {
+    "scope": "real P07 producers/consumers with external AWS/HTTP mocked; one external storage failure and a changed feed window; no test-created intermediates",
+    "fixture": "synthetic qualifying insurance-company role, not a real opening",
+    "injected_failure": null,
+    "normalized_before_interruption": [
+      "greenhouse:machinifyinc#900001",
+      "himalayas:all#internal-tools"
+    ],
+    "source_success_persisted_before_live_commit": [
+      "himalayas"
+    ],
+    "traversal_state_persisted_before_live_commit": true,
+    "live_job_ids_after_same_run_retry": [
+      "himalayas:all#internal-tools"
+    ],
+    "same_run_retry_discovery_candidates": [
+      "himalayas:all#internal-tools"
+    ],
+    "following_run_discovery_candidates": [
+      "himalayas:all#internal-tools"
+    ],
+    "retained_raw_snapshot_count": 3
+  },
+  "interrupted": {
+    "scope": "real P07 producers/consumers with external AWS/HTTP mocked; one external storage failure and a changed feed window; no test-created intermediates",
+    "fixture": "synthetic qualifying insurance-company role, not a real opening",
+    "injected_failure": "review-injected storage failure before live-view commit",
+    "normalized_before_interruption": [
+      "greenhouse:machinifyinc#900001",
+      "himalayas:all#internal-tools"
+    ],
+    "source_success_persisted_before_live_commit": [
+      "himalayas"
+    ],
+    "traversal_state_persisted_before_live_commit": true,
+    "live_job_ids_after_same_run_retry": [
+      "himalayas:all#internal-tools"
+    ],
+    "same_run_retry_discovery_candidates": [
+      "himalayas:all#internal-tools"
+    ],
+    "following_run_discovery_candidates": [
+      "himalayas:all#internal-tools"
+    ],
+    "retained_raw_snapshot_count": 3
+  }
+}

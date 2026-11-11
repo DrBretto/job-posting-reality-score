@@ -1,0 +1,106 @@
+{
+  "scope": "real enumerate, collector, discovery, differ and report handlers against mocked S3/SQS/HTTP; no manifest, expected_sources, normalized, current, screening, scorecard or report row is written by this script or by the harness",
+  "fixture_provenance": {
+    "UNREGISTERED_FIT": "synthetic fit control; proves pipeline behavior, not a live opening",
+    "EXCLUDED_BY_POLICY": "synthetic exclusion control",
+    "MONITORED_PAYLOAD": "synthetic monitored-board control, present so a discovery-only result cannot hide a monitored-path regression"
+  },
+  "s3_prefixes_written": [
+    "current",
+    "discovery",
+    "events",
+    "normalized",
+    "raw",
+    "reports",
+    "runs",
+    "status"
+  ],
+  "stage_trace": {
+    "label": "acceptance_round",
+    "run_id": "2026-09-25",
+    "fetched_normalized_job_ids": [
+      "greenhouse:machinifyinc#900001",
+      "himalayas:all#enterprise-ae",
+      "himalayas:all#internal-tools"
+    ],
+    "discovery_live_view_ids": {
+      "himalayas": [
+        "himalayas:all#enterprise-ae",
+        "himalayas:all#internal-tools"
+      ]
+    },
+    "counts": {
+      "postings_considered": 3,
+      "deduplicated_hard_merges": 0,
+      "retained_credible": 2,
+      "excluded_by_policy": 1,
+      "below_fit_threshold": 0,
+      "needing_a_check": 0,
+      "fresh_arrivals": 1
+    },
+    "report_candidate_ids": [
+      "himalayas:all#internal-tools",
+      "greenhouse:machinifyinc#900001"
+    ],
+    "excluded_ids_with_reason": {
+      "himalayas:all#enterprise-ae": [
+        "sales-ownership: title is a sales role (Account Executive)"
+      ]
+    },
+    "discovery_candidate_ids": [
+      "himalayas:all#internal-tools"
+    ],
+    "monitored_candidate_ids": [
+      "greenhouse:machinifyinc#900001"
+    ]
+  },
+  "coverage_statements": [
+    {
+      "target": "jobicy:all",
+      "reason": "this feed is configured and expected, but no stored postings exist for it yet, so nothing from it can appear below. Absence here is a gap in coverage, not an observation that the feed holds nothing"
+    },
+    {
+      "target": "remoteok:all",
+      "reason": "this feed is configured and expected, but no stored postings exist for it yet, so nothing from it can appear below. Absence here is a gap in coverage, not an observation that the feed holds nothing"
+    },
+    {
+      "target": "remotive:all",
+      "reason": "this feed is configured and expected, but no stored postings exist for it yet, so nothing from it can appear below. Absence here is a gap in coverage, not an observation that the feed holds nothing"
+    }
+  ],
+  "health_axes": {
+    "collection": "INCOMPLETE",
+    "collection_missing_sources": [
+      "greenhouse:axiomaticai",
+      "greenhouse:cargomatic",
+      "greenhouse:future",
+      "greenhouse:grafanalabs",
+      "greenhouse:iconcareers",
+      "greenhouse:implicit",
+      "greenhouse:mozilla",
+      "greenhouse:nimblegravity",
+      "greenhouse:snorkelai",
+      "greenhouse:solutions",
+      "greenhouse:stackblitz",
+      "greenhouse:tailscale",
+      "greenhouse:warp",
+      "greenhouse:yurtsai"
+    ],
+    "discovery_coverage": "PARTIAL",
+    "discovery_coverage_detail": "1/1 discovery sources returned results; 5/14 query families covered; never run yet: automation-integration, data-extraction, sector-construction, sector-healthcare, sector-hospitality, sector-logistics, sector-manufacturing, sector-professional-services, sector-retail",
+    "freshness": "CHANGED",
+    "interpretation": "CLEAN",
+    "interpretation_detail": "no source-level condition is suppressing removals"
+  },
+  "timing": {
+    "run_started_at": "2026-09-25T14:21:00.155360+00:00",
+    "previous_run_at": null,
+    "previous_run_id": null,
+    "basis": "manifest.opened_at",
+    "cold_start_run": true,
+    "previously_reported_count": 0,
+    "previously_reported_source": null,
+    "previously_reported_truncated": false,
+    "boundary": "cold-start"
+  }
+}

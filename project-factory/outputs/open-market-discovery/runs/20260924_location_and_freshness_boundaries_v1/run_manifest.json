@@ -1,0 +1,150 @@
+{
+  "packet_id": "JPRS-L2-P04-location-and-freshness-boundaries-v01",
+  "run_id": "20260924_location_and_freshness_boundaries_v1",
+  "project_slug": "jprs",
+  "phase_key": "location-and-freshness-boundaries",
+  "execution_profile": "FULL_BUILD",
+  "executed_at": "2026-09-24",
+  "status": "complete",
+  "execution_acceptance": "MET",
+  "release_acceptance": "operator decision; not authorized by this run",
+
+  "outputs": [
+    "run_manifest.json",
+    "checkpoint.md",
+    "gate_decision.md",
+    "OPERATOR_RETURN.md",
+    "VALIDATION.md",
+    "DEPLOYMENT_HANDOFF.md",
+    "evidence/p04_before_repair_probe.json",
+    "evidence/p04_after_repair_probe.json",
+    "evidence/p04_after_repair_verification.txt",
+    "evidence/p04_report_boundary_probe.py",
+    "evidence/p04_report_boundary_results.json",
+    "evidence/p04_rehearsal_driver.py",
+    "evidence/p04_rehearsal_results.json",
+    "rehearsal/fixtures/{himalayas_page1..4,himalayas_cursors,remotive,remoteok,jobicy}.json",
+    "rehearsal/round1/{daily_report.md,daily_report.json,discovery_coverage.json}",
+    "rehearsal/round2/{daily_report.md,daily_report.json,discovery_coverage.json}"
+  ],
+
+  "repairs": {
+    "R1_location": {
+      "reproduced_before_repair": true,
+      "new_module": "src/candidate/location.py",
+      "changed": ["src/candidate/screening.py"],
+      "ruleset_version": "1.3.0 -> 1.4.0",
+      "removed": "three regexes of hand-written town names, deleted rather than left reusable",
+      "decides": [
+        "residency limits that exclude New Hampshire",
+        "mandatory attendance, polarity-aware, outranking a remote label",
+        "place and state resolution, so punctuation and shared town names stop deciding"
+      ],
+      "hard_distance_rule": "the state boundary only: Laconia is in central New Hampshire, so no out-of-state worksite is a ~30-minute drive. Every in-state distance question is surfaced for confirmation, never certified",
+      "regressions": 20
+    },
+    "R2_report_timing": {
+      "reproduced_before_repair": true,
+      "new_function": "src/report/handler.py:resolve_run_timing",
+      "run_start_source": "RUN_OPEN manifest opened_at (labelled fallback when absent)",
+      "previous_boundary": "the most recent EARLIER persisted report, ordered by its dt= partition",
+      "decision_mechanism": "identity - which postings the previous report showed - not clock arithmetic",
+      "also_fixed": [
+        "src/cli.py local report path had the same unwired boundary (--previous-report added)",
+        "cold_start_sources inferred a first observation from timestamp cardinality, suppressing a warm single-posting source's new arrival"
+      ],
+      "forward_compatible": "a report from an earlier release has no timing fields; its candidate id list is still used, so the first morning after a deploy does not announce every known posting as new",
+      "regressions": 13
+    },
+    "R3_head_continuation": {
+      "reproduced_before_repair": true,
+      "changed": ["src/discovery/handler.py", "src/discovery/budget.py"],
+      "new_state_fields": ["head_cursors", "head_frontier_at"],
+      "bounds": [
+        "at least one page always reserved for the historical backfill",
+        "stops at the recency horizon (72h), at a previously observed frontier, at the feed end, or when it meets the backfill",
+        "an unfetched remainder is saved and resumed, never discarded",
+        "per-source budget never exceeded (asserted at 1, 2, 3, 5)"
+      ],
+      "design_bug_caught_by_its_own_test": "the frontier stop fired before a saved continuation could resume, which would have abandoned the pages the previous run saved",
+      "regressions": 10
+    }
+  },
+
+  "verification": {
+    "tests_total": 296,
+    "tests_inherited": 252,
+    "tests_new": 44,
+    "p02_p03_regression_subset": 84,
+    "rollback_credential_subset": 22,
+    "sam_validate": "valid SAM template",
+    "sam_build": "Build Succeeded",
+    "policy_check": "projection matches all policy sources",
+    "review_probe": "P03 review probe run unmodified, before and after",
+    "infra_changed": false,
+    "schema_version": "1.1.0 unchanged; no CanonicalJob field added by P04"
+  },
+
+  "rehearsal": {
+    "kind": "real captured provider payloads, transport mocked",
+    "not_evidence_of": "production transport; that remains an activation gate",
+    "capture": "7 public GETs on 2026-09-24: 4 consecutive Himalayas cursor pages + 3 bulk feeds",
+    "cursor_contract_reconfirmed": "successive pages descend in time (10:26 -> 09:34 -> 08:57)",
+    "round_one": {"pages": ["page1", "page2"], "considered": 245, "retained": 10, "fresh": 2, "boundary": "cold-start"},
+    "round_two": {"pages": ["page1", "page2", "page3"], "considered": 264, "retained": 11, "fresh": 3, "boundary": "reported-ids", "backfill_advanced_to": "page4"}
+  },
+
+  "counts_with_populations": {
+    "note": "these are different populations and must not be compared as one",
+    "821": "postings in the P03 live sweep",
+    "216": "employers in that sweep absent from the monitored registry - employers, not postings; observed, not monitored",
+    "161": "the same measure in the smaller P01 sweep",
+    "44": "postings retained in the P03 sweep",
+    "16": "of those 44, the ones with no application history - the cohort the '4 fresh + 12 older' split described, not all 44",
+    "264": "postings in the P04 rehearsal, a smaller captured slice; fewer retained rows is a smaller input, not a regression"
+  },
+
+  "reconciliation": {
+    "handoff_of_record": "this run's DEPLOYMENT_HANDOFF.md; supersedes P03's",
+    "contradiction_corrected": "P03 §6 claimed the baseline ignores the additive fields while its own §8 said the opposite; the baseline rejects 18 job fields and 5 diff-state fields, so the data downgrade is REQUIRED",
+    "rollback_order_made_explicit": "quiesce writers and wait for in-flight executions -> downgrade data -> revert source -> re-enable",
+    "broken_evidence_path_fixed": "P03 cited evidence/rollback_validation.txt relative to its own run root; the file is in the P02 run root",
+    "evidence_paths_verified": true,
+    "surfaces_synchronized": [
+      "START_HERE.md",
+      "project-factory/ORCHESTRATOR_BOOTSTRAP.md",
+      "project-factory/meta/SESSION_STATUS.md",
+      "project-factory/meta/PHASE_LEDGER.md",
+      "project-factory/meta/EXECUTION_TIMELINE.md",
+      "project-factory/meta/DECISION_LOG.md",
+      "project-factory/claude_handoff/PACKET_REGISTRY.tsv",
+      "docs/PLAN.md",
+      "docs/plans/2026-09-24-open-market-job-discovery.md"
+    ],
+    "historical_returns_preserved": "no earlier run's evidence, review or return edited; the one in-place correction is a stale test count in the timeline, marked as corrected"
+  },
+
+  "environment_findings": {
+    "live_transport_unreliable_here": "the same Himalayas URL returned 18586 / 0 / 5996 / 18600 bytes on four consecutive urllib attempts where curl returned the full 80693; the connector correctly keeps the partial body and lands the snapshot PARTIAL. No transport code was changed in this run",
+    "sam_validate_sandbox": "PermissionError on ~/.aws-sam/metadata.json; re-run with an isolated HOME plus explicit AWS_CONFIG_FILE/AWS_SHARED_CREDENTIALS_FILE. Not a template problem"
+  },
+
+  "open_gates": [
+    "discovery running in AWS - first scheduled run",
+    "production HTTP transport for the four keyless feeds",
+    "authenticated Adzuna search returning results",
+    "general-industry coverage",
+    "careers-URL resolver live path",
+    "rollback data downgrade against real state",
+    "whether a plausibly-local worksite should auto-approve - deliberately left to the operator"
+  ],
+
+  "not_done_by_instruction": [
+    "deployment", "AWS/SSM/registry mutation", "credential provisioning", "paid service or signup",
+    "email or digest send", "application submission", "schedule change",
+    "commit", "branch", "staging", "reset", "push",
+    "edits to AGENTS/shared contracts, sibling candidate files, or Inbox application materials"
+  ],
+
+  "git": {"branch": "codex/real-job-radar", "commit": "e549a73", "staged_files": 0}
+}

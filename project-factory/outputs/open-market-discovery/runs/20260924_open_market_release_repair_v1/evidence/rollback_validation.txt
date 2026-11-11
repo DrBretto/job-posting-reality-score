@@ -1,0 +1,27 @@
+ROLLBACK COMMAND VALIDATION — validation only, no AWS operation performed
+date: 2026-09-24   aws-cli/2.24.15
+
+1. The command P01 proposed — REJECTED by the CLI:
+   $ aws scheduler update-schedule --name jprs-discovery-daily --state DISABLED --generate-cli-skeleton output
+   aws: error: the following arguments are required: --flexible-time-window, --schedule-expression, --target
+
+   Cause: UpdateSchedule is a FULL REPLACE, not a patch. Omitted fields are not preserved,
+   so a bare --state DISABLED would also be wrong even if the CLI accepted it.
+
+2. Shorthand form with all required fields — ACCEPTED (exit 0):
+   $ aws scheduler update-schedule --name ... --state DISABLED --schedule-expression "cron(5 7 * * ? *)" \
+       --schedule-expression-timezone America/New_York --flexible-time-window "Mode=OFF" \
+       --target "Arn=...,RoleArn=...,Input=\"{\\"trigger\\":\\"discovery\\"}\"" --generate-cli-skeleton output
+   -> { "ScheduleArn": "ScheduleArn" }   (parsed, no call made)
+   Note: the unescaped Input JSON fails shorthand parsing with
+         "Error parsing parameter '--target': Expected: '=', received: '\"'"
+
+3. RECOMMENDED form — round-trips get-schedule so every field is preserved (exit 0):
+   $ aws scheduler get-schedule --name jprs-discovery-daily > sched.json
+     # set .State to DISABLED; drop read-only Arn/CreationDate/LastModificationDate
+   $ aws scheduler update-schedule --cli-input-json file://sched.json
+   Validated here with --generate-cli-skeleton output against a representative document:
+   -> { "ScheduleArn": "ScheduleArn" }   (parsed, no call made)
+
+This is a PARTIAL disable. It stops the discovery pass only; it does not revert the
+modified screening, scoring or report code. See DEPLOYMENT_HANDOFF.md for the distinction.

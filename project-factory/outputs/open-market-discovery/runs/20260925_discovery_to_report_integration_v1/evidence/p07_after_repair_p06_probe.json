@@ -1,0 +1,20 @@
+{
+  "scope": "real enumerate, discovery persistence and report handlers; mocked AWS/HTTP; no hand-written manifest, normalized, current or report rows",
+  "limit": "monitored-board collection is not simulated; this isolates the discovery producer-to-report edge, not the entire state machine",
+  "registry_sources": 15,
+  "expected_discovery_sources": [
+    "himalayas:all",
+    "jobicy:all",
+    "remoteok:all",
+    "remotive:all"
+  ],
+  "discovered": 1,
+  "normalized_job_ids": [
+    "himalayas:all#applied-engineer"
+  ],
+  "current_keys": [],
+  "candidate_rows": 1,
+  "discovery_candidate_ids": [
+    "himalayas:all#applied-engineer"
+  ]
+}

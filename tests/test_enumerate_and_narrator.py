@@ -23,8 +23,10 @@ def _entries():
     return [
         CompanyEntry(provider=Provider.GREENHOUSE, board_token="stripe", company_slug="stripe"),
         CompanyEntry(provider=Provider.GREENHOUSE, board_token="figma", company_slug="figma"),
-        # a disabled + a gated Ashby entry must NOT be enumerated
+        # a disabled entry must NOT be enumerated
         CompanyEntry(provider=Provider.GREENHOUSE, board_token="off", company_slug="off", enabled=False),
+        # Ashby is now ENABLED (its identity concern was resolved with live evidence on 2026-09-24),
+        # so this entry IS enumerated. It used to be excluded by the ASHBY_ENABLED feature flag.
         CompanyEntry(provider=Provider.ASHBY, board_token="ramp", company_slug="ramp"),
     ]
 
@@ -33,13 +35,17 @@ def test_manifest_records_expected_task_set():
     m = build_manifest("2026-07-24", _entries(), now=NOW)
     assert m.state == "RUN_OPEN"
     assert m.run_id == "2026-07-24"
-    # only the two enabled Greenhouse sources (disabled + gated Ashby excluded)
-    assert m.expected_sources == ["greenhouse:figma", "greenhouse:stripe"]
+    # the two enabled Greenhouse sources plus the now-enabled Ashby board; the disabled one is out
+    assert m.expected_sources == ["ashby:ramp", "greenhouse:figma", "greenhouse:stripe"]
     assert m.source_labels == {
+        "ashby:ramp": "ramp",
         "greenhouse:figma": "figma",
         "greenhouse:stripe": "stripe",
     }
-    assert len(m.expected_tasks) == 2
+    assert len(m.expected_tasks) == 3
+    # Every monitored board is labelled as such, which is how the report keeps collection health
+    # from being read as market coverage.
+    assert set(m.source_kinds.values()) == {"ATS_BOARD"}
 
 
 def test_incomplete_detection_contract():
@@ -47,15 +53,20 @@ def test_incomplete_detection_contract():
     m = build_manifest("2026-07-24", _entries(), now=NOW)
     # only stripe succeeded -> figma is INCOMPLETE
     missing = incomplete_sources(m, succeeded_source_ids={"greenhouse:stripe"})
-    assert missing == ["greenhouse:figma"]
+    assert missing == ["ashby:ramp", "greenhouse:figma"]
     # all succeeded -> empty (complete)
-    assert incomplete_sources(m, {"greenhouse:stripe", "greenhouse:figma"}) == []
+    assert incomplete_sources(
+        m, {"greenhouse:stripe", "greenhouse:figma", "ashby:ramp"}
+    ) == []
 
 
 def test_fan_out_one_message_per_active_company():
     msgs = fan_out_messages("2026-07-24", _entries())
-    assert len(msgs) == 2
-    assert {mm["board_token"] for mm in msgs} == {"stripe", "figma"}
+    assert len(msgs) == 3
+    assert {mm["board_token"] for mm in msgs} == {"stripe", "figma", "ramp"}
+    # The employer name travels with the task so the collector can stamp it onto each job, instead
+    # of the report translating a board token through a hardcoded company table.
+    assert all(mm["employer_name"] for mm in msgs)
     assert all(mm["run_id"] == "2026-07-24" and mm["correlation_id"] == "2026-07-24" for mm in msgs)
 
 

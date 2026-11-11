@@ -1,0 +1,52 @@
+=== git status --short (owned slice) ===
+ M infra/DEPLOY.md
+ M infra/template.yaml
+ M src/cli.py
+ M src/collector/handler.py
+ M src/common/connectors.py
+ M src/common/models.py
+ M src/common/normalize.py
+ M src/common/s3layout.py
+ M src/differ/handler.py
+ M src/enumerate/handler.py
+ M src/report/handler.py
+ M src/scoring/scoring.py
+ M tests/test_connectors.py
+ M tests/test_differ.py
+ M tests/test_enumerate_and_narrator.py
+ M tests/test_scoring.py
+?? config/application_history.json
+?? config/candidate_policy.json
+?? config/discovery_sources.yaml
+?? docs/plans/2026-09-24-open-market-job-discovery.md
+?? docs/plans/2026-09-25-resumable-discovery-release-repair.md
+?? scripts/inspect_discovery_integration.py
+?? src/candidate/
+?? src/common/dedup.py
+?? src/common/fetch_guard.py
+?? src/common/rollback.py
+?? src/discovery/
+?? tests/test_dedup_and_history.py
+?? tests/test_discovery.py
+?? tests/test_discovery_to_report_integration.py
+?? tests/test_durable_discovery_publication.py
+?? tests/test_fetch_guard.py
+?? tests/test_location_and_freshness_boundaries.py
+?? tests/test_recall_and_coverage.py
+?? tests/test_release_repair.py
+?? tests/test_resumable_discovery_and_release_binding.py
+?? tests/test_runtime_boundary_and_fresh_first.py
+?? tests/test_screening.py
+
+=== P08 owned source hashes ===
+7627260e8deef126ef8819a8a3986d65e7b66aabc8903bbdc5403046415f714e  src/common/s3layout.py
+ec68c70727226e0a2cf75329909d6bea2df3564eb0e74021b63587b08f33e058  src/discovery/handler.py
+2fa0212967c933eea5cc018e67095e33ba509bcf76a00a9a1bd214690a30b39c  src/discovery/live.py
+804b86f8b3f8f7bf6f6f59785619badc7afda2eb2e746846bdfa7bbc1839cc69  src/report/handler.py
+d82b0081f2625a2fbf74137471bd87e5bf6eed2dd719e62a85818d627af8fd4d  tests/test_durable_discovery_publication.py
+b1603d2cb53ef48968235592428edc0e8663676aad557ce7c3a53da53cb58628  scripts/inspect_discovery_integration.py
+
+=== branch/head (unchanged by this run) ===
+codex/real-job-radar
+e549a73c98038eb4acaed59f515ac1bd3f163547
+nothing staged, committed, pushed or branched by this run

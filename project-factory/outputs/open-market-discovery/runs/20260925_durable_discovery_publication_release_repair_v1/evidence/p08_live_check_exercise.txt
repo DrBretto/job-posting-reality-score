@@ -1,0 +1,16 @@
+inspection script under test: /Users/drbretto/Desktop/Projects/job-posting-reality-score/scripts/inspect_discovery_integration.py
+fixtures and full output written to: /Users/drbretto/Desktop/Projects/job-posting-reality-score/project-factory/outputs/open-market-discovery/runs/20260925_durable_discovery_publication_release_repair_v1/evidence/live_check_fixtures
+
+PASS  A_acceptance: registry-absent employer retained
+      expected ACCEPTANCE_MET, got ACCEPTANCE_MET
+PASS  B_zero_fit: genuine zero-fit discovery day
+      expected INTEGRATION_OK, got INTEGRATION_OK
+PASS  C_missing_ingestion: consumer connection removed
+      expected MISSING_INGESTION, got MISSING_INGESTION
+PASS  D_pending: interrupted publication, nothing published
+      expected PENDING_PUBLICATION, got PENDING_PUBLICATION
+PASS  E_monitored_employer: retained, but the employer is already monitored
+      expected INTEGRATION_OK, got INTEGRATION_OK
+
+LIVE_CHECK_DISCRIMINATES — every situation is told apart on real report output
+exit=0

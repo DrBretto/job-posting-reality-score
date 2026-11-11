@@ -1,0 +1,5341 @@
+{
+  "corpus": {
+    "fixtures_dir": "project-factory/outputs/open-market-discovery/runs/20260924_location_and_freshness_boundaries_v1/rehearsal/fixtures",
+    "captured_on": "2026-09-24",
+    "providers": [
+      "himalayas",
+      "remotive",
+      "remoteok",
+      "jobicy"
+    ],
+    "pages_per_source_budget": 4,
+    "network_used": false,
+    "limits": "one captured slice from four keyless remote-job feeds on one day; not a market census and not evidence that the live transport works"
+  },
+  "ruleset_version": "1.5.0",
+  "totals": {
+    "postings_considered": 282,
+    "retained": 11,
+    "policy_excluded": 117,
+    "below_fit_threshold": 154,
+    "new_strong": 5,
+    "needs_a_check": 6
+  },
+  "dispositions": {
+    "himalayas:all#accounts-payable-supervisor": {
+      "employer": "TopDog Law LLC",
+      "title": "Accounts Payable Supervisor",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#ai-coach-agentic-engineering": {
+      "employer": "Mindera",
+      "title": "AI Coach - Agentic Engineering",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [
+        "ai-interview"
+      ],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#analista-contabil-pl-projetos": {
+      "employer": "Libbs Farmac\u00eautica (Oficial)",
+      "title": "Analista Cont\u00e1bil Pl. - Projetos",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Brazil"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#application-security-engineer-appsec": {
+      "employer": "micro1",
+      "title": "Application Security Engineer (AppSec)",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#applied-ai-product-associate-technical": {
+      "employer": "Hubs",
+      "title": "Applied AI Product Associate, Technical",
+      "bucket": "retained",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#bengali-bilingual-expert": {
+      "employer": "micro1",
+      "title": "Bengali Bilingual Expert",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#biglaw-lawyers-3239214341": {
+      "employer": "micro1",
+      "title": "BigLaw lawyers",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#biglaw-lawyers-litigation-corporate-m-a": {
+      "employer": "micro1",
+      "title": "BigLaw lawyers (Litigation/Corporate/M&A)",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#bookkeeper-uk-clients-remote-8556112727": {
+      "employer": "Sleek",
+      "title": "Bookkeeper - UK Clients - Remote",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "India"
+        }
+      ]
+    },
+    "himalayas:all#break-it-to-build-it-hardware-tester": {
+      "employer": "micro1",
+      "title": "Break-It-To-Build-It \u2014 Hardware Tester",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#buildium-specialist": {
+      "employer": "micro1",
+      "title": "Buildium Specialist",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#business-analyst-dept-of-va": {
+      "employer": "TalentRemedy",
+      "title": "Business Analyst (Dept of VA)",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "clearance-government"
+      ],
+      "suppressed_rules": [
+        "recorded-video"
+      ],
+      "reason": "clearance-government: government-adjacent without a stated clearance requirement; the policy requires explicit operator reconsideration before preparation rather than an automatic exclusion or an automatic pass",
+      "evidence_spans": [
+        {
+          "rule_id": "clearance-government",
+          "section": "requirements",
+          "matched": "VA program and will interact regularly with government customers, functional experts, technical teams, develo"
+        }
+      ]
+    },
+    "himalayas:all#business-development-executive-future-team-lead": {
+      "employer": "D2B",
+      "title": "Business Development Executive - Future Team Lead",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Business Development)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Business Development"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#chaplain-part-time-north-dallas-tx": {
+      "employer": "Marketplace Ministries, Inc.",
+      "title": "Chaplain Part-Time - North Dallas, TX",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#child-development-psychologist-phd": {
+      "employer": "micro1",
+      "title": "Child Development Psychologist (PhD)",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#client-experience-coordinator": {
+      "employer": "Saybrus Partners",
+      "title": "Client Experience Coordinator",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Canada canada"
+        }
+      ]
+    },
+    "himalayas:all#client-support-specialist-greater-st-louis-mo-area": {
+      "employer": "Fidelity Investments",
+      "title": "Client Support Specialist - Greater St. Louis, MO Area",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "customer-service-queue",
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "location-eligibility"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: role owns sales outcomes (outbound calls); customer-service-queue: the role's own subject is external customer service or phone support (client support); stated duty: inbound calls",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "requirements",
+          "matched": "e complex client requests Conduct pro-active outbound calls to communicate resolution to the client or s"
+        },
+        {
+          "rule_id": "customer-service-queue",
+          "section": "requirements",
+          "matched": "Value You Deliver Engage with customers, via inbound calls, responding to their inquires which may incl"
+        },
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "United States united states | eration of this role, your primary residence must be located within a 90 mile ra"
+        }
+      ]
+    },
+    "himalayas:all#clio-specialist": {
+      "employer": "micro1",
+      "title": "Clio Specialist",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#consultant-sales-gtm": {
+      "employer": "micro1",
+      "title": "Consultant (Sales & GTM)",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#continuous-improvement-lead-ai": {
+      "employer": "Capita",
+      "title": "Continuous Improvement Lead (AI)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "United Kingdom united kingdom"
+        }
+      ]
+    },
+    "himalayas:all#corporate-sales-engineer-gcc-remote-uae": {
+      "employer": "Crowdstrike",
+      "title": "Corporate Sales Engineer - GCC (Remote, UAE)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Sales Engineer)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Sales Engineer"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#cpaas-support-product-manager": {
+      "employer": "Signalmash",
+      "title": "CPaaS Support & Product Manager",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#customer-enrollment-specialist-8485282841": {
+      "employer": "Motive",
+      "title": "Customer Enrollment Specialist",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "clearance-government",
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "clearance-government: government-adjacent without a stated clearance requirement; the policy requires explicit operator reconsideration before preparation rather than an automatic exclusion or an automatic pass; process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "clearance-government",
+          "section": "about",
+          "matched": "iculture, food and beverage, retail, and the public sector."
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#customer-marketing-manager-4002679045": {
+      "employer": "Concentrix",
+      "title": "Customer Marketing Manager",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "United Kingdom united kingdom"
+        }
+      ]
+    },
+    "himalayas:all#data-analyst-6163999369": {
+      "employer": "micro1",
+      "title": "Data Analyst",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#data-analyst-9215136284": {
+      "employer": "micro1",
+      "title": "Data Analyst",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#delivery-leader-safety-services": {
+      "employer": "Rockwell Automation",
+      "title": "Delivery Leader, Safety Services",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#destination-wedding-sales-consultant-u-s": {
+      "employer": "Paradise Travel Group",
+      "title": "Destination Wedding Sales Consultant | U.S.",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [
+        "sales-ownership"
+      ],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#e-commerce-catalog-specialist": {
+      "employer": "WebLife Stores",
+      "title": "E-Commerce Catalog Specialist",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#e-discovery-project-manager": {
+      "employer": "Stoel Rives LLP",
+      "title": "e-Discovery Project Manager",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#email-and-lifecycle-marketing-specialist-nicaragua": {
+      "employer": "HireHawk",
+      "title": "Email and Lifecycle Marketing Specialist | Nicaragua",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#engineering-manager-ii-ai-systems-8135236448": {
+      "employer": "Root, Inc.",
+      "title": "Engineering Manager II, AI Systems",
+      "bucket": "retained",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#functional-sap-consultant": {
+      "employer": "Ford",
+      "title": "Functional SAP Consultant",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#github-specialist": {
+      "employer": "micro1",
+      "title": "GitHub Specialist",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#global-sales-manager": {
+      "employer": "Forward Air Corp.",
+      "title": "Global Sales Manager",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [
+        "recorded-video"
+      ],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#google-analytics-specialist": {
+      "employer": "micro1",
+      "title": "Google Analytics Specialist",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#google-classroom-specialist": {
+      "employer": "micro1",
+      "title": "Google Classroom Specialist",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#hubspot-specialist": {
+      "employer": "micro1",
+      "title": "HubSpot Specialist",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#key-account-manager": {
+      "employer": "Forward Air Corp.",
+      "title": "Key Account Manager",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [
+        "recorded-video"
+      ],
+      "reason": "sales-ownership: title is a sales role (Account Manager)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Account Manager"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#lead-engineer": {
+      "employer": "Pipeworks Studios",
+      "title": "Lead Engineer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#lead-service-tech-equip-care": {
+      "employer": "Smart Care",
+      "title": "Lead Service Tech Equip Care",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#linux-systemadministrator-senior-2nd-level-support-im-hosting-m-w-d": {
+      "employer": "dataforest GmbH",
+      "title": "Linux-Systemadministrator (Senior) \u2013 2nd-Level-Support im Hosting (m/w/d)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Germany"
+        }
+      ]
+    },
+    "himalayas:all#materials-science-expert": {
+      "employer": "micro1",
+      "title": "Materials Science Expert",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#member-of-technical-staff-medical-research-2287045424": {
+      "employer": "micro1",
+      "title": "Member of Technical Staff, Medical Research",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#paid-search-manager-3655349628": {
+      "employer": "Magic",
+      "title": "Paid Search Manager",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#partnerships-manager": {
+      "employer": "Spocket",
+      "title": "Partnerships Manager",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#patient-outreach-coordinator-4431157020": {
+      "employer": "Sanford Health",
+      "title": "Patient Outreach Coordinator",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-residency"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-residency: the posting limits employment to residents of SD, ND, MN, WI, IA, which does not include New Hampshire; a remote label does not make this role available from New Hampshire",
+      "evidence_spans": [
+        {
+          "rule_id": "location-residency",
+          "section": "location",
+          "matched": "SD, ND, MN, WI or IA) \u2022 Competitive salary based off of experience \u2022 Employee Wellness Program \u2022 Family like Team Culture \u2022 Career advancement opportunities \u2022 C"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#payroll-manager-contractor": {
+      "employer": "National University",
+      "title": "Payroll Manager (Contractor)",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#portfolio-director-navfac-us-coast-guard": {
+      "employer": "Parsons Corporation",
+      "title": "Portfolio Director, NAVFAC & US Coast Guard",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "clearance-government"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "clearance-government: requires a clearance, federal-suitability or drug-screening process (Security Clearance)",
+      "evidence_spans": [
+        {
+          "rule_id": "clearance-government",
+          "section": "requirements",
+          "matched": "An active PE or PMP An active US Security Clearance \u200b Security Clearance Requirement:"
+        }
+      ]
+    },
+    "himalayas:all#regional-sales-manager": {
+      "employer": "Experts Plus Recruitment Services",
+      "title": "Regional Sales Manager",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#robot-whisperer-skills-data": {
+      "employer": "micro1",
+      "title": "Robot Whisperer \u2014 Skills & Data",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#safeguarding-panel-members": {
+      "employer": "British Rowing",
+      "title": "Safeguarding Panel Members",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "United Kingdom united kingdom"
+        }
+      ]
+    },
+    "himalayas:all#sales-operations-associate": {
+      "employer": "Advanced Electric Systems",
+      "title": "Sales Operations Associate",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#sales-support-italian": {
+      "employer": "Integrated Language Solutions",
+      "title": "Sales Support - Italian",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "customer-service-queue"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "customer-service-queue: the role's stated duties include working an external customer-contact queue (inbound sales and support inquiries); 2 such duties stated",
+      "evidence_spans": [
+        {
+          "rule_id": "customer-service-queue",
+          "section": "body",
+          "matched": "e incumbent will be responsible for fielding inbound sales and support inquiries for their designated country and website mar"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#saybrus-internal-sales-consultant": {
+      "employer": "Saybrus Partners",
+      "title": "Saybrus - Internal Sales Consultant",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#sem-manager-8325873687": {
+      "employer": "Clever Digital Marketing",
+      "title": "SEM Manager",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Canada canada"
+        }
+      ]
+    },
+    "himalayas:all#senior-accountant-expert-188363007": {
+      "employer": "micro1",
+      "title": "Senior Accountant Expert",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#senior-cloud-engineer-azure-iac-terraform-projeto-internacional-267579421": {
+      "employer": "Deliver IT",
+      "title": "Senior Cloud Engineer (Azure, IaC, Terraform) - Projeto Internacional",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Brazil"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#senior-compute-engineer-go-kube": {
+      "employer": "Virtasant",
+      "title": "Senior Compute Engineer (Go + Kube)",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#senior-director-sales-6575123559": {
+      "employer": "RELX",
+      "title": "Senior Director Sales",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#senior-seo-specialist-local-content": {
+      "employer": "Do It Right Plumbers",
+      "title": "Senior SEO Specialist \u2013 Local & Content",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#senior-systems-analyst": {
+      "employer": "Enroute",
+      "title": "Senior Systems Analyst",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Mexico"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#senior-tax-manager-property-tax-strategic-valuation-services": {
+      "employer": "DMA",
+      "title": "Senior Tax Manager, Property Tax (Strategic Valuation Services)",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#shopify-developer": {
+      "employer": "Satellite Office",
+      "title": "Shopify Developer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [
+        "ai-interview"
+      ],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#specialiste-devops-q4d": {
+      "employer": "TEHORA",
+      "title": "Sp\u00e9cialiste DevOps (Q4D)",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#sr-paid-social-specialist": {
+      "employer": "GoodRx",
+      "title": "Sr. Paid Social Specialist",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#strategic-account-manager-service-providers": {
+      "employer": "Palo Alto Networks",
+      "title": "Strategic Account Manager, Service Providers",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Account Manager)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Account Manager"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#streaming-media-assistant": {
+      "employer": "The Walt Disney Company",
+      "title": "Streaming Media Assistant",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#stripe-specialist": {
+      "employer": "micro1",
+      "title": "Stripe Specialist",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#talent-acquisition-partner-riyadh-remote-sau": {
+      "employer": "Crowdstrike",
+      "title": "Talent Acquisition Partner, Riyadh (Remote, SAU)",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "sales-ownership"
+      ],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#tax-operations-analyst": {
+      "employer": "SRS Acquiom",
+      "title": "Tax Operations Analyst",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "location-eligibility"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: onsite or hybrid presence is required but the worksite could not be identified from the posting; confirm where the work happens before preparing",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "United States united states | You must be located within the Mountain (MST) or Central (CST) time zon"
+        }
+      ]
+    },
+    "himalayas:all#technical-sales-representative-sc": {
+      "employer": "Emerson",
+      "title": "Technical Sales Representative - SC",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Sales Representative)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Sales Representative"
+        }
+      ]
+    },
+    "himalayas:all#telefonische-arztbetreuung-freelancer-m-w-d": {
+      "employer": "mooci",
+      "title": "Telefonische Arztbetreuung - Freelancer (m/w/d)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: role owns sales outcomes (Upsell)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "body",
+          "matched": "egen Entwicklungsperspektive: sp\u00e4ter Premium-Upsell mit zus\u00e4tzlicher Provision m\u00f6glich Langfrist"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "himalayas:all#template-specialist-i-pennsylvania-resident": {
+      "employer": "Geisinger",
+      "title": "Template Specialist I (Pennsylvania resident)",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#toast-pos-specialist": {
+      "employer": "micro1",
+      "title": "Toast POS Specialist",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#vice-president-of-sales": {
+      "employer": "Asteris Lending LLC",
+      "title": "Vice President of Sales",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "himalayas:all#web-designer": {
+      "employer": "SmartClout Media",
+      "title": "Web Designer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "frontend-specialist"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "frontend-specialist: role's primary identity is frontend engineering (Web Designer)",
+      "evidence_spans": [
+        {
+          "rule_id": "frontend-specialist",
+          "section": "title",
+          "matched": "Web Designer"
+        }
+      ]
+    },
+    "jobicy:all#144336": {
+      "employer": "Kraken",
+      "title": "Staff Security Architect",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "EMEA, LATAM, Canada, Europe canada | emea | europe | latam"
+        }
+      ]
+    },
+    "jobicy:all#149520": {
+      "employer": "Canonical",
+      "title": "Junior Linux Kernel Engineer - Ubuntu",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "sales-ownership"
+      ],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#149521": {
+      "employer": "Canonical",
+      "title": "Engineering Manager - MLOps & Analytics",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#149550": {
+      "employer": "Canonical",
+      "title": "Security Software Engineer",
+      "bucket": "retained",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#149554": {
+      "employer": "Canonical",
+      "title": "Support Engineering Manager",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [
+        "sales-ownership"
+      ],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#149591": {
+      "employer": "Lakeshore Learning Materials, LLC",
+      "title": "Manager of IT Security",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#149595": {
+      "employer": "Natera",
+      "title": "Senior Workday Platform Engineer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#149596": {
+      "employer": "Samsara",
+      "title": "Senior Applied Scientist",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#149623": {
+      "employer": "AssetWatch",
+      "title": "Customer Success Manager",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Customer Success Manager)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Customer Success Manager"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#151047": {
+      "employer": "Socket",
+      "title": "Sales Engineer, EMEA",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Sales Engineer); location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Sales Engineer"
+        },
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "UK united kingdom"
+        }
+      ]
+    },
+    "jobicy:all#151456": {
+      "employer": "EverAI",
+      "title": "Senior Performance Marketer (Full Remote - Worldwide)",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#151457": {
+      "employer": "Bloomreach",
+      "title": "AI GTM Program Manager",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#151466": {
+      "employer": "CertiK",
+      "title": "Background Investigator",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Europe, UK, USA europe | united kingdom | united states"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#151470": {
+      "employer": "CertiK",
+      "title": "Blockchain Security Engineer - (Solidity / Rust / Golang)",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#151471": {
+      "employer": "Brain Co.",
+      "title": "President of Government Strategy & Partnerships",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "clearance-government",
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [
+        "ai-interview"
+      ],
+      "reason": "clearance-government: government-adjacent without a stated clearance requirement; the policy requires explicit operator reconsideration before preparation rather than an automatic exclusion or an automatic pass; process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "clearance-government",
+          "section": "responsibilities",
+          "matched": "government and bringing frontier AI into the public sector, we\u2019d love to hear from you."
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#151472": {
+      "employer": "FanDuel",
+      "title": "Software Engineer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "UK united kingdom"
+        }
+      ]
+    },
+    "jobicy:all#151473": {
+      "employer": "Dataiku",
+      "title": "Anaplan Systems Architect",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "sales-ownership"
+      ],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#151474": {
+      "employer": "Brain Co.",
+      "title": "Builder/Architect/Engineer Expert Consultant (Part-Time Contractor)",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#151477": {
+      "employer": "Brain Co.",
+      "title": "Sales Engineer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "clearance-government",
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Sales Engineer)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Sales Engineer"
+        },
+        {
+          "rule_id": "clearance-government",
+          "section": "responsibilities",
+          "matched": "l agencies, state and local governments, and public sector institutions \u2014 and turn ambitious mission pr"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#151479": {
+      "employer": "Brain Co.",
+      "title": "Commercial/Transactional Lawyer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#151480": {
+      "employer": "Dataiku",
+      "title": "Product Marketing Manager",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "sales-ownership"
+      ],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#151483": {
+      "employer": "Limbic",
+      "title": "Product Manager",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#151488": {
+      "employer": "Limbic",
+      "title": "Clinical Transcript Reviewer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#151493": {
+      "employer": "Oowlish Technology",
+      "title": "Full Stack Engineer (Vue + Nest)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Argentina Brazil Mexico, Argentina, Brazil, Mexico"
+        }
+      ]
+    },
+    "jobicy:all#151496": {
+      "employer": "Oowlish Technology",
+      "title": "Full Stack Web Engineer (Python & React)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "frontend-specialist"
+      ],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Argentina Brazil Mexico, Argentina, Brazil, Mexico"
+        }
+      ]
+    },
+    "jobicy:all#151500": {
+      "employer": "Oowlish Technology",
+      "title": "Meta Creative Strategist \u2014 Performance Creative",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Brazil"
+        }
+      ]
+    },
+    "jobicy:all#151502": {
+      "employer": "Mozilla",
+      "title": "Front End Engineering Manager, Firefox Desktop",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Canada canada"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#151503": {
+      "employer": "Oowlish Technology",
+      "title": "SDET \u2013 Regression Automation Engineer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Argentina Brazil Mexico, Argentina, Brazil, Mexico"
+        }
+      ]
+    },
+    "jobicy:all#151507": {
+      "employer": "Oowlish Technology",
+      "title": "Senior AI Solutions Engineer (Python & AWS Bedrock)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "customer-service-queue"
+      ],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Latam Argentina Brazil Mexico, Argentina, Brazil, Mexico"
+        }
+      ]
+    },
+    "jobicy:all#151512": {
+      "employer": "Verra Mobility",
+      "title": "Project Manager",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#151515": {
+      "employer": "Docplanner",
+      "title": "Product Director, Practice Management Software (PMS)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Poland Spain, Poland, Spain"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#151520": {
+      "employer": "Docplanner",
+      "title": "Senior Platform Security Engineer (100% Remote within Spain)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Spain"
+        }
+      ]
+    },
+    "jobicy:all#151521": {
+      "employer": "Docplanner",
+      "title": "Senior Platform Security Engineer (100% Remote within Poland)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Poland"
+        }
+      ]
+    },
+    "jobicy:all#151522": {
+      "employer": "DataGrail",
+      "title": "Enterprise Account Executive",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Account Executive)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Account Executive"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#151526": {
+      "employer": "Anagram",
+      "title": "Head of Marketing",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: role owns sales outcomes (revenue targets)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "responsibilities",
+          "matched": "n the full marketing plan and hit pipeline + revenue targets Build and run SMB demand gen: paid search/so"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#151527": {
+      "employer": "DataGrail",
+      "title": "Senior Product Manager, Intelligence",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#151531": {
+      "employer": "DataGrail",
+      "title": "Senior Product Marketing Manager",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#152576": {
+      "employer": "Ajax Systems",
+      "title": "Area Sales Manager ( Emilia-Romagna region)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: role owns sales outcomes (closing deals)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "body",
+          "matched": "roposals and presentations, negotiating, and closing deals."
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#153964": {
+      "employer": "Tenable",
+      "title": "Commercial Territory Manager",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "clearance-government",
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: role owns sales outcomes (Prospecting); 7 such duties stated",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "body",
+          "matched": "Proactive Prospecting:"
+        },
+        {
+          "rule_id": "clearance-government",
+          "section": "body",
+          "matched": "00, 50 percent of the Global 2000, and large government agencies."
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#153965": {
+      "employer": "Datavant",
+      "title": "Atlassian Platform Architect",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "clearance-government"
+      ],
+      "suppressed_rules": [],
+      "reason": "clearance-government: government-adjacent without a stated clearance requirement; the policy requires explicit operator reconsideration before preparation rather than an automatic exclusion or an automatic pass",
+      "evidence_spans": [
+        {
+          "rule_id": "clearance-government",
+          "section": "requirements",
+          "matched": "irect experience working with both HIPAA and FedRAMP requirements and translating them into pract"
+        }
+      ]
+    },
+    "jobicy:all#153973": {
+      "employer": "RevenueCat",
+      "title": "Senior Product Designer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "EMEA, LATAM, Canada, USA canada | emea | latam | united states"
+        }
+      ]
+    },
+    "jobicy:all#153974": {
+      "employer": "LaunchDarkly",
+      "title": "Backend Engineer, Observability",
+      "bucket": "retained",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "ai-interview"
+      ],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#153975": {
+      "employer": "Tenable",
+      "title": "Customer Success Manager",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "clearance-government",
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Customer Success Manager)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Customer Success Manager"
+        },
+        {
+          "rule_id": "clearance-government",
+          "section": "body",
+          "matched": "00, 50 percent of the Global 2000, and large government agencies."
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#153976": {
+      "employer": "Welo Global",
+      "title": "Ads Quality Rater - Cantonese (Hong Kong)",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#153977": {
+      "employer": "LaunchDarkly",
+      "title": "Corporate Account Executive",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Account Executive)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Account Executive"
+        }
+      ]
+    },
+    "jobicy:all#153978": {
+      "employer": "Tenable",
+      "title": "Data Analyst - SQL / Databricks",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-residency"
+      ],
+      "pending_rules": [
+        "clearance-government",
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [
+        "sales-ownership"
+      ],
+      "reason": "location-residency: the posting limits employment to residents of TN, which does not include New Hampshire; a remote label does not make this role available from New Hampshire",
+      "evidence_spans": [
+        {
+          "rule_id": "location-residency",
+          "section": "location",
+          "matched": ": F1-OPT, F1-CPT, H-1B, TN, J-1, etc Your Role: As a Data Analyst in our Business Intelligence organization, you will turn operational and customer data into ac"
+        },
+        {
+          "rule_id": "clearance-government",
+          "section": "body",
+          "matched": "00, 50 percent of the Global 2000, and large government agencies."
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#153979": {
+      "employer": "Welo Global",
+      "title": "Ads Quality Rater - Farsi (Turkey)",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#153985": {
+      "employer": "Best Egg",
+      "title": "Senior Product Manager",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#153986": {
+      "employer": "Garner Health",
+      "title": "Account Executive - Northeast",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Account Executive)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Account Executive"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#153987": {
+      "employer": "Smartsheet",
+      "title": "Account Executive, Commercial - Mid Market Central / East (Remote Eligible)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Account Executive)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Account Executive"
+        }
+      ]
+    },
+    "jobicy:all#153988": {
+      "employer": "Spire",
+      "title": "Sales Manager \u2013 Aviation, Middle East & Asia-Pacific",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "clearance-government",
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: role owns sales outcomes (quota-carrying); 3 such duties stated; clearance-government: requires a clearance, federal-suitability or drug-screening process (export-controlled); location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "responsibilities",
+          "matched": "This is a high-impact, quota-carrying role for a seller who understands how govern"
+        },
+        {
+          "rule_id": "clearance-government",
+          "section": "benefits",
+          "matched": "vary by country of employment.) Access to US export-controlled software and/or technology may be required f"
+        },
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "UK united kingdom"
+        }
+      ]
+    },
+    "jobicy:all#153989": {
+      "employer": "Garner Health",
+      "title": "Account Executive - Southwest",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Account Executive)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Account Executive"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#153990": {
+      "employer": "Smartsheet",
+      "title": "Account Executive, Commercial - Named (East)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Account Executive)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Account Executive"
+        }
+      ]
+    },
+    "jobicy:all#153991": {
+      "employer": "Garner Health",
+      "title": "Account Executive - West",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Account Executive)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Account Executive"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#153992": {
+      "employer": "Smartsheet",
+      "title": "Associate Technical Writer (Remote Eligible - Costa Rica)",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#153993": {
+      "employer": "Garner Health",
+      "title": "Business Development Representative",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Business Development Representative)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Business Development Representative"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#153995": {
+      "employer": "Collibra",
+      "title": "CPS Account Program Manager",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "clearance-government"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [
+        "sales-ownership"
+      ],
+      "reason": "clearance-government: requires a clearance, federal-suitability or drug-screening process (security clearance)",
+      "evidence_spans": [
+        {
+          "rule_id": "clearance-government",
+          "section": "requirements",
+          "matched": "Government security clearance Because this role supports the U.S. governme"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#153996": {
+      "employer": "Carrot",
+      "title": "Product Design Lead",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "ai-interview"
+      ],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#153997": {
+      "employer": "CoinGecko",
+      "title": "Operations Associate",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "customer-service-queue"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "customer-service-queue: the role's stated duties include working an external customer-contact queue (customer inquiries)",
+      "evidence_spans": [
+        {
+          "rule_id": "customer-service-queue",
+          "section": "responsibilities",
+          "matched": "ccurate, timely, and personalised support to customer inquiries across channels, strictly adhering to SLAs a"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#153998": {
+      "employer": "Resilience",
+      "title": "Underwriter",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#153999": {
+      "employer": "CentralReach",
+      "title": "Sr. Quality Engineer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#154001": {
+      "employer": "Carrot",
+      "title": "Sr. Manager, Data Engineering",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#154002": {
+      "employer": "CentralReach",
+      "title": "Technical Product Analyst",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#154003": {
+      "employer": "Collibra",
+      "title": "CPS Solution Architect",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "clearance-government"
+      ],
+      "pending_rules": [
+        "location-eligibility"
+      ],
+      "suppressed_rules": [
+        "sales-ownership"
+      ],
+      "reason": "clearance-government: requires a clearance, federal-suitability or drug-screening process (security clearance)",
+      "evidence_spans": [
+        {
+          "rule_id": "clearance-government",
+          "section": "requirements",
+          "matched": "en who resides on U.S. soil and holds active security clearance (Secret/TS/TS-SCI)."
+        },
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "USA united states | person federal customer engagements, with an on-site requirement of up to 50%."
+        }
+      ]
+    },
+    "jobicy:all#154004": {
+      "employer": "Carrot",
+      "title": "Sr. Member Engagement Manager, Lifecycle",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#154005": {
+      "employer": "Samsara",
+      "title": "Enterprise Customer Success Manager",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "customer-service-queue",
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Customer Success Manager); customer-service-queue: the role's stated duties include working an external customer-contact queue (phone call); location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Customer Success Manager"
+        },
+        {
+          "rule_id": "customer-service-queue",
+          "section": "responsibilities",
+          "matched": "Every phone call you answer and every email you send can affe"
+        },
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Germany"
+        }
+      ]
+    },
+    "jobicy:all#154006": {
+      "employer": "Docplanner",
+      "title": "Senior Product Manager \u2013 Marketplace (100% Remote within Poland)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Poland Spain, Poland, Spain"
+        }
+      ]
+    },
+    "jobicy:all#154007": {
+      "employer": "Acceleration Partners",
+      "title": "Associate Director / Director, Data Strategy & Measurement",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "UK united kingdom"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#154008": {
+      "employer": "TrustedHousesitters",
+      "title": "Senior Product Designer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "ai-interview"
+      ],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "UK united kingdom"
+        }
+      ]
+    },
+    "jobicy:all#154009": {
+      "employer": "Samsara",
+      "title": "Enterprise Implementation Consultant - German Fluency",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Germany"
+        }
+      ]
+    },
+    "jobicy:all#154010": {
+      "employer": "Docplanner",
+      "title": "Senior Product Manager \u2013 Marketplace (100% Remote within Spain)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Poland Spain, Poland, Spain"
+        }
+      ]
+    },
+    "jobicy:all#154011": {
+      "employer": "Samsara",
+      "title": "Implementation Consultant",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "France"
+        }
+      ]
+    },
+    "jobicy:all#154012": {
+      "employer": "Docplanner",
+      "title": "Freelance - Spanish Data Annotation Specialist (100% Remote within Europe)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Europe europe"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#154013": {
+      "employer": "Acceleration Partners",
+      "title": "Enterprise Account Executive, New Business Development",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Account Executive); location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Account Executive"
+        },
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Germany Uk Usa, Germany"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#154014": {
+      "employer": "Zone & Co",
+      "title": "Platform Product Engineer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "ai-interview"
+      ],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#154016": {
+      "employer": "Socure",
+      "title": "International Data Acquisition Manager",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "UK united kingdom"
+        }
+      ]
+    },
+    "jobicy:all#154017": {
+      "employer": "Quince",
+      "title": "Director - Specialty Fibers",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Italy Uk, Italy"
+        }
+      ]
+    },
+    "jobicy:all#154018": {
+      "employer": "Elevenlabs",
+      "title": "Full-Stack Engineer (Back-End Leaning)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [
+        "ai-interview"
+      ],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Bulgaria, Germany, Ireland, Netherlands, Poland, Portugal, Spain, UK, USA bulgaria | germany | ireland | netherlands | poland | portugal | spain | united kingdo"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#154019": {
+      "employer": "Ashby",
+      "title": "Senior Strategic Implementation Specialist - EMEA",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Europe europe"
+        }
+      ]
+    },
+    "jobicy:all#154020": {
+      "employer": "Elevenlabs",
+      "title": "Full-Stack Engineer (Front-End Leaning)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [
+        "ai-interview"
+      ],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Bulgaria, Ireland, Netherlands, Poland, Portugal, Sweden, UK, USA bulgaria | ireland | netherlands | poland | portugal | sweden | united kingdom | united states"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#154021": {
+      "employer": "Ashby",
+      "title": "Design Engineer - EU",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Croatia, Estonia, Germany, Ireland, Italy, Portugal, Romania, Spain, Sweden, Switzerland croatia | estonia | germany | ireland | italy | portugal | romania | sp"
+        }
+      ]
+    },
+    "jobicy:all#154022": {
+      "employer": "Elevenlabs",
+      "title": "Full-Stack Engineer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [
+        "ai-interview"
+      ],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Bulgaria, Germany, Ireland, Netherlands, Poland, Spain, UK, USA bulgaria | germany | ireland | netherlands | poland | spain | united kingdom | united states"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#154023": {
+      "employer": "Ashby",
+      "title": "Design Engineer - UK",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "UK united kingdom"
+        }
+      ]
+    },
+    "jobicy:all#154024": {
+      "employer": "Elevenlabs",
+      "title": "Research Engineer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [
+        "ai-interview"
+      ],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Bulgaria, Germany, Poland, UK, USA bulgaria | germany | poland | united kingdom | united states"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#154026": {
+      "employer": "Carrot",
+      "title": "Telemedicine Physician Consultant",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "jobicy:all#154027": {
+      "employer": "Capital on Tap",
+      "title": "Lead Automation Engineer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Portugal"
+        }
+      ]
+    },
+    "jobicy:all#154028": {
+      "employer": "Mozilla",
+      "title": "Contract Software Engineer - DOM Core Firefox/Gecko",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "France Germany Uk, France, Germany"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#154029": {
+      "employer": "Launchpad Technologies",
+      "title": "Senior Implementation Project Manager",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "LATAM latam"
+        }
+      ]
+    },
+    "jobicy:all#154030": {
+      "employer": "Carrot",
+      "title": "Telemedicine Registered Nurse (RN), Consultant",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#154031": {
+      "employer": "Capital on Tap",
+      "title": "Software Engineer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Portugal"
+        }
+      ]
+    },
+    "jobicy:all#154032": {
+      "employer": "Mozilla",
+      "title": "Contract Software Engineer - WebCompat Tooling (Dashboards and Reporting), Firefox",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Canada France Germany Uk, France, Germany"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#154033": {
+      "employer": "Acceleration Partners",
+      "title": "Director, Channel Partnerships",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: role owns sales outcomes (revenue targets); 2 such duties stated",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "responsibilities",
+          "matched": "ountability Own partner-sourced pipeline and revenue targets."
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#154034": {
+      "employer": "Mozilla",
+      "title": "Contract Staff Front End Engineer (Web Conference/Screen Sharing)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "frontend-specialist",
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [
+        "recorded-video"
+      ],
+      "reason": "frontend-specialist: role's primary identity is frontend engineering (Front End Engineer); location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "frontend-specialist",
+          "section": "title",
+          "matched": "Front End Engineer"
+        },
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Canada canada"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "jobicy:all#154035": {
+      "employer": "Acceleration Partners",
+      "title": "Director, Influencer Strategy",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: role owns sales outcomes (upsell); 3 such duties stated",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "responsibilities",
+          "matched": "This role closes that gap and creates upsell opportunities in the process."
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1135765": {
+      "employer": "Bored Panda",
+      "title": "Voice Over Artist",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1135783": {
+      "employer": "Pacific Health Group",
+      "title": "Human Resources Coordinator",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1135788": {
+      "employer": "Liberty Mutual Insurance",
+      "title": "Licensed Customer Service Representative",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "customer-service-queue",
+        "location-residency"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [
+        "sales-ownership"
+      ],
+      "reason": "customer-service-queue: the role's own subject is external customer service or phone support (customer service); no duty text contradicts the title; location-residency: the posting limits employment to residents of NY, CA, AK, HI, NM, IL, which does not include New Hampshire; a remote label does not make this role available from New Hampshire",
+      "evidence_spans": [
+        {
+          "rule_id": "customer-service-queue",
+          "section": "title",
+          "matched": "Licensed Customer Service Representative"
+        },
+        {
+          "rule_id": "location-residency",
+          "section": "location",
+          "matched": "NY, CA, AK, HI, NM or IL"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1135789": {
+      "employer": "Grapefruit Health",
+      "title": "Patient Outreach Specialist",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1135901": {
+      "employer": "BMWL",
+      "title": "Freelance Creative Director",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1135903": {
+      "employer": "PulseMediaNL",
+      "title": "Data Entry Administrator",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1135908": {
+      "employer": "Berni and Mick Ireland",
+      "title": "Managing Director",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Sunshine Coast, Sunshine Coast, Queensland, Australia australia | queensland | sunshine coast"
+        }
+      ]
+    },
+    "remoteok:all#1136054": {
+      "employer": "Wing",
+      "title": "Regional Flight Operations Support Manager",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1136066": {
+      "employer": "Resource Guru",
+      "title": "Customer Support Specialist",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "customer-service-queue"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "recorded-video"
+      ],
+      "reason": "customer-service-queue: the role's own subject is external customer service or phone support (customer support); no duty text contradicts the title",
+      "evidence_spans": [
+        {
+          "rule_id": "customer-service-queue",
+          "section": "title",
+          "matched": "Customer Support Specialist"
+        }
+      ]
+    },
+    "remoteok:all#1136086": {
+      "employer": "FindTutors",
+      "title": "Student Success Coach",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "London London England United Kingdom, England, London"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136094": {
+      "employer": "INNERGY",
+      "title": "Marketing Specialist",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-residency"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-residency: the posting limits employment to residents of TX, FL, MO, AZ, IN, NC, WI, which does not include New Hampshire; a remote label does not make this role available from New Hampshire",
+      "evidence_spans": [
+        {
+          "rule_id": "location-residency",
+          "section": "location",
+          "matched": ": Texas, Florida, Missouri, Arizona, Indiana, North Carolina, and Wisconsin"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136096": {
+      "employer": "Enable Dental",
+      "title": "Clinical Coordination Manager",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136097": {
+      "employer": "Balco, Inc.",
+      "title": "Regional Sales Manager",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "clearance-government"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "clearance-government: requires a clearance, federal-suitability or drug-screening process (drug screen)",
+      "evidence_spans": [
+        {
+          "rule_id": "clearance-government",
+          "section": "requirements",
+          "matched": "ust successfully pass a background check and drug screen."
+        }
+      ]
+    },
+    "remoteok:all#1136168": {
+      "employer": "testacy",
+      "title": "Why do you want this new job",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1136188": {
+      "employer": "Clera",
+      "title": "Java Developer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1136192": {
+      "employer": "Sophie's Flats Inc.",
+      "title": "Architectural Designer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136210": {
+      "employer": "Tremendous",
+      "title": "Head of Security",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1136213": {
+      "employer": "Control Shift Video",
+      "title": "Freelance Designer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136216": {
+      "employer": "GROW10X",
+      "title": "Market Research",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: role owns sales outcomes (cold calling); location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "body",
+          "matched": "h a focus on direct outreach methods such as cold calling and one-on-one cold email marketing, the tea"
+        },
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Chennai, Chennai, Tamil Nadu, India chennai | india | tamil nadu"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136217": {
+      "employer": "Arabian Private Holdings",
+      "title": "Data Analyst Assistant",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136221": {
+      "employer": "GROW10X",
+      "title": "Business Development",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Business Development)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Business Development"
+        }
+      ]
+    },
+    "remoteok:all#1136222": {
+      "employer": "SEAhub Asia",
+      "title": "Data Analyst",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1136370": {
+      "employer": "PFAS (Personal Functional Assessment Services)",
+      "title": "Functional Assessor",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136379": {
+      "employer": "DoiT",
+      "title": "Sales Development Representative Attribute\u00e2\u0084",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Sales Development); location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Sales Development"
+        },
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Remote UK remote uk"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136447": {
+      "employer": "Evolve",
+      "title": "Staff Software Engineer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "ai-interview"
+      ],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1136566": {
+      "employer": "Adaptive Teams",
+      "title": "Customer Service Representative",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "customer-service-queue",
+        "recorded-video",
+        "sales-ownership"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: role owns sales outcomes (outbound calls); recorded-video: application requires a recorded candidate video (video introduction); customer-service-queue: the role's own subject is external customer service or phone support (customer service); no duty text contradicts the title",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "body",
+          "matched": "ast-paced auction activity\u00e2\u0080\u0094making critical outbound calls, delivering clear info, and keeping everythi"
+        },
+        {
+          "rule_id": "recorded-video",
+          "section": "requirements",
+          "matched": "ase ensure that both your CV/resume and your video introduction are submitted in English ."
+        },
+        {
+          "rule_id": "customer-service-queue",
+          "section": "title",
+          "matched": "Customer Service Representative"
+        }
+      ]
+    },
+    "remoteok:all#1136568": {
+      "employer": "Bybit",
+      "title": "P2P BD Assistant",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "LATAM latam"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136569": {
+      "employer": "Stone",
+      "title": "Software Engineer II Golang",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136570": {
+      "employer": "Stone",
+      "title": "Software Engineer III Mobile",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136592": {
+      "employer": "American Bureau of Shipping (ABS)",
+      "title": "Surveyor I",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Port Of Spain"
+        }
+      ]
+    },
+    "remoteok:all#1136625": {
+      "employer": "NT Health",
+      "title": "Gardener Handyman Driver",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136670": {
+      "employer": "Bjak",
+      "title": "Engineering Manager Thailand",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1136687": {
+      "employer": "MultiplyMii",
+      "title": "Brand Protection & Marketplace Compliance Analyst",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1136701": {
+      "employer": "Ace IT Careers",
+      "title": "QA Tester Entry Level",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136770": {
+      "employer": "Shapr3D",
+      "title": "Future Shaprs",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136778": {
+      "employer": "AWeber",
+      "title": "Operations Engineer II",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136795": {
+      "employer": "Pivotal Health",
+      "title": "Senior Software Engineer Case Execution",
+      "bucket": "retained",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1136796": {
+      "employer": "Delinea",
+      "title": "Staff Software Development Engineer SDM",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-residency"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-residency: the posting limits employment to residents of TN, which does not include New Hampshire; a remote label does not make this role available from New Hampshire",
+      "evidence_spans": [
+        {
+          "rule_id": "location-residency",
+          "section": "location",
+          "matched": ": F1-OPT, F1-CPT, H-1B, TN, L-1, J1, etc"
+        }
+      ]
+    },
+    "remoteok:all#1136797": {
+      "employer": "FreedomPay",
+      "title": "Strategic Account Executive Lodging",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Account Executive)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Account Executive"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136798": {
+      "employer": "Physical Superintelligence",
+      "title": "Member of Technical Staff Engineering",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [
+        "location-eligibility"
+      ],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136841": {
+      "employer": "HighLevel",
+      "title": "Lead Product Designer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "India"
+        }
+      ]
+    },
+    "remoteok:all#1136844": {
+      "employer": "Precision Medicine Group",
+      "title": "Senior Contracts and Budget Associate",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136857": {
+      "employer": "SLB",
+      "title": "Real Time Drilling Ops Centre Analyst",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136861": {
+      "employer": "Legal Services NYC",
+      "title": "Hotline Paralegal",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1136878": {
+      "employer": "Crystalia Glass LLC",
+      "title": "Engineer Estimator",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136937": {
+      "employer": "Benchling",
+      "title": "Solutions Delivery Manager",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "location-eligibility"
+      ],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1136948": {
+      "employer": "Dreem Health",
+      "title": "Digital Workplace & Automation Specialist",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136949": {
+      "employer": "Chaos",
+      "title": "Team Lead Education",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: role owns sales outcomes (pipeline generation)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "responsibilities",
+          "matched": "sales territory or segment end-to-end, from pipeline generation through closed, retained revenue."
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136950": {
+      "employer": "Engine",
+      "title": "Marketing Operations Specialist",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1136987": {
+      "employer": "Harbor",
+      "title": "Consultant Implementation Engineer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137062": {
+      "employer": "Kruger NearShore LLC - Rekluti",
+      "title": "DESARROLLADOR FULL STACK",
+      "bucket": "retained",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137072": {
+      "employer": "Orca Bio",
+      "title": "Senior Specialist Global QMS",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1137114": {
+      "employer": "Salesforge",
+      "title": "Senior Backend Engineer Build AI Agents",
+      "bucket": "retained",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137155": {
+      "employer": "Tessera Labs",
+      "title": "Oracle Fusion Cloud Lead \u00e2\u0080\u0094 Logistics & Supply Chain Management",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137156": {
+      "employer": "Blackbird Interactive",
+      "title": "Senior Level Designer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Vancouver, BC, Canada bc | canada | vancouver"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137162": {
+      "employer": "The AI Whistleblower Initiative",
+      "title": "Principal Engineer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137169": {
+      "employer": "VirtuHire",
+      "title": "Programmatic Campaign Operations Specialist Trader",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137194": {
+      "employer": "Transportation Partners & Logistics",
+      "title": "Renewables Project Scheduler",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "clearance-government"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "clearance-government: requires a clearance, federal-suitability or drug-screening process (drug screening)",
+      "evidence_spans": [
+        {
+          "rule_id": "clearance-government",
+          "section": "requirements",
+          "matched": "successfully complete a background check and drug screening prior to hiring."
+        }
+      ]
+    },
+    "remoteok:all#1137209": {
+      "employer": "Webnotics Pvt Ltd",
+      "title": "Online Bidder",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "sales-ownership"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: role owns sales outcomes (close deals)",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "responsibilities",
+          "matched": "erate leads, build client relationships, and close deals. \u00c3\u00a2\u00c2\u009c\u00c2 Analyze client requirements and coord"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137224": {
+      "employer": "Benzinga",
+      "title": "AI Engineer Data APIs",
+      "bucket": "retained",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137279": {
+      "employer": "OrderYOYO",
+      "title": "Regional Sales Manager",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137302": {
+      "employer": "Warehance",
+      "title": "Customer Support & Success Specialist",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "customer-service-queue"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "customer-service-queue: the role's own subject is external customer service or phone support (customer support); no duty text contradicts the title",
+      "evidence_spans": [
+        {
+          "rule_id": "customer-service-queue",
+          "section": "title",
+          "matched": "Customer Support & Success Specialist"
+        }
+      ]
+    },
+    "remoteok:all#1137307": {
+      "employer": "Empire Assets",
+      "title": "Junior Crypto Analyst & Trader",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1137309": {
+      "employer": "iMerit Technology",
+      "title": "AI Response Analyst",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1137314": {
+      "employer": "NOPE",
+      "title": "Social Comms",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137374": {
+      "employer": "Thatchers Cider",
+      "title": "Quality Dispense Technician North",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137375": {
+      "employer": "eClinical Solutions",
+      "title": "External Data Specialist",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137378": {
+      "employer": "TestGorilla",
+      "title": "Senior People & Talent Operations Partner",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1137379": {
+      "employer": "GiveWell",
+      "title": "Senior Communications Officer Strategic Communications",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137380": {
+      "employer": "Harper",
+      "title": "Engineering Manager TLM Platform",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "location-eligibility",
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: onsite or hybrid presence is required but the worksite could not be identified from the posting; confirm where the work happens before preparing; process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "San Francisco san francisco | Monday\u00e2\u0080\u0093Friday, in-office five days a week."
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137381": {
+      "employer": "Copenhagen Optimization",
+      "title": "Marketing Student Assistant",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137387": {
+      "employer": "Mirantis",
+      "title": "Software Engineer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137388": {
+      "employer": "Bjak",
+      "title": "Technical Product Lead AI Finance App",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1137391": {
+      "employer": "Sleek",
+      "title": "Junior Payroll Assistant",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "recorded-video"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "recorded-video: application requires a recorded candidate video (One-way Video)",
+      "evidence_spans": [
+        {
+          "rule_id": "recorded-video",
+          "section": "process",
+          "matched": "TA Screen / One-way Video Interview:"
+        }
+      ]
+    },
+    "remoteok:all#1137394": {
+      "employer": "ExtraHop",
+      "title": "Sr Solutions Architect",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1137396": {
+      "employer": "DomainTools",
+      "title": "Principal Product Manager",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137398": {
+      "employer": "iMerit Technology",
+      "title": "AI Trainer Image QA Evaluator",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137399": {
+      "employer": "Sticker Mule",
+      "title": "AI agent engineer",
+      "bucket": "retained",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137400": {
+      "employer": "Arango",
+      "title": "Golang Kubernetes Engineer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137405": {
+      "employer": "Sanctuary Computer",
+      "title": "Senior Shopify Developer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "frontend-specialist"
+      ],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1137406": {
+      "employer": "JumpCloud",
+      "title": "Customer Success Manager Mexico",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility",
+        "sales-ownership"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "sales-ownership: title is a sales role (Customer Success Manager); location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "sales-ownership",
+          "section": "title",
+          "matched": "Customer Success Manager"
+        },
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Mexico City Mexico - Remote, Mexico City, Mexico Remote"
+        }
+      ]
+    },
+    "remoteok:all#1137407": {
+      "employer": "Delinea",
+      "title": "VP Pricing & Packaging",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1137408": {
+      "employer": "KPI Solutions",
+      "title": "Software Deployment Engineer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1137409": {
+      "employer": "Airspace Link",
+      "title": "Backend Software Engineer",
+      "bucket": "retained",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137410": {
+      "employer": "Bjak",
+      "title": "Frontend Engineer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "frontend-specialist",
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "frontend-specialist: role's primary identity is frontend engineering (Frontend Engineer); location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "frontend-specialist",
+          "section": "title",
+          "matched": "Frontend Engineer"
+        },
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Ireland"
+        }
+      ]
+    },
+    "remoteok:all#1137411": {
+      "employer": "OkWhen",
+      "title": "Senior .NET Software Engineer",
+      "bucket": "retained",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "ai-interview"
+      ],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1137412": {
+      "employer": "Ashby",
+      "title": "People Operations Coordinator",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1137414": {
+      "employer": "Magic Eden",
+      "title": "Senior Growth Product Manager AI Native",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137415": {
+      "employer": "Mindrift - Data annotation",
+      "title": "Freelance grabaci\u00c33n de tareas cotidianas para proyecto de IA",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137417": {
+      "employer": "RedMimicry",
+      "title": "Software Developer Security Analytics",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remoteok:all#1137418": {
+      "employer": "Omega Enterprises",
+      "title": "Junior Digital Assets Operations Analyst",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remoteok:all#1137420": {
+      "employer": "Bjak",
+      "title": "Frontend Engineer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "frontend-specialist",
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "frontend-specialist: role's primary identity is frontend engineering (Frontend Engineer); location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "frontend-specialist",
+          "section": "title",
+          "matched": "Frontend Engineer"
+        },
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Singapore"
+        }
+      ]
+    },
+    "remoteok:all#1137421": {
+      "employer": "Bjak",
+      "title": "Technical Product Manager AI Stockbroking App",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Germany"
+        }
+      ]
+    },
+    "remoteok:all#1137427": {
+      "employer": "Prenosis",
+      "title": "Software Engineer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remotive:all#1185979": {
+      "employer": "IAPWE",
+      "title": "Freelance Writer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remotive:all#1680495": {
+      "employer": "Coalition Technologies",
+      "title": "Remote Office Assistant",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remotive:all#1919266": {
+      "employer": "A.Team",
+      "title": "Senior Independent AI Engineer / Architect",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "sales-ownership"
+      ],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Americas, Europe, Israel americas | europe | israel"
+        }
+      ]
+    },
+    "remotive:all#2069746": {
+      "employer": "Mitre Media",
+      "title": "Tech Lead Full-Stack Rails Engineer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "USA, Canada, USA timezones canada | united states | usa timezones"
+        }
+      ]
+    },
+    "remotive:all#2086540": {
+      "employer": "Credit Wellness, LLC",
+      "title": "Inside Sales Contractor",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "PENDING_CHECK",
+      "exclusion_rules": [],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [
+        "sales-ownership"
+      ],
+      "reason": "process-not-inspectable: the posting does not describe its interview or application process; the live form still needs inspection for recorded-video and AI-interview requirements",
+      "evidence_spans": [
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remotive:all#2091045": {
+      "employer": "Unio Digital",
+      "title": "Tier III Service Desk Engineer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "customer-service-queue"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "customer-service-queue: the role's stated duties include working an external customer-contact queue (helpdesk); 2 such duties stated",
+      "evidence_spans": [
+        {
+          "rule_id": "customer-service-queue",
+          "section": "requirements",
+          "matched": "Duties \u00b7 Lead and support our helpdesk environment for managed service clients \u00b7 Co"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remotive:all#2091099": {
+      "employer": "Lemon.io",
+      "title": "Senior DevOps Engineer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "LATAM, Europe, USA, Canada, APAC apac | canada | europe | latam | united states"
+        }
+      ]
+    },
+    "remotive:all#2091100": {
+      "employer": "Lemon.io",
+      "title": "Senior QA Engineer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Europe europe"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remotive:all#2091101": {
+      "employer": "Lemon.io",
+      "title": "Senior React Full-stack Developer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "ai-interview"
+      ],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "LATAM, Europe, USA, Canada, APAC apac | canada | europe | latam | united states"
+        }
+      ]
+    },
+    "remotive:all#2091126": {
+      "employer": "iMerit Technology",
+      "title": "AI Response Evaluator",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "France Japan Turkey Vietnam Mexico Norway, France, Japan, Mexico, Norway, Turkey, Vietnam"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remotive:all#2091129": {
+      "employer": "Lemon.io",
+      "title": "Senior Data Scientist",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Northern America, LATAM, Europe, APAC apac | europe | latam | northern america"
+        }
+      ]
+    },
+    "remotive:all#2091130": {
+      "employer": "Lemon.io",
+      "title": "Senior .NET Full-stack Developer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Northern America, LATAM, Europe, APAC apac | europe | latam | northern america"
+        }
+      ]
+    },
+    "remotive:all#2091131": {
+      "employer": "Lemon.io",
+      "title": "Senior AI Engineer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Northern America, LATAM, Europe, APAC apac | europe | latam | northern america"
+        }
+      ]
+    },
+    "remotive:all#2091139": {
+      "employer": "hey contact heroes GmbH",
+      "title": "\ud83c\udde9\ud83c\uddea Kundenservice Mobilfunk Inbound - innerhalb der EU (ausgenommen: Deutschland)",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "customer-service-queue",
+        "location-eligibility"
+      ],
+      "pending_rules": [
+        "process-not-inspectable"
+      ],
+      "suppressed_rules": [],
+      "reason": "customer-service-queue: the role's own subject is external customer service or phone support (kundenservice); no duty text contradicts the title; location-eligibility: location is outside the US with no US-remote eligibility stated",
+      "evidence_spans": [
+        {
+          "rule_id": "customer-service-queue",
+          "section": "title",
+          "matched": "\ud83c\udde9\ud83c\uddea Kundenservice Mobilfunk Inbound - innerhalb der EU (ausgenommen: Deutschland)"
+        },
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Europe europe"
+        },
+        {
+          "rule_id": "process-not-inspectable",
+          "section": "meta",
+          "matched": "<no process section>"
+        }
+      ]
+    },
+    "remotive:all#2091140": {
+      "employer": "Sanctuary Computer Inc",
+      "title": "Senior Shopify Developer",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "frontend-specialist"
+      ],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    },
+    "remotive:all#2091141": {
+      "employer": "KoboToolbox",
+      "title": "Frontend Web Application Developer",
+      "bucket": "policy_excluded",
+      "screen_outcome": "EXCLUDED",
+      "exclusion_rules": [
+        "location-eligibility"
+      ],
+      "pending_rules": [],
+      "suppressed_rules": [
+        "ai-interview"
+      ],
+      "reason": "location-eligibility: the stated worksite is outside the US and no US-remote eligibility is stated",
+      "evidence_spans": [
+        {
+          "rule_id": "location-eligibility",
+          "section": "location",
+          "matched": "Usa Canada Argentina Mexico Peru, Argentina, Mexico, Peru"
+        }
+      ]
+    },
+    "remotive:all#2091144": {
+      "employer": "TELUS Digital",
+      "title": "Content Reviewer - United States",
+      "bucket": "below_fit_threshold",
+      "screen_outcome": "ELIGIBLE",
+      "exclusion_rules": [],
+      "pending_rules": [],
+      "suppressed_rules": [],
+      "reason": "no policy exclusion matched",
+      "evidence_spans": []
+    }
+  }
+}

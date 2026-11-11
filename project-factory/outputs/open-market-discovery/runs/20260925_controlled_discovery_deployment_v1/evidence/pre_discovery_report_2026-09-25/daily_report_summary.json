@@ -1,0 +1,51 @@
+{
+  "run_id": "2026-09-25",
+  "dt": "2026-09-25",
+  "run_health": "VERIFIED-QUIET",
+  "header": "VERIFIED-QUIET \u2014 every expected source produced a successful snapshot; changes listed below.",
+  "expected_sources": [
+    "greenhouse:axiomaticai",
+    "greenhouse:cargomatic",
+    "greenhouse:future",
+    "greenhouse:grafanalabs",
+    "greenhouse:iconcareers",
+    "greenhouse:implicit",
+    "greenhouse:machinifyinc",
+    "greenhouse:mozilla",
+    "greenhouse:nimblegravity",
+    "greenhouse:snorkelai",
+    "greenhouse:solutions",
+    "greenhouse:stackblitz",
+    "greenhouse:tailscale",
+    "greenhouse:warp",
+    "greenhouse:yurtsai"
+  ],
+  "succeeded_sources": [
+    "greenhouse:axiomaticai",
+    "greenhouse:cargomatic",
+    "greenhouse:future",
+    "greenhouse:grafanalabs",
+    "greenhouse:iconcareers",
+    "greenhouse:implicit",
+    "greenhouse:machinifyinc",
+    "greenhouse:mozilla",
+    "greenhouse:nimblegravity",
+    "greenhouse:snorkelai",
+    "greenhouse:solutions",
+    "greenhouse:stackblitz",
+    "greenhouse:tailscale",
+    "greenhouse:warp",
+    "greenhouse:yurtsai"
+  ],
+  "incomplete_sources": [],
+  "completeness_ratio": 1.0,
+  "current_job_count": 511,
+  "matching_job_count": 32,
+  "narration_enabled": false,
+  "_note": "large row arrays omitted; preserved pre-discovery summary of the already-delivered 2026-09-25 report",
+  "_row_counts": {
+    "complete_candidate_list": 0,
+    "top_matches": 20,
+    "policy_exclusions": 0
+  }
+}

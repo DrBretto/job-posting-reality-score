@@ -118,12 +118,51 @@ def test_ashby_url_slug_uuid_vs_content_hash():
     assert jobs_c[0].identity_low_confidence is True
 
 
-def test_ashby_feature_flagged_off_in_registry():
-    import pytest
+def test_ashby_is_enabled_and_prefers_the_native_id():
+    """The Ashby gate is OPEN and identity comes from the provider's own `id`.
 
-    # Ashby stays gated (UUID permanence unverified — D2/U4)
-    with pytest.raises(RuntimeError):
-        get_connector("ashby")
-    # but Greenhouse/Lever resolve
+    Evidence (bounded read-only probes, 2026-09-24): Ramp 155, OpenAI 828, Ashby 70, Linear 30 —
+    1,083 postings, every one carrying a top-level UUID `id` that also terminates `jobUrl`. A Linear
+    posting published 2021-04-27 is still listed under its original UUID, so the id survives years.
+    """
+    assert get_connector("ashby") is not None
     assert get_connector("greenhouse") is not None
     assert get_connector("lever") is not None
+
+    posting = {
+        "id": "34413f8d-26bf-4bbc-8ade-eb309a0e2245",
+        "title": "Security Engineer, Cloud",
+        "department": "Engineering", "team": "Backend",
+        "employmentType": "FullTime", "location": "New York, NY (HQ)",
+        "jobUrl": "https://jobs.ashbyhq.com/Ramp/34413f8d-26bf-4bbc-8ade-eb309a0e2245",
+        "applyUrl": "https://jobs.ashbyhq.com/Ramp/34413f8d-26bf-4bbc-8ade-eb309a0e2245/application",
+        "descriptionPlain": "Own cloud security engineering.",
+        "secondaryLocations": [{"location": "Remote (US)"}],
+        "compensation": {"compensationTierSummary": "$198K - $233K"},
+    }
+    _snap, jobs = AshbyConnector().build_snapshot("Ramp", _fr({"jobs": [posting]}),
+                                                 employer_name="Ramp")
+    job = jobs[0]
+    assert job.id_kind == IdKind.NATIVE_ID
+    assert job.provider_native_id == "34413f8d-26bf-4bbc-8ade-eb309a0e2245"
+    assert job.identity_low_confidence is False
+    assert job.employer_name == "Ramp"
+    # Published compensation is kept; a location-eligibility variant is kept separately so dedup
+    # cannot collapse two genuinely different openings.
+    assert job.salary is not None and job.salary.min == 198000
+    assert job.secondary_locations == ["Remote (US)"]
+
+
+def test_ashby_identity_ladder_degrades_honestly():
+    """With no native id, fall back to the URL UUID, then to a low-confidence content hash."""
+    conn = AshbyConnector()
+    url_only = {
+        "title": "ML Engineer",
+        "jobUrl": "https://jobs.ashbyhq.com/acme/3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "department": "AI",
+    }
+    neither = {"title": "ML Engineer", "jobUrl": "https://example.com/careers/ml", "department": "AI"}
+    _s1, j1 = conn.build_snapshot("acme", _fr({"jobs": [url_only]}))
+    _s2, j2 = conn.build_snapshot("acme", _fr({"jobs": [neither]}))
+    assert j1[0].id_kind == IdKind.URL_SLUG and j1[0].identity_low_confidence is False
+    assert j2[0].id_kind == IdKind.CONTENT_HASH and j2[0].identity_low_confidence is True

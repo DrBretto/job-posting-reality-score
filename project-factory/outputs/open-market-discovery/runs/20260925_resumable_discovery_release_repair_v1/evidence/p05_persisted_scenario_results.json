@@ -1,0 +1,275 @@
+{
+  "scope": "real discovery walk, real state serialization, real screening/scoring/report handler; mocked HTTP transport and mocked S3; no network, no AWS, no credential, no email",
+  "failed_recent_page": {
+    "runs": [
+      {
+        "run_id": "failed_recent_page-run1",
+        "cursors_requested": [
+          "page1(None)",
+          "NEW_TWO",
+          "OLD"
+        ],
+        "requests": 3,
+        "budget": 3,
+        "within_budget": true,
+        "state_after": {
+          "backfill_position": "OLD_1",
+          "owed_recent_ranges": [
+            "NEW_TWO"
+          ],
+          "compatibility_mirror": "NEW_TWO",
+          "observed_frontier": "2026-09-24T11:00:00+00:00",
+          "requests_spent": 3,
+          "failures": 1,
+          "backlog_reason": "himalayas feed has 1 untraversed recent page range(s) plus its historical position saved; all resumable"
+        },
+        "reported_incomplete_coverage": [
+          {
+            "target": "himalayas recent arrivals",
+            "reason": "1 recent page range(s) are still untraversed after the 2 page(s) this run could spend on the feed head; every one is saved and resumed next run, and one page was still reserved for the historical backfill"
+          }
+        ],
+        "target_in_persisted_report": false,
+        "persisted_candidate_rows": 2,
+        "report_dir": "reports/failed_recent_page/run1"
+      },
+      {
+        "run_id": "failed_recent_page-run2",
+        "cursors_requested": [
+          "page1(None)",
+          "NEW_TWO",
+          "OLD_1"
+        ],
+        "requests": 3,
+        "budget": 3,
+        "within_budget": true,
+        "state_after": {
+          "backfill_position": "OLD_2",
+          "owed_recent_ranges": [
+            "OLD"
+          ],
+          "compatibility_mirror": "OLD",
+          "observed_frontier": "2026-09-24T11:00:00+00:00",
+          "requests_spent": 3,
+          "failures": 0,
+          "backlog_reason": "himalayas feed has 1 untraversed recent page range(s) plus its historical position saved; all resumable"
+        },
+        "reported_incomplete_coverage": [
+          {
+            "target": "himalayas recent arrivals",
+            "reason": "1 recent page range(s) are still untraversed after the 2 page(s) this run could spend on the feed head; every one is saved and resumed next run, and one page was still reserved for the historical backfill"
+          }
+        ],
+        "target_in_persisted_report": true,
+        "persisted_candidate_rows": 4,
+        "report_dir": "reports/failed_recent_page/run2"
+      },
+      {
+        "run_id": "failed_recent_page-run3",
+        "cursors_requested": [
+          "page1(None)",
+          "OLD",
+          "OLD_2"
+        ],
+        "requests": 3,
+        "budget": 3,
+        "within_budget": true,
+        "state_after": {
+          "backfill_position": "OLD_3",
+          "owed_recent_ranges": [],
+          "compatibility_mirror": null,
+          "observed_frontier": "2026-09-24T11:00:00+00:00",
+          "requests_spent": 3,
+          "failures": 0,
+          "backlog_reason": "himalayas feed has 1 untraversed recent page range(s) plus its historical position saved; all resumable"
+        },
+        "reported_incomplete_coverage": [],
+        "target_in_persisted_report": true,
+        "persisted_candidate_rows": 5,
+        "report_dir": "reports/failed_recent_page/run3"
+      }
+    ],
+    "target": "himalayas:NEW_TWO#fresh-two",
+    "target_reached_on_run": "failed_recent_page-run2",
+    "every_run_within_budget": true,
+    "backfill_never_rewound": true,
+    "backfill_positions": [
+      "OLD_1",
+      "OLD_2",
+      "OLD_3"
+    ],
+    "owed_drained_by_the_end": true
+  },
+  "new_burst_above_saved_continuation": {
+    "runs": [
+      {
+        "run_id": "new_burst_above_saved_continuation-run1",
+        "cursors_requested": [
+          "page1(None)",
+          "B2",
+          "OLD"
+        ],
+        "requests": 3,
+        "budget": 3,
+        "within_budget": true,
+        "state_after": {
+          "backfill_position": "OLD_1",
+          "owed_recent_ranges": [
+            "B3"
+          ],
+          "compatibility_mirror": "B3",
+          "observed_frontier": "2026-09-24T11:00:00+00:00",
+          "requests_spent": 3,
+          "failures": 0,
+          "backlog_reason": "himalayas feed has 1 untraversed recent page range(s) plus its historical position saved; all resumable"
+        },
+        "reported_incomplete_coverage": [
+          {
+            "target": "himalayas recent arrivals",
+            "reason": "1 recent page range(s) are still untraversed after the 2 page(s) this run could spend on the feed head; every one is saved and resumed next run, and one page was still reserved for the historical backfill"
+          }
+        ],
+        "target_in_persisted_report": false,
+        "persisted_candidate_rows": 3,
+        "report_dir": "reports/new_burst_above_saved_continuation/run1"
+      },
+      {
+        "run_id": "new_burst_above_saved_continuation-run2",
+        "cursors_requested": [
+          "page1(None)",
+          "NEWER_TWO",
+          "OLD_1"
+        ],
+        "requests": 3,
+        "budget": 3,
+        "within_budget": true,
+        "state_after": {
+          "backfill_position": "OLD_2",
+          "owed_recent_ranges": [
+            "B2",
+            "B3"
+          ],
+          "compatibility_mirror": "B2",
+          "observed_frontier": "2026-09-24T11:54:00+00:00",
+          "requests_spent": 3,
+          "failures": 0,
+          "backlog_reason": "himalayas feed has 1 untraversed recent page range(s) plus its historical position saved; all resumable"
+        },
+        "reported_incomplete_coverage": [
+          {
+            "target": "himalayas recent arrivals",
+            "reason": "2 recent page range(s) are still untraversed after the 2 page(s) this run could spend on the feed head; every one is saved and resumed next run, and one page was still reserved for the historical backfill"
+          }
+        ],
+        "target_in_persisted_report": true,
+        "persisted_candidate_rows": 6,
+        "report_dir": "reports/new_burst_above_saved_continuation/run2"
+      },
+      {
+        "run_id": "new_burst_above_saved_continuation-run3",
+        "cursors_requested": [
+          "page1(None)",
+          "B2",
+          "OLD_2"
+        ],
+        "requests": 3,
+        "budget": 3,
+        "within_budget": true,
+        "state_after": {
+          "backfill_position": "OLD_3",
+          "owed_recent_ranges": [
+            "B3"
+          ],
+          "compatibility_mirror": "B3",
+          "observed_frontier": "2026-09-24T11:54:00+00:00",
+          "requests_spent": 3,
+          "failures": 0,
+          "backlog_reason": "himalayas feed has 1 untraversed recent page range(s) plus its historical position saved; all resumable"
+        },
+        "reported_incomplete_coverage": [
+          {
+            "target": "himalayas recent arrivals",
+            "reason": "1 recent page range(s) are still untraversed after the 2 page(s) this run could spend on the feed head; every one is saved and resumed next run, and one page was still reserved for the historical backfill"
+          }
+        ],
+        "target_in_persisted_report": true,
+        "persisted_candidate_rows": 7,
+        "report_dir": "reports/new_burst_above_saved_continuation/run3"
+      },
+      {
+        "run_id": "new_burst_above_saved_continuation-run4",
+        "cursors_requested": [
+          "page1(None)",
+          "B3",
+          "OLD_3"
+        ],
+        "requests": 3,
+        "budget": 3,
+        "within_budget": true,
+        "state_after": {
+          "backfill_position": "OLD_4",
+          "owed_recent_ranges": [
+            "OLD"
+          ],
+          "compatibility_mirror": "OLD",
+          "observed_frontier": "2026-09-24T11:54:00+00:00",
+          "requests_spent": 3,
+          "failures": 0,
+          "backlog_reason": "himalayas feed has 1 untraversed recent page range(s) plus its historical position saved; all resumable"
+        },
+        "reported_incomplete_coverage": [
+          {
+            "target": "himalayas recent arrivals",
+            "reason": "1 recent page range(s) are still untraversed after the 2 page(s) this run could spend on the feed head; every one is saved and resumed next run, and one page was still reserved for the historical backfill"
+          }
+        ],
+        "target_in_persisted_report": true,
+        "persisted_candidate_rows": 9,
+        "report_dir": "reports/new_burst_above_saved_continuation/run4"
+      },
+      {
+        "run_id": "new_burst_above_saved_continuation-run5",
+        "cursors_requested": [
+          "page1(None)",
+          "OLD",
+          "OLD_4"
+        ],
+        "requests": 3,
+        "budget": 3,
+        "within_budget": true,
+        "state_after": {
+          "backfill_position": "OLD_5",
+          "owed_recent_ranges": [],
+          "compatibility_mirror": null,
+          "observed_frontier": "2026-09-24T11:54:00+00:00",
+          "requests_spent": 3,
+          "failures": 0,
+          "backlog_reason": "himalayas feed has 1 untraversed recent page range(s) plus its historical position saved; all resumable"
+        },
+        "reported_incomplete_coverage": [],
+        "target_in_persisted_report": true,
+        "persisted_candidate_rows": 10,
+        "report_dir": "reports/new_burst_above_saved_continuation/run5"
+      }
+    ],
+    "target": "himalayas:NEWER_TWO#newer-two",
+    "target_reached_on_run": "new_burst_above_saved_continuation-run2",
+    "every_run_within_budget": true,
+    "backfill_never_rewound": true,
+    "backfill_positions": [
+      "OLD_1",
+      "OLD_2",
+      "OLD_3",
+      "OLD_4",
+      "OLD_5"
+    ],
+    "owed_drained_by_the_end": true
+  },
+  "assertions": {
+    "scenario_one_formerly_lost_job_reaches_the_persisted_report": true,
+    "scenario_two_formerly_lost_job_reaches_the_persisted_report": true,
+    "every_run_stayed_within_its_source_budget": true,
+    "the_historical_backfill_never_rewound": true,
+    "owed_ranges_drained_to_empty_in_both_scenarios": true
+  }
+}
