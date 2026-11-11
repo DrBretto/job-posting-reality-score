@@ -781,6 +781,12 @@ _AI_TRAINING_DUTY_RE = re.compile(
     r"(?:coding )?tasks for ai (?:systems|models)|paid per accepted task)\b",
     re.I,
 )
+_FUTURE_RELOCATION_RE = re.compile(
+    r"\b((?:eventual|future|later|expected|anticipated) relocation|"
+    r"relocat(?:e|ion) (?:later|eventually|in the future|once we|as (?:the|our) team)|"
+    r"(?:will|would) (?:need|be expected) to relocate)\b",
+    re.I,
+)
 _AI_TRAINING_STRONG_RE = re.compile(
     r"ai training work|tasks for ai|paid per accepted task", re.I)
 _EQUITY_FIRST_RE = re.compile(
@@ -1503,6 +1509,19 @@ def screen_job(job: CanonicalJob) -> ScreenResult:
                 "no explicit remote statement and the worksite is unclear; eligibility from New "
                 "Hampshire needs confirmation before preparation",
             ))
+
+    # ---- 7b. a remote role that expects a later move ---------------------------------------------
+    # "Remote in the US today, with eventual relocation as the team centralizes" (Helmsted, live HN
+    # thread 2026-11-11) passed every location rule. The policy says not to assume willingness to
+    # relocate, so a stated future move is a question for Brett, not a pass and not a rejection.
+    seg, m = _find(all_segments, _FUTURE_RELOCATION_RE, _ROLE_SECTIONS + (Section.BENEFITS,))
+    if seg is not None:
+        result.pending_checks.append(RuleHit(
+            "location-eligibility", ScreenOutcome.PENDING_CHECK.value, _context(seg.text, m),
+            seg.section,
+            f"the role is remote now but states a later relocation ({m.group(0)}); relocation is "
+            "not assumed, so confirm whether staying in New Hampshire is possible",
+        ))
 
     # ---- 8. can we even see the process? ---------------------------------------------------------
     # This is the rule that stops the system claiming an absence it never observed.

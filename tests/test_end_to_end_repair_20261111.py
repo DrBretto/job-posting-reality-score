@@ -414,3 +414,14 @@ def test_visa_list_tn_is_not_tennessee():
     assert find_residency_restriction(text) is None
     real_limit = "We are only able to hire employees who currently reside in AZ, CA, TN or TX."
     assert find_residency_restriction(real_limit).excludes_home
+
+
+def test_a_remote_role_with_a_stated_later_relocation_is_a_check_not_a_pass():
+    from src.candidate.screening import screen_job
+
+    job = _hn_job("Wealth OS Co | Founding AI Engineer | REMOTE (US) | $160K-$200K",
+                  "You'd build the agents with our CTO. Remote in the US today, with eventual "
+                  "relocation as the team centralizes. Interview process: calls.")
+    result = screen_job(job)
+    assert result.outcome == "PENDING_CHECK"
+    assert any("relocation" in h.reason for h in result.pending_checks)
