@@ -1,5 +1,5 @@
 {
-  "Comment": "JPRS daily assemble (Standard). Runs on the assemble schedule AFTER the collect schedule + offset. Reads the configured company set, diffs each company in an isolated Map branch (differ skips any company lacking a fresh SUCCESS sentinel -> never diffs an uncollected source to 'all removed'), then invokes report. Report is the completeness judge: it compares the RUN_OPEN manifest's expected sources against SUCCESS sentinels (manifest-vs-sentinel, never wall-clock). Any hard failure Catches to ReportIncomplete so a degraded report is always produced.",
+  "Comment": "JPRS daily assemble (Standard). Runs on the assemble schedule AFTER the collect schedule + offset. Reads the configured company set, diffs each company in an isolated Map branch (differ skips any company lacking a fresh SUCCESS sentinel -> never diffs an uncollected source to 'all removed'), then invokes report. Report is the completeness judge: it compares the RUN_OPEN manifest's expected sources against SUCCESS sentinels (manifest-vs-sentinel, never wall-clock). Any hard failure Catches to ReportIncomplete, which publishes a DEGRADED report over the fresh cohort only. BuildReport retries transient Lambda service errors only: a timeout or code error is deterministic and is not retried (until 2026-11-11 States.TaskFailed retried a 300 s timeout three times a day).",
   "StartAt": "LoadCompanies",
   "States": {
     "LoadCompanies": {
@@ -98,9 +98,9 @@
         {
           "ErrorEquals": [
             "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
             "Lambda.SdkClientException",
-            "Lambda.TooManyRequestsException",
-            "States.TaskFailed"
+            "Lambda.TooManyRequestsException"
           ],
           "IntervalSeconds": 2,
           "MaxAttempts": 3,

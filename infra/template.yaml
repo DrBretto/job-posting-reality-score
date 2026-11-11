@@ -472,29 +472,24 @@ Resources:
     Properties:
       FunctionName: jprs-report
       Handler: src.report.handler.handler
-      # 90 -> 300 (deployed 2026-09-30). Measured, not guessed: against live production data the
-      # assembly takes 21.3s on a developer laptop, of which 4.2s is S3 across 55 calls and 17.1s is
-      # single-threaded computation, so this is a capacity problem and not a hang or a wait. 90 had
-      # been exceeded on every scheduled round since 2026-09-27.
+      # Timeout 300 (since 2026-09-30). MemorySize 512 -> 1769 (2026-11-11), on measured evidence:
       #
-      # THE NUMBER BELOW IS THE MEASURED PRODUCTION RESULT, NOT THE PRE-DEPLOY ESTIMATE. The first
-      # live run after this change took 188.52s of a 298.97s budget on 1,344 postings, leaving 36.9%
-      # headroom and peaking at 209 MB of 512. The pre-deploy estimate was ~150s, derived from a
-      # 6.7x laptop-to-Lambda factor; the real factor is about 8.9x, so that estimate was low by
-      # roughly a quarter and is recorded here rather than quietly replaced.
+      # - From 2026-10-10 to 2026-11-11 every scheduled report timed out at 300 s. The population is
+      #   now set by discovery's 21-day retention window (1,526 postings on 09-30, 3,143 on 10-09,
+      #   4,671 on 11-11), and the report's cost is linear in it: 69.99-100.28 s per 1,000 postings at
+      #   512 MB in production. A 21-day steady state of ~4,700 needs ~330-470 s at 512 MB.
+      # - Lambda allocates CPU in proportion to memory; 1,769 MB is one full vCPU, 512 MB is 29% of
+      #   one. The work is single-threaded CPU (peak memory ~209 MB), so memory buys exactly the CPU
+      #   it needs. Replay of the real 2026-11-11 inputs with the 8.9x laptop-to-Lambda factor scaled
+      #   to 1,769 MB: 95 s of 298.8 s, 68% headroom; the population can roughly triple first.
+      # - Cost: ~1.73 GB x ~95 s x 30 days = ~4,900 GB-s/month against ~3,750 at 512 MB x 250 s.
+      #   Both are inside the Lambda free tier; outside it the difference is about two cents a month.
       #
-      # 300 is headroom, not requirement, and it does not last: the dominant stage (`deduplicate`,
-      # via `normalize_employer` on both operands of a nested loop over the kept set) is QUADRATIC
-      # in corpus size, measured constant at 3.1e-6 * n^2 seconds across a 6.7x range of n. At the
-      # corrected 8.9x factor this budget is exhausted near ~1,990 postings, NOT the ~2,400 first
-      # projected. The corpus went from 813 to 1,344 in three days. The durable repair is that loop,
-      # not this number, and there is less room before it is needed than the first estimate implied.
-      #
-      # MemorySize stays 512 deliberately. Peak use is ~191 MB of 512, so memory is not the
-      # constraint; more of it would buy proportional vCPU, which is a different change with its own
-      # cost shape and is not made here.
+      # The handler also measures its own rate and stops evaluating (newest first) before the
+      # reserve it needs to publish, so a population that outgrows even this still produces a report
+      # that names what it did not evaluate, instead of no report at all.
       Timeout: 300
-      MemorySize: 512
+      MemorySize: 1769
       Description: Step Functions task. Reads manifest + sentinels (completeness judge) + events, writes reports/, sends the SES digest.
       Environment:
         Variables:

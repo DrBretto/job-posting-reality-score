@@ -46,6 +46,8 @@ from tests.test_discovery_to_report_integration import (  # noqa: F401  (harness
 )
 
 
+from src.candidate.screening import HUMAN_FIRST_HOLD  # noqa: E402
+
 def _feed_record(*, title: str, company: str, slug: str, body: str,
                  locations: str = "['United States']") -> dict:
     record = {
@@ -586,8 +588,10 @@ def test_a_loom_video_requirement_is_a_recorded_candidate_video():
             "Remote throughout the United States."
         ),
     ))
-    assert excluded.outcome == ScreenOutcome.EXCLUDED.value
-    assert any(h.rule_id == "recorded-video" for h in excluded.exclusions)
+    # Human-first rule (2026-10-12): held for a human-interview route, never offered as ready, and
+    # never a silent pass.
+    assert excluded.outcome == ScreenOutcome.PENDING_CHECK.value
+    assert "recorded-video" in {h.rule_id for h in excluded.pending_checks if h.reason.startswith(HUMAN_FIRST_HOLD)}
 
     live_call = screen_job(make_job(
         "vid-2", title="Software Engineer",

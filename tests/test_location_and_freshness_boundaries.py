@@ -36,6 +36,8 @@ from src.candidate.screening import screen_job
 from src.common.connectors import FetchResult
 from src.common.models import CanonicalJob, IdKind, RemoteMode, ScreenOutcome
 
+from src.candidate.screening import HUMAN_FIRST_HOLD  # noqa: E402
+
 NOW = datetime(2026, 9, 24, 12, 0, tzinfo=timezone.utc)
 BUCKET = "jprs-p04-bucket"
 PROCESS_OK = "Interview process: two live video calls with the team."
@@ -297,8 +299,9 @@ def test_existing_non_location_exclusions_survive_the_rewrite():
     cases = {
         "sales-ownership": "Responsibilities: carry a sales quota and own the pipeline. " + PROCESS_OK,
         "clearance-government": "Requirements: you must obtain a security clearance. " + PROCESS_OK,
-        "recorded-video": "Interview process: submit a one-way recorded video introduction.",
     }
+    held = _verdict(description="Interview process: submit a one-way recorded video introduction.")
+    assert "recorded-video" in {h.rule_id for h in held.pending_checks if h.reason.startswith(HUMAN_FIRST_HOLD)}
     for rule_id, description in cases.items():
         result = _verdict(description=description)
         assert rule_id in {h.rule_id for h in result.exclusions}, (rule_id, _reasons(result))

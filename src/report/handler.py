@@ -473,6 +473,28 @@ class ReportInput:
     # names the posting's department segment, lowercased). Read from each board's
     # `_diff_state.json`; used only to recognize that source text inside those notes.
     state_source_text: set[str] = field(default_factory=set)
+    # What the round actually evaluated. Empty for a ReportInput built directly (tests, fixtures),
+    # which the renderer treats as "everything in `jobs` was evaluated".
+    evaluation: dict = field(default_factory=dict)
+    # Memo for `_cold_start(inp)`. Keyed on the job list's identity and length so a caller that
+    # replaces or extends `jobs` after construction gets a fresh answer rather than a stale one.
+    _cold_start_memo: tuple | None = field(default=None, repr=False, compare=False)
+
+
+def _cold_start(inp: ReportInput) -> set[str]:
+    """`cold_start_sources` for this report, computed once.
+
+    It is a property of the whole population, not of a row, yet `_match_json` recomputed it twice per
+    rendered row. At 4,671 postings and 2,792 rendered rows that was 26 million `set.add` calls and
+    15.5 of the 51 seconds a local replay of the 2026-11-11 report took — the largest single cost in
+    the report, and pure repetition. Same inputs, same answer, once.
+    """
+    key = (id(inp.jobs), len(inp.jobs), id(inp.source_observations))
+    memo = inp._cold_start_memo
+    if memo is None or memo[0] != key:
+        memo = (key, cold_start_sources(inp.jobs, inp.source_observations))
+        inp._cold_start_memo = memo
+    return memo[1]
 
 
 # --------------------------------------------------------------------------------------------------
@@ -859,11 +881,10 @@ def _match_json(card: DimensionScorecard, job: CanonicalJob, inp: ReportInput) -
             job,
             now=inp.run_started_at or datetime.fromisoformat(f"{inp.dt}T23:59:59+00:00"),
             previous_run_at=inp.previous_run_at,
-            cold_start=cold_start_sources(inp.jobs, inp.source_observations),
+            cold_start=_cold_start(inp),
             previously_reported=inp.previously_reported_ids,
         ),
-        "first_observation_run_for_source": job.source_id in cold_start_sources(
-            inp.jobs, inp.source_observations),
+        "first_observation_run_for_source": job.source_id in _cold_start(inp),
         "source_lag_hours": SOURCE_LAG_HOURS.get(job.source_id.partition(":")[0]),
         "source_lookback_days": SOURCE_LOOKBACK_DAYS.get(job.source_id.partition(":")[0]),
         "history_status": status.value if hasattr(status, "value") else str(status),
@@ -940,6 +961,9 @@ def _source_values(inp: ReportInput) -> list[str]:
             values.update(str(v) for v in item.values() if v)
     values.update(_source_employer(s, inp.source_labels) for s in inp.expected_sources)
     values.update(inp.state_source_text)
+    # Ids of postings the round did not evaluate are provider-derived identifiers like any other
+    # job id ("…-real-estate-analyst"); they reach the JSON through `evaluation`.
+    values.update((inp.evaluation or {}).get("not_evaluated_job_ids") or ())
     # The differ's segment spelling ("real estate & workplace"), which its notes quote.
     values.update(_segment_form(v) for v in inp.state_source_text)
     return sorted((str(value) for value in values if value), key=len, reverse=True)
@@ -1065,7 +1089,7 @@ def render_report(inp: ReportInput) -> tuple[str, dict]:
     ranked = _ranked(inp)
     pairs = [(card, jobs_by_id[card.job_id]) for card in ranked if card.job_id in jobs_by_id]
     report_now = inp.run_started_at or datetime.fromisoformat(f"{inp.dt}T23:59:59+00:00")
-    cold_start = cold_start_sources(inp.jobs, inp.source_observations)
+    cold_start = _cold_start(inp)
 
     # Partition by screening outcome and history. Nothing is dropped; every posting lands somewhere.
     strong: list[tuple] = []
@@ -1173,6 +1197,30 @@ def render_report(inp: ReportInput) -> tuple[str, dict]:
         f"triage aid, not a verdict.",
         "",
     ]
+
+    ev = inp.evaluation or {}
+    if ev and not ev.get("complete", True):
+        if ev.get("cohort") == "fresh":
+            scope = (
+                "This is the DEGRADED report: the full assembly did not complete"
+                + (f" ({ev.get('degraded_reason')})" if ev.get("degraded_reason") else "")
+                + ", so only postings first observed since "
+                + str(ev.get("cohort_window_start") or "the fresh-cohort window")[:16].replace("T", " ")
+                + " UTC were evaluated"
+            )
+        else:
+            scope = (
+                "The round ran short of time and stopped evaluating newest-first before the "
+                "oldest carried postings"
+            )
+        lines += [
+            f"> **Partial evaluation — {ev.get('evaluated', 0)} of {ev.get('population', 0)} postings "
+            f"evaluated.** {scope}. The other {ev.get('not_evaluated', 0)} were NOT screened or ranked "
+            "this round; they are not rejected, are listed by id in `daily_report.json` "
+            "(`evaluation.not_evaluated_job_ids`), are not recorded as shown, and return as unseen "
+            "in the next complete round.",
+            "",
+        ]
 
     if cov is not None and cov.policy_projection_note:
         lines += [f"Candidate policy: {cov.policy_projection_note}", ""]
@@ -1608,6 +1656,8 @@ def render_report(inp: ReportInput) -> tuple[str, dict]:
             } if cov is not None else None
         ),
         "dedup": inp.dedup or None,
+        # What this round evaluated, and what it did not. Absent (None) for a directly built input.
+        "evaluation": inp.evaluation or None,
         "events": [_event_json(e) for e in inp.events],
         # Counted and named, so a differ regression that starts writing accusatory notes is visible
         # here and in the logs rather than absorbed.
@@ -1715,14 +1765,17 @@ def _ratio(inp: ReportInput) -> float:
 # --------------------------------------------------------------------------------------------------
 # assembly from S3
 # --------------------------------------------------------------------------------------------------
-def assemble_report_input(s3, bucket: str, run_id: str, dt: str) -> ReportInput:
+def assemble_report_input(
+    s3, bucket: str, run_id: str, dt: str, *,
+    deadline=None, reserve_seconds: float = 0.0, cohort: str = "full",
+) -> ReportInput:
     """Build ReportInput from S3: RUN_OPEN manifest (expected), SUCCESS sentinels (succeeded),
     the differ's change events, and the current job set. Completeness = manifest-expected vs
     sentinel-succeeded (never wall-clock), per RELIABILITY §5.1."""
     from src.candidate.history import load_history
-    from src.candidate.ownership import assess_all
+    from src.candidate.ownership import assess_ownership
     from src.candidate.policy import check_divergence, load_projection
-    from src.candidate.screening import screen_all
+    from src.candidate.screening import screen_job
     from src.common import s3layout
     from src.common.dedup import deduplicate
     from src.discovery.live import DiscoveryLiveView
@@ -1841,24 +1894,81 @@ def assemble_report_input(s3, bucket: str, run_id: str, dt: str) -> ReportInput:
 
     # Cross-source dedup BEFORE scoring, so one posting is scored once and its provenance is intact.
     jobs, dedup_report = deduplicate(jobs)
+    population = jobs
 
-    scorecards: list[DimensionScorecard] = []
-    for job in jobs:
-        sid = job.source_id
-        source_events = [e for e in events if e.source_id == sid]
-        job_events = [e for e in source_events if e.job_id == job.job_id or e.job_id is None]
-        scorecards.append(score_job(
-            ScoreContext(
-                job=job,
-                events=job_events,
-                recent_snapshot_statuses=statuses_by_source.get(sid, [SnapshotStatus.SUCCESS]),
-                num_successful_observations=observations.get(sid, 1),
-            ),
-            today=scored_as_of,
-        ))
-
-    screen_results = screen_all(jobs)
-    ownership_results = assess_all(jobs)
+    # ---- evaluation: scoring, screening and ownership, inside the time the round actually has ----
+    # These three are pure per-posting work and are ~90% of the report's cost. Until 2026-11-11 they
+    # ran over the whole population unconditionally, so a population that outgrew the function's
+    # time limit produced NO report at all for 33 consecutive days. They now run newest-first in
+    # chunks; when the measured rate says the next chunk would cross into the reserve the round needs
+    # to render and publish, evaluation stops and the report says exactly how many postings it did
+    # not evaluate. Nothing is dropped: unevaluated postings are listed by id, are not recorded as
+    # shown, and therefore come back as unseen in the next round. With time to spare (the ordinary
+    # case) every posting is evaluated and the output is identical to evaluating them all at once.
+    events_by_source: dict[str, list[ChangeEvent]] = {}
+    for e in events:
+        events_by_source.setdefault(e.source_id, []).append(e)
+    order = _evaluation_order(population)
+    cohort_window_start = None
+    if cohort == "fresh":
+        cohort_window_start = _fresh_cohort_start(timing, scored_as_of)
+        first_seen_ids = {e.job_id for e in events if e.event_type == ChangeEventType.FIRST_SEEN}
+        order = [
+            job for job in order
+            if job.job_id in first_seen_ids
+            or (_aware(job.first_seen_at) is not None
+                and _aware(job.first_seen_at) >= cohort_window_start)
+        ]
+    stage_seconds = {"scoring": 0.0, "screening": 0.0, "ownership": 0.0}
+    cards_by_id: dict[str, DimensionScorecard] = {}
+    screen_results: dict = {}
+    ownership_results: dict = {}
+    stopped_for_budget = False
+    eval_started = _monotonic()
+    for start in range(0, len(order), EVALUATION_CHUNK):
+        chunk = order[start:start + EVALUATION_CHUNK]
+        if deadline is not None and cards_by_id:
+            per_job = (_monotonic() - eval_started) / len(cards_by_id)
+            if deadline() - per_job * len(chunk) < reserve_seconds:
+                stopped_for_budget = True
+                break
+        for job in chunk:
+            sid = job.source_id
+            source_events = events_by_source.get(sid, [])
+            job_events = [e for e in source_events if e.job_id == job.job_id or e.job_id is None]
+            t0 = _monotonic()
+            cards_by_id[job.job_id] = score_job(
+                ScoreContext(
+                    job=job,
+                    events=job_events,
+                    recent_snapshot_statuses=statuses_by_source.get(sid, [SnapshotStatus.SUCCESS]),
+                    num_successful_observations=observations.get(sid, 1),
+                ),
+                today=scored_as_of,
+            )
+            t1 = _monotonic()
+            screen_results[job.job_id] = screen_job(job)
+            t2 = _monotonic()
+            ownership_results[job.job_id] = assess_ownership(job)
+            t3 = _monotonic()
+            stage_seconds["scoring"] += t1 - t0
+            stage_seconds["screening"] += t2 - t1
+            stage_seconds["ownership"] += t3 - t2
+    # Population order, not evaluation order, so a complete evaluation renders exactly as before.
+    jobs = [job for job in population if job.job_id in cards_by_id]
+    scorecards = [cards_by_id[job.job_id] for job in jobs]
+    not_evaluated = [job.job_id for job in population if job.job_id not in cards_by_id]
+    evaluation = {
+        "cohort": cohort,
+        "population": len(population),
+        "evaluated": len(jobs),
+        "not_evaluated": len(not_evaluated),
+        "not_evaluated_job_ids": not_evaluated,
+        "stopped_for_budget": stopped_for_budget,
+        "cohort_window_start": cohort_window_start.isoformat() if cohort_window_start else None,
+        "stage_seconds": {k: round(v, 3) for k, v in stage_seconds.items()},
+        "complete": not not_evaluated,
+    }
 
     history = load_history() or None
     history_status: dict = {}
@@ -1902,7 +2012,7 @@ def assemble_report_input(s3, bucket: str, run_id: str, dt: str) -> ReportInput:
         policy_note = f"{policy_note}; {history_note}" if policy_note else history_note
 
     coverage = _assemble_coverage(
-        s3, bucket, run_id, jobs, expected_sources, policy_note,
+        s3, bucket, run_id, population, expected_sources, policy_note,
         discovery_status=discovery_status,
         history_projection=history_projection,
     )
@@ -1929,7 +2039,49 @@ def assemble_report_input(s3, bucket: str, run_id: str, dt: str) -> ReportInput:
         source_observations=dict(observations),
         timing=timing.to_json(),
         state_source_text=state_source_text,
+        evaluation=evaluation,
     )
+
+
+# Postings evaluated between budget checks. Small enough that one chunk is a few seconds even on the
+# slowest configuration measured; large enough that the check itself costs nothing.
+EVALUATION_CHUNK = 200
+# The degraded cohort reaches back at least this far, and further when the previous report is newer.
+FRESH_COHORT_HOURS = 72
+
+
+def _monotonic() -> float:
+    import time
+
+    return time.monotonic()
+
+
+def _evaluation_order(jobs: list[CanonicalJob]) -> list[CanonicalJob]:
+    """Newest first: when a round cannot evaluate everything, the postings Brett has not seen go first.
+
+    Ordered by when JPRS first observed the posting (descending), then by id so the order is total and
+    deterministic. A posting with no first-seen stamp sorts last — carried postings with no timing are
+    the ones a later round is best placed to finish.
+    """
+    epoch = datetime(1970, 1, 1, tzinfo=timezone.utc)
+    return sorted(
+        jobs,
+        key=lambda job: (-(_aware(job.first_seen_at) or epoch).timestamp(), job.job_id),
+    )
+
+
+def _fresh_cohort_start(timing, scored_as_of: datetime) -> datetime:
+    """Start of the degraded cohort: the later of the previous report and `FRESH_COHORT_HOURS` ago.
+
+    Bounded on purpose. When the last published report is weeks old (2026-11-11: thirty-three days),
+    "since the last report" is the whole population and would reproduce the very timeout the degraded
+    path exists to survive.
+    """
+    from datetime import timedelta
+
+    floor = _aware(scored_as_of) - timedelta(hours=FRESH_COHORT_HOURS)
+    previous = _aware(timing.previous_run_at) if timing.previous_run_at else None
+    return max(floor, previous) if previous else floor
 
 
 def _report_day(dt: str, cutoff):
@@ -2188,8 +2340,34 @@ def handler(event, context):
         except Exception:  # pragma: no cover - a context that cannot answer is not a report failure
             budget_seconds = None
 
-    inp = assemble_report_input(s3, bucket, run_id, dt)
+    # `mode` was ignored until 2026-11-11, so the state machine's ReportIncomplete step re-ran the
+    # identical full assembly that had just timed out — and timed out too, every day for 33 days.
+    # "incomplete" now means what the state machine always meant by it: publish what can be published
+    # without the work that failed — the fresh cohort only, stated as degraded.
+    mode = str(event.get("mode") or "assemble")
+    cohort = "fresh" if mode == "incomplete" else "full"
+    degraded_reason = _degraded_reason(ctx) if mode == "incomplete" else None
+    deadline = None
+    reserve = 0.0
+    if budget_seconds is not None:
+        def deadline() -> float:  # seconds this invocation still has
+            return budget_seconds - (time.monotonic() - started_at)
+        # Render, two S3 writes of a multi-megabyte JSON and SES. Measured locally at ~2 s for 4,671
+        # postings; the reserve is deliberately far above any plausible Lambda multiple of that.
+        reserve = max(45.0, 0.15 * budget_seconds)
+
+    inp = assemble_report_input(
+        s3, bucket, run_id, dt, deadline=deadline, reserve_seconds=reserve, cohort=cohort,
+    )
+    if degraded_reason:
+        inp.evaluation["degraded_reason"] = degraded_reason
+    if mode == "incomplete":
+        # A fresh-cohort report is partial by construction even if the cohort is the whole
+        # population; say so rather than letting it read as a complete round.
+        inp.evaluation["complete"] = False
     markdown, report_json = render_report(inp)
+    report_json["delivery_mode"] = "degraded" if mode == "incomplete" else (
+        "partial" if not inp.evaluation.get("complete", True) else "complete")
 
     runtime = measure_runtime(
         started_at=started_at, now=time.monotonic(),
@@ -2228,6 +2406,8 @@ def handler(event, context):
                 f"Job radar {dt}: {report_json['new_strong_count']} new, "
                 f"{report_json['matching_job_count']} retained "
                 f"({report_json['run_health']})"
+                + ("" if report_json["delivery_mode"] == "complete"
+                   else f" [{report_json['delivery_mode']}]")
             )
             message_id = send_digest(
                 boto3.client("ses"), sender=sender, recipient=recipient,
@@ -2251,7 +2431,21 @@ def handler(event, context):
         "events": len(inp.events), "matches": report_json["matching_job_count"],
         "new_strong": report_json["new_strong_count"],
         "digest_delivery": digest_delivery,
+        "delivery_mode": report_json["delivery_mode"],
+        "evaluated": inp.evaluation.get("evaluated"),
+        "population": inp.evaluation.get("population"),
     }
+
+
+def _degraded_reason(ctx: dict) -> str:
+    """One short line naming why the full assembly did not publish, from the Catch payload."""
+    err = ctx.get("error") if isinstance(ctx, dict) else None
+    if not isinstance(err, dict):
+        return "the full assembly step did not complete"
+    name = str(err.get("Error") or "").strip()
+    if name in ("Sandbox.Timedout", "States.Timeout"):
+        return "the full assembly ran out of time"
+    return f"the full assembly step failed ({name})" if name else "the full assembly step failed"
 
 
 def send_digest(ses, *, sender: str, recipient: str, subject: str, body: str) -> str:

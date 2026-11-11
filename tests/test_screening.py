@@ -24,6 +24,8 @@ from src.common.models import (
     VerificationState,
 )
 
+from src.candidate.screening import HUMAN_FIRST_HOLD  # noqa: E402
+
 NOW = datetime(2026, 9, 24, tzinfo=timezone.utc)
 PROCESS_OK = "Interview process: two video calls on Zoom with the engineering team."
 
@@ -203,8 +205,9 @@ def test_recorded_candidate_video_is_excluded():
                    "complete a HireVue assessment",
                    "submit a pre-recorded video"):
         job = _job("Software Engineer", f"Application process: {phrase}.")
-        assert _outcome(job) == ScreenOutcome.EXCLUDED.value, phrase
-        assert "recorded-video" in _rules(job), phrase
+        # Held under the human-first rule (2026-10-12), not rejected.
+        assert _outcome(job) == ScreenOutcome.PENDING_CHECK.value, phrase
+        assert "recorded-video" in {h.rule_id for h in screen_job(job).pending_checks if h.reason.startswith(HUMAN_FIRST_HOLD)}, phrase
 
 
 def test_live_human_video_call_is_not_a_recorded_video_application():
@@ -226,8 +229,8 @@ def test_ai_conducted_interview_is_excluded():
                    "we use an AI-led interview for the first round",
                    "an automated AI screen precedes the human rounds"):
         job = _job("Software Engineer", f"Hiring process: {phrase}.")
-        assert _outcome(job) == ScreenOutcome.EXCLUDED.value, phrase
-        assert "ai-interview" in _rules(job), phrase
+        assert _outcome(job) == ScreenOutcome.PENDING_CHECK.value, phrase
+        assert "ai-interview" in {h.rule_id for h in screen_job(job).pending_checks if h.reason.startswith(HUMAN_FIRST_HOLD)}, phrase
 
 
 def test_company_building_ai_is_not_an_ai_interview():

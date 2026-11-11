@@ -25,6 +25,8 @@ from moto import mock_aws
 from src.common.connectors import FetchResult
 from src.common.models import CanonicalJob, IdKind, RemoteMode, ScreenOutcome
 
+from src.candidate.screening import HUMAN_FIRST_HOLD  # noqa: E402
+
 NOW = datetime(2026, 9, 24, 12, 0, tzinfo=timezone.utc)
 BUCKET = "jprs-p03-bucket"
 FAKE_ID = "FAKE_APP_ID_p03"
@@ -245,7 +247,7 @@ def test_r3_a_later_mandatory_video_still_excludes_despite_an_earlier_negation()
         "Interview process: We do not require a recorded video introduction. "
         "You must complete a one-way video interview in the final round."
     )
-    assert "recorded-video" in {h.rule_id for h in result.exclusions}, result.human_reason()
+    assert "recorded-video" in {h.rule_id for h in result.pending_checks if h.reason.startswith(HUMAN_FIRST_HOLD)}, result.human_reason()
 
 
 def test_r3_a_separate_mandatory_drug_screening_still_excludes_after_a_clearance_negation():
@@ -308,7 +310,7 @@ def test_r3_mandatory_ai_interview_after_an_optional_mention_still_excludes():
         "Hiring process: the AI screen is optional at first. "
         "All candidates must then complete an interview with our AI interviewer."
     )
-    assert "ai-interview" in {h.rule_id for h in result.exclusions}, result.human_reason()
+    assert "ai-interview" in {h.rule_id for h in result.pending_checks if h.reason.startswith(HUMAN_FIRST_HOLD)}, result.human_reason()
 
 
 def test_r3_html_encoded_variant_of_the_aggregation_cases_behaves_identically():
@@ -320,8 +322,8 @@ def test_r3_html_encoded_variant_of_the_aggregation_cases_behaves_identically():
         "Interview process: We don&#39;t require a recorded video introduction. "
         "You must complete a one-way video interview &amp; nothing else."
     )
-    assert "recorded-video" in {h.rule_id for h in native.exclusions}
-    assert "recorded-video" in {h.rule_id for h in encoded.exclusions}
+    assert "recorded-video" in {h.rule_id for h in native.pending_checks if h.reason.startswith(HUMAN_FIRST_HOLD)}
+    assert "recorded-video" in {h.rule_id for h in encoded.pending_checks if h.reason.startswith(HUMAN_FIRST_HOLD)}
 
 
 def test_r3_optional_without_a_stated_alternative_goes_to_review_not_to_a_verdict():
@@ -351,6 +353,10 @@ def test_r3_genuine_hard_exclusions_are_all_preserved():
     for name, (description, rule) in cases.items():
         title = "Account Executive" if name == "sales-title" else "Senior Software Engineer"
         result = _screen(description, title)
+        if rule in ("recorded-video", "ai-interview"):
+            # Held under the human-first rule rather than excluded (2026-10-12).
+            assert rule in {h.rule_id for h in result.pending_checks if h.reason.startswith(HUMAN_FIRST_HOLD)}, (name, result.human_reason())
+            continue
         assert rule in {h.rule_id for h in result.exclusions}, (name, result.human_reason())
 
 

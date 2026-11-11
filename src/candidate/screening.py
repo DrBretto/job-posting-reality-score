@@ -39,7 +39,7 @@ from src.candidate.location import (
 from src.common.models import CanonicalJob, ScreenOutcome, VerificationState
 from src.common.normalize import normalize_title_for_matching
 
-SCREENING_RULESET_VERSION = "1.6.0"
+SCREENING_RULESET_VERSION = "1.7.0"
 
 
 # --------------------------------------------------------------------------------------------------
@@ -87,6 +87,9 @@ _LINE_SPLIT_RE = re.compile(r"(?:\r?\n)+|(?<=[.;:!?])\s+(?=[A-Z])")
 class Segment:
     section: str
     text: str
+    # True inside a block whose heading marks it as preferred / nice-to-have. Read only by rules that
+    # must tell a stated duty from a wished-for qualification (voice/telephony).
+    preferred: bool = False
 
 
 def segment_description(text: str) -> list[Segment]:
@@ -100,6 +103,7 @@ def segment_description(text: str) -> list[Segment]:
         return []
     segments: list[Segment] = []
     current = Section.BODY
+    preferred = False
     for chunk in _LINE_SPLIT_RE.split(text):
         piece = chunk.strip()
         if not piece:
@@ -107,9 +111,14 @@ def segment_description(text: str) -> list[Segment]:
         for name, cue in _SECTION_CUES:
             if cue.search(piece[:120]):
                 current = name
+                preferred = bool(_PREFERRED_HEADING_RE.search(piece[:60]))
                 break
-        segments.append(Segment(section=current, text=piece))
+        segments.append(Segment(section=current, text=piece, preferred=preferred))
     return segments
+
+
+_PREFERRED_HEADING_RE = re.compile(
+    r"\b(preferred|nice[- ]to[- ]have|bonus points?|pluses|desirable)\b", re.I)
 
 
 # --------------------------------------------------------------------------------------------------
@@ -705,6 +714,42 @@ _NON_US_ONLY_RE = re.compile(
 )
 
 
+# ---- human-first holds and voice/telephony (operator rules of 2026-10-12 and 2026-10-17) --------
+# Prefix carried by every hold reason, so the report and any reader can tell "held under the
+# human-first rule" from an ordinary check without parsing prose.
+HUMAN_FIRST_HOLD = "HUMAN-FIRST HOLD:"
+_EVALUATION_RE = re.compile(
+    r"\b(take[- ]home(?: (?:assignment|project|test|exercise|challenge))?|"
+    r"coding (?:challenge|assessment|test|exercise)|online assessment|"
+    r"(?:technical|skills?|cognitive|aptitude|personality) (?:assessment|test)s?|"
+    r"hackerrank|codility|codesignal|testgorilla|criteria (?:corp|cognitive)|ccat|"
+    r"work[- ]sample (?:test|exercise|assignment))\b",
+    re.I,
+)
+_BEFORE_HUMAN_RE = re.compile(
+    r"\b(as part of (?:your|the) application|(?:with|alongside) your application|"
+    r"before (?:any|the|your|we schedule (?:a|an|any)) (?:first |initial )?(?:interviews?|calls?|"
+    r"conversations?)|prior to (?:an?y? )?(?:first |initial )?(?:interviews?|calls?)|"
+    r"(?:the )?first step (?:is|in our process)|to apply,? (?:please )?complete|"
+    r"applicants? (?:must|will be asked to) complete|before we (?:speak|talk|meet))\b",
+    re.I,
+)
+_VOICE_TITLE_RE = re.compile(
+    r"\b(voice(?: ai| agents?| assistants?| bots?| applications?| platform)?|speech|telephony|"
+    r"voip|conversational audio|text to speech|speech to text|tts|asr|ivr)\b",
+    re.I,
+)
+_VOICE_DUTY_RE = re.compile(
+    r"\b(voice (?:ai|agents?|assistants?|bots?|applications?|platforms?|pipelines?|interfaces?|"
+    r"experiences?)|speech (?:recognition|synthesis|models?|pipelines?)|speech[- ]to[- ]text|"
+    r"text[- ]to[- ]speech|telephony|voip|sip trunk(?:ing)?|ivr|phone (?:agents?|systems?|bots?)|"
+    r"call (?:routing|recording|center software)|conversational audio|real[- ]time audio)\b",
+    re.I,
+)
+_PREFERRED_CONTEXT_RE = re.compile(
+    r"\b(preferred|nice[- ]to[- ]have|bonus|a plus|is a plus|desirable|ideally)\b", re.I)
+
+
 # --------------------------------------------------------------------------------------------------
 # The screener
 # --------------------------------------------------------------------------------------------------
@@ -965,11 +1010,17 @@ def screen_job(job: CanonicalJob) -> ScreenResult:
     video_optional = optional_only(video_findings)
     if video_required:
         hit = video_required[0]
-        result.exclusions.append(RuleHit(
-            "recorded-video", ScreenOutcome.EXCLUDED.value, hit.context, hit.section,
-            f"application requires a recorded candidate video ({hit.matched_text})"
+        # HELD, not excluded (Human-first Screening Rule, 2026-10-12): "Record a pre-interview
+        # evaluation request as held ... retain the opportunity for a human-interview route rather
+        # than invent a rejection." It reaches the needs-a-check section marked as a hold that only
+        # Brett can lift; it is never presented as ready to act on.
+        result.pending_checks.append(RuleHit(
+            "recorded-video", ScreenOutcome.PENDING_CHECK.value, hit.context, hit.section,
+            f"{HUMAN_FIRST_HOLD} the application asks for a recorded candidate video "
+            f"({hit.matched_text}) before any human interview"
             + ("; an earlier mention called it optional, but a later step makes it mandatory"
-               if video_optional else ""),
+               if video_optional else "")
+            + "; retained for a human-interview route, and only Brett can grant an exception",
         ))
     elif video_optional:
         # Optional is neither a requirement nor a clean pass. With a stated alternative it is
@@ -1015,11 +1066,12 @@ def screen_job(job: CanonicalJob) -> ScreenResult:
     ai_optional = optional_only(ai_findings)
     if ai_required:
         hit = ai_required[0]
-        result.exclusions.append(RuleHit(
-            "ai-interview", ScreenOutcome.EXCLUDED.value, hit.context, hit.section,
-            f"interviews are conducted by an AI ({hit.matched_text})"
+        result.pending_checks.append(RuleHit(
+            "ai-interview", ScreenOutcome.PENDING_CHECK.value, hit.context, hit.section,
+            f"{HUMAN_FIRST_HOLD} interviews are conducted by an AI ({hit.matched_text})"
             + ("; an earlier mention called it optional, but a later step makes it mandatory"
-               if ai_optional else ""),
+               if ai_optional else "")
+            + "; retained for a human-interview route, and only Brett can grant an exception",
         ))
     elif ai_optional:
         hit = ai_optional[0]
@@ -1045,6 +1097,80 @@ def screen_job(job: CanonicalJob) -> ScreenResult:
                 "conducts the interview",
                 suppressed_by="ai-in-product guard",
             ))
+
+    # ---- 5b. other candidate evaluations before a human interview --------------------------------
+    # The human-first rule covers "screening test, assessment, take-home or other candidate
+    # evaluation" too, but only BEFORE a completed human preliminary interview. A posting that names
+    # a take-home after two live calls is ordinary; one that puts a coding test in front of any human
+    # contact is held. Most postings do not say which, and that is missing evidence rather than a
+    # disqualifying fact: it is noted, not held.
+    eval_findings = mandatory(collect_findings(all_segments, _EVALUATION_RE, _PROCESS_SECTIONS))
+    if eval_findings:
+        before_human = [f for f in eval_findings if _BEFORE_HUMAN_RE.search(f.context)]
+        if before_human:
+            hit = before_human[0]
+            result.pending_checks.append(RuleHit(
+                "pre-interview-evaluation", ScreenOutcome.PENDING_CHECK.value, hit.context,
+                hit.section,
+                f"{HUMAN_FIRST_HOLD} the posting puts a candidate evaluation "
+                f"({hit.matched_text}) ahead of any human interview; retained for a "
+                "human-interview route, and only Brett can grant an exception",
+            ))
+        else:
+            hit = eval_findings[0]
+            result.suppressed.append(RuleHit(
+                "pre-interview-evaluation", ScreenOutcome.ELIGIBLE.value, hit.context, hit.section,
+                f"a candidate evaluation is mentioned ({hit.matched_text}) but the posting does not "
+                "place it before a human interview; the human-first rule applies if an invitation "
+                "arrives before one",
+                suppressed_by="stage-not-stated guard",
+            ))
+
+    # ---- 5c. voice / telephony-centered work (operator exclusion, 2026-10-17) --------------------
+    # "Screen actual duties ... do not pursue work centered on these areas." Centered is the word:
+    # a title naming voice/speech/telephony, or two or more distinct stated duties in it, excludes.
+    # One duty is part of a broader role and is a check; a preferred qualification is neither — the
+    # Soil Connect platform lead lists "voice agents, phone systems" as nice-to-have, and the role is
+    # the platform. Not a company-wide blacklist: only the role's own title and duties are read.
+    voice_title = _VOICE_TITLE_RE.search(title_norm)
+    voice_findings = collect_findings(
+        [seg for seg in all_segments if not seg.preferred], _VOICE_DUTY_RE, _ROLE_SECTIONS)
+    voice_preferred = collect_findings(
+        [seg for seg in all_segments if seg.preferred], _VOICE_DUTY_RE, _ROLE_SECTIONS)
+    voice_required = [f for f in mandatory(voice_findings)
+                      if not _PREFERRED_CONTEXT_RE.search(f.context)]
+    # Only duties count toward "centered"; a requirement line is evidence for a check, not a center.
+    voice_duties = [f for f in voice_required if f.section != Section.REQUIREMENTS]
+    voice_distinct = sorted({f.matched_text.lower() for f in voice_duties})
+    voice_findings = voice_findings + voice_preferred
+    if voice_title:
+        result.exclusions.append(RuleHit(
+            "voice-telephony", ScreenOutcome.EXCLUDED.value, voice_title.group(0), Section.TITLE,
+            f"the role's title centers it on voice, speech or telephony ({voice_title.group(0)}), "
+            "which the operator excludes",
+        ))
+    elif len(voice_distinct) >= 2:
+        hit = voice_duties[0]
+        result.exclusions.append(RuleHit(
+            "voice-telephony", ScreenOutcome.EXCLUDED.value, hit.context, hit.section,
+            "the stated duties center on voice, speech or telephony work "
+            f"({', '.join(voice_distinct[:4])}), which the operator excludes",
+        ))
+    elif voice_required:
+        hit = voice_required[0]
+        result.pending_checks.append(RuleHit(
+            "voice-telephony", ScreenOutcome.PENDING_CHECK.value, hit.context, hit.section,
+            f"one stated duty touches voice or telephony ({hit.matched_text}); confirm the role is "
+            "not centered on it before preparing",
+        ))
+    elif voice_findings:
+        hit = voice_findings[0]
+        result.suppressed.append(RuleHit(
+            "voice-telephony", ScreenOutcome.ELIGIBLE.value, hit.context, hit.section,
+            "voice or telephony appears only as an optional or preferred qualification, not as the "
+            "work the role is centered on",
+            suppressed_by="not-centered guard",
+        ))
 
     # ---- 6. external customer service / call-center work -----------------------------------------
     # "Do not target call centers, external customer service or customer phone-support queues" —

@@ -34,11 +34,11 @@ from src.common.models import (
 )
 
 SCORING_PROFILE_VERSION = "1.2.0"
-FIT_RULESET_VERSION = "1.2.0"
+FIT_RULESET_VERSION = "1.3.0"
 
 # Per-dimension scorer versions (independent semver, stamped onto each emitted score).
 _V = {
-    "brett_fit": "1.2.0",
+    "brett_fit": "1.3.0",
     "freshness": "1.0.0",
     "hiring_activity_evidence": "1.0.0",
     "repost_churn_pattern": "1.0.0",
@@ -131,7 +131,28 @@ _TECHNICAL_TITLE_RE = re.compile(
 _NON_TARGET_TITLE_RE = re.compile(
     r"\b(account executive|sales|marketing|recruit(?:er|ing)|talent|customer success|"
     r"product manager|program manager|project manager|finance|legal|counsel|designer|"
-    r"people operations|human resources|business development|analyst)\b",
+    r"people operations|human resources|business development)\b",
+    re.I,
+)
+# A title word that says nothing reliable about the work. "Business Systems Analyst" and "Business
+# Systems Engineer" were the same posting in the 2026-11-11 audit — first in-house software hire,
+# founder access, Python/AWS internal platform — and the Analyst spelling scored 0.00 with
+# `blocked_role` set while the Engineer spelling scored 0.41. An analyst title now blocks only when the
+# role's own duties do not establish engineering work (`_ENGINEERING_DUTY_RE` below, plus a technical
+# skill stated in role context). An analyst who reads dashboards is still blocked; one who builds and
+# runs the company's software is evaluated on that work.
+_DUTY_DEFERRED_TITLE_RE = re.compile(r"\b(analyst|analytics)\b", re.I)
+# Engineering work stated as a duty: a BUILD verb and a software-system object. Deliberately stricter
+# than screening's software-artifact guard — "own the roadmap", "design reports" and "maintain
+# dashboards" are not engineering, and a bare "own" is product ownership as often as code ownership.
+_ENGINEERING_DUTY_RE = re.compile(
+    r"\b(?:build|building|develop|developing|implement|implementing|architect(?:ing)?|"
+    r"writ(?:e|ing)|code|coding|program(?:ming)?|deploy(?:ing)?|ship(?:ping)?|"
+    r"maintain(?:ing)?|integrat(?:e|ing)|automat(?:e|ing))\s+"
+    r"(?:(?:and|&|or)\s+(?:own|run|maintain|operate|evolve|support)\s+)?"
+    r"(?:[A-Za-z0-9\-+/&.]+\s+){0,4}"
+    r"(?:software|applications?|apps?|services?|apis?|integrations?|platforms?|infrastructure|"
+    r"pipelines?|internal tools?|tooling|backends?|systems?|code|codebase|automations?|agents?)\b",
     re.I,
 )
 _MANAGEMENT_TITLE_RE = re.compile(r"\b(manager|director|head of|vice president|vp)\b", re.I)
@@ -313,8 +334,13 @@ def score_brett_fit(ctx: ScoreContext, profile: ScoringProfile) -> DimensionScor
     skill_total = role_skill_total + _BOILERPLATE_SKILL_WEIGHT * boilerplate_skill_total
 
     technical_title = bool(_TECHNICAL_TITLE_RE.search(title))
+    duty_deferred_title = bool(_DUTY_DEFERRED_TITLE_RE.search(title)) and not technical_title
+    engineering_duties = bool(_ENGINEERING_DUTY_RE.search(role_text)) and role_skill_total > 0
+    # The title stands in for the work only when the work is not stated. When it is, the work decides.
+    duty_established_title = duty_deferred_title and engineering_duties
     blocked_role = (
         (bool(_NON_TARGET_TITLE_RE.search(title)) and not technical_title)
+        or (duty_deferred_title and not engineering_duties)
         or bool(_BLOCKED_TECH_TITLE_RE.search(title))
     )
     geography, geography_adjustment, geography_blocked = _geography(job)
@@ -334,7 +360,7 @@ def score_brett_fit(ctx: ScoreContext, profile: ScoringProfile) -> DimensionScor
     if not title_signals:
         # The credit derives from ROLE-context skill only. Boilerplate cannot buy a recall path: that
         # is what let an unrelated engineering title ride in on a company AI blurb.
-        if technical_title and role_skill_total > 0:
+        if (technical_title or duty_established_title) and role_skill_total > 0:
             # Capped below the strong-title band: this is genuine eligibility, not a promise.
             work_based_credit = min(0.20, role_skill_total * 0.6)
             recall_path = "work-evidence"
@@ -390,6 +416,7 @@ def score_brett_fit(ctx: ScoreContext, profile: ScoringProfile) -> DimensionScor
             "skill_signals": ",".join(sorted(skill_signals)),
             "geography": geography,
             "blocked_role": int(blocked_role),
+            "title_deferred_to_duties": int(duty_established_title),
             "blocked_geography": int(geography_blocked),
             "recall_path": recall_path,
             "normalized_title": title,

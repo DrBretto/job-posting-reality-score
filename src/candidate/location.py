@@ -285,6 +285,11 @@ _STATE_FULL_NAME_RE = re.compile(
 _STATE_CODE_RE = re.compile(r"\b(?:" + "|".join(sorted(_STATE_CODES)) + r")\b")
 
 
+_NOT_LIMITED_RE = re.compile(r"\b(?:not|n't)\s+(?:be\s+)?limited\s+to\b", re.I)
+_VISA_LIST_RE = re.compile(
+    r"\b(?:h-?1b|f-?1|opt|cpt|j-?1|l-?1|e-?3|o-?1|ead|visa|sponsorship)\b", re.I)
+
+
 @dataclass
 class ResidencyRestriction:
     """A posting-stated limit on where an employee may live."""
@@ -313,6 +318,14 @@ def find_residency_restriction(text: str | None) -> ResidencyRestriction | None:
         return None
     for match in _RESIDENCY_RE.finditer(text):
         scope = match.group("scope") or ""
+        # "This includes, but is not limited to, visa categories such as H-1B, F-1 OPT, TN, J-1"
+        # is a work-authorization list, and TN there is the NAFTA/USMCA visa, not Tennessee
+        # (PQ-CAREER_FACTORY-166; reproduced on Applied Digital, Mom's Meals and Delinea on
+        # 2026-11-11). Neither "not limited to" nor a visa list states where anyone may live.
+        if _NOT_LIMITED_RE.search(text[max(0, match.start() - 30):match.start() + 12]):
+            continue
+        if _VISA_LIST_RE.search(scope):
+            continue
         country_scope = bool(_COUNTRY_SCOPE_RE.search(scope))
         states: list[str] = []
         for pattern in (_STATE_FULL_NAME_RE, _STATE_CODE_RE):

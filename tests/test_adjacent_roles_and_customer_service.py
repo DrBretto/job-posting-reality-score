@@ -36,6 +36,8 @@ from src.common.models import (
     VerificationState,
 )
 
+from src.candidate.screening import HUMAN_FIRST_HOLD  # noqa: E402
+
 NOW = datetime(2026, 9, 26, tzinfo=timezone.utc)
 PROCESS_OK = "Interview process: two video calls on Zoom with the engineering team."
 RULE = "customer-service-queue"
@@ -339,7 +341,9 @@ def test_the_ruleset_version_records_the_change():
     # video-walkthrough spellings to `recorded-video`, after a live posting requiring one reached
     # the retained pool on 2026-09-28 (tests/test_broad_ownership.py). The pin is updated rather
     # than loosened: its point is that a behavior change moves the version, and this one did.
-    assert SCREENING_RULESET_VERSION == "1.6.0"
+    # 1.7.0 (2026-11-11): human-first holds replace the recorded-video / AI-interview exclusions,
+    # plus the pre-interview-evaluation and voice/telephony rules.
+    assert SCREENING_RULESET_VERSION == "1.7.0"
 
 
 # --------------------------------------------------------------------------------------------------

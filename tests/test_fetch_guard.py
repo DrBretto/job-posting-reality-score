@@ -17,6 +17,8 @@ from src.common.fetch_guard import (
     assert_url_allowed,
 )
 
+from src.candidate.screening import HUMAN_FIRST_HOLD  # noqa: E402
+
 PUBLIC = lambda host: ["93.184.216.34"]  # noqa: E731
 
 
@@ -253,4 +255,4 @@ def test_prompt_injection_shaped_text_in_a_description_is_treated_as_ordinary_te
     assert result.outcome == "EXCLUDED"
     rules = {h.rule_id for h in result.exclusions}
     assert "clearance-government" in rules
-    assert "recorded-video" in rules
+    assert "recorded-video" in {h.rule_id for h in result.pending_checks if h.reason.startswith(HUMAN_FIRST_HOLD)}

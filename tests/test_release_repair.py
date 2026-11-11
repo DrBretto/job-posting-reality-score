@@ -34,6 +34,8 @@ from src.common.connectors import FetchResult
 from src.common.models import CanonicalJob, IdKind, RemoteMode, ScreenOutcome
 from src.discovery.connectors import AdzunaConnector, get_discovery_connector
 
+from src.candidate.screening import HUMAN_FIRST_HOLD  # noqa: E402
+
 NOW = datetime(2026, 9, 24, 12, 0, tzinfo=timezone.utc)
 BUCKET = "jprs-test-bucket"
 FAKE_ID = "TEST_APP_ID_abc123"
@@ -510,7 +512,8 @@ def test_r3_genuine_recorded_video_is_still_excluded(description):
     from src.candidate.screening import screen_job
 
     result = screen_job(_job(description))
-    assert "recorded-video" in {hit.rule_id for hit in result.exclusions}
+    assert "recorded-video" in {h.rule_id for h in result.pending_checks if h.reason.startswith(HUMAN_FIRST_HOLD)}
+    assert "recorded-video" not in {hit.rule_id for hit in result.exclusions}
 
 
 def test_r3_optional_versus_required_language_is_distinguished():
