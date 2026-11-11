@@ -454,6 +454,8 @@ _CLEARANCE_RE = re.compile(
     r"polygraph|(?:able|ability|willing|willingness|eligible|eligibility) to obtain(?: and maintain)?"
     r"(?: a| an)? (?:security )?clearance|"
     r"active clearance|dod secret|q clearance|l clearance|suitability determination|"
+    # "US citizens, clearable" (Odette Technologies, live HN thread 2026-11-11) states the same gate.
+    r"clearable|"
     r"itar|export[- ]controlled|drug (?:test|screen(?:ing)?))\b",
     re.I,
 )
@@ -771,8 +773,20 @@ _AI_TRAINING_TITLE_RE = re.compile(
     re.I,
 )
 _AI_TRAINING_DUTY_RE = re.compile(
-    r"\b(?:train|training|improve|improving) (?:ai|llm|large language|frontier) models? by "
-    r"(?:writing|rating|ranking|reviewing|evaluating|labell?ing)\b",
+    r"\b(?:(?:train|training|improve|improving) (?:ai|llm|large language|frontier) models? by "
+    r"(?:writing|rating|ranking|reviewing|evaluating|labell?ing)|"
+    # OpenTrain AI on the live thread: "paid, part-time AI training work ... design realistic coding
+    # tasks for AI systems ... paid per accepted task".
+    r"(?:paid,? )?(?:part[- ]time )?ai training work|"
+    r"(?:coding )?tasks for ai (?:systems|models)|paid per accepted task)\b",
+    re.I,
+)
+_AI_TRAINING_STRONG_RE = re.compile(
+    r"ai training work|tasks for ai|paid per accepted task", re.I)
+_EQUITY_FIRST_RE = re.compile(
+    r"\b(equity[- ]first|equity[- ]heavy|primarily (?:in )?equity|mostly equity|"
+    r"(?:low|modest|below[- ]market) (?:cash|salary) (?:plus|with|and) (?:significant |meaningful )?"
+    r"equity)\b",
     re.I,
 )
 
@@ -1215,9 +1229,24 @@ def screen_job(job: CanonicalJob) -> ScreenResult:
             "no-cash-pay", ScreenOutcome.EXCLUDED.value, hit.context, hit.section,
             f"the posting states the work is not paid in cash ({hit.matched_text})",
         ))
+    elif not any(h.rule_id == "no-cash-pay" for h in result.exclusions):
+        seg, m = _find(all_segments, _EQUITY_FIRST_RE, _ROLE_SECTIONS + (Section.BENEFITS,))
+        if seg is not None:
+            # "Equity-first" is not "equity-only", and missing evidence is not a disqualifying fact:
+            # the cash component is a question to answer before any effort, not a verdict.
+            result.pending_checks.append(RuleHit(
+                "no-cash-pay", ScreenOutcome.PENDING_CHECK.value, _context(seg.text, m), seg.section,
+                f"the posting leads with equity ({m.group(0)}) and states no cash salary; confirm the "
+                "cash pay before treating it as a paid role",
+            ))
     training_title = _AI_TRAINING_TITLE_RE.search(title_norm)
     seg, m = _find(all_segments, _AI_TRAINING_DUTY_RE, _ROLE_SECTIONS)
-    if training_title or (seg is not None and not _SOFTWARE_ROLE_RE.search(title_norm)):
+    # A software title is a guard only for the softer phrasing; "AI training work ... paid per
+    # accepted task" is training-data production whatever the title says ("Backend Engineer, AI
+    # Coding Task Design").
+    strong_training = seg is not None and _AI_TRAINING_STRONG_RE.search(m.group(0))
+    if training_title or (seg is not None and (strong_training
+                                               or not _SOFTWARE_ROLE_RE.search(title_norm))):
         evidence = training_title.group(0) if training_title else _context(seg.text, m)
         result.exclusions.append(RuleHit(
             "ai-training-only", ScreenOutcome.EXCLUDED.value, evidence,

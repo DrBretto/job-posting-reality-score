@@ -342,3 +342,75 @@ def test_report_function_has_one_full_vcpu():
     text = (ROOT / "infra/template.yaml").read_text()
     block = text[text.index("  ReportFunction:"):text.index("  ReportFunction:") + 4000]
     assert "MemorySize: 1769" in block and "Timeout: 300" in block
+
+
+# ==================================================================================================
+# False negatives / positives found on the dated live run (2026-11-11), pinned as regressions
+# ==================================================================================================
+def _hn_job(header: str, body: str, item_id: int = 900):
+    from src.discovery.connectors import get_discovery_connector
+
+    c = get_discovery_connector("hn_hiring")
+    raw = c.parse_jobs({"id": 1, "title": "Ask HN: Who is hiring?",
+                        "children": [_post(item_id, header, body)]})[0]
+    return c.map_job("hn_hiring:all", raw, now=datetime(2026, 11, 11, tzinfo=timezone.utc))
+
+
+def test_a_cto_written_founding_engineer_post_reaches_review():
+    from src.candidate.ownership import assess_ownership
+    from src.scoring.scoring import ScoreContext, score_job
+
+    job = _hn_job("BuildQ-like Co | Founding Engineer | REMOTE (PT to ET overlap preferred) | "
+                  "$130K - $150K + equity | Full-time | Seed",
+                  "I'm the CTO. We're looking for a Founding Engineer to join 2 of us on the "
+                  "engineering team. You'll ship to production on your first day. Stack: Rails, "
+                  "Python, React, Postgres, AWS.")
+    card = score_job(ScoreContext(job=job), today=datetime(2026, 11, 11, tzinfo=timezone.utc))
+    assert "founding-engineer" in card.brett_fit.detail["title_signals"]
+    assert card.brett_fit.score >= 0.40
+    assert assess_ownership(job).team_structure.value == "SMALL_TEAM"
+
+
+@pytest.mark.parametrize("header,rule,outcome", [
+    ("Defense AI Co | Senior Integration Engineer | REMOTE | US citizens, clearable",
+     "clearance-government", "EXCLUDED"),
+    ("Training Co | Backend Engineer, AI Coding Task Design | REMOTE (US) | Part-time",
+     "ai-training-only", "EXCLUDED"),
+    ("Chatcart | Founding Engineer | REMOTE (US) | Full-time | Equity-first",
+     "no-cash-pay", "PENDING_CHECK"),
+])
+def test_live_thread_gates_are_applied(header, rule, outcome):
+    from src.candidate.screening import screen_job
+
+    body = {
+        "ai-training-only": "We connect professionals with paid, part-time AI training work. "
+                            "Design realistic coding tasks for AI systems; paid per accepted task.",
+    }.get(rule, "You will build the platform in Python. Interview process: calls.")
+    result = screen_job(_hn_job(header, body))
+    hits = result.exclusions if outcome == "EXCLUDED" else result.pending_checks
+    assert rule in {h.rule_id for h in hits}, result.human_reason()
+
+
+def test_remote_eea_or_eu_is_not_remote_from_new_hampshire():
+    from src.candidate.screening import screen_job
+
+    for region in ("REMOTE (EEA)", "REMOTE (EU)"):
+        job = _hn_job(f"Euro Co | AI Engineer | {region} | Full-time",
+                      "You will build agents in Python. Interview process: calls.")
+        assert screen_job(job).outcome != "ELIGIBLE", region
+
+
+def test_a_post_header_onsite_city_is_not_overridden_by_body_prose():
+    job = _hn_job("Compute Co | Systems Engineer | San Francisco (Onsite) | $250K",
+                  "We work remotely with partners worldwide. You will build the scheduler.")
+    assert job.remote_hybrid_language.value == "ONSITE"
+
+
+def test_visa_list_tn_is_not_tennessee():
+    from src.candidate.location import find_residency_restriction
+
+    text = ("Sponsorship is not available. This includes, but is not limited to, visa categories "
+            "such as H-1B, F-1 OPT, F-1 CPT, J-1, TN, E-2, E-3, L-1, O-1.")
+    assert find_residency_restriction(text) is None
+    real_limit = "We are only able to hire employees who currently reside in AZ, CA, TN or TX."
+    assert find_residency_restriction(real_limit).excludes_home
